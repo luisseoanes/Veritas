@@ -5,6 +5,7 @@ import { AlertTriangle, FlaskConical, RotateCcw } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+import { MarkdownContent } from "./markdown-content";
 import { TraceAccordion } from "./trace-accordion";
 import type { ChatMessage, ChatTone } from "./types";
 import { WordStream } from "./word-stream";
@@ -138,14 +139,13 @@ export function MessageBubble({
           </p>
         ) : null}
 
-        <p className="text-[15px] leading-relaxed whitespace-pre-wrap">
-          <WordStream
-            text={message.content}
-            animate={message.status === "streaming"}
-            onTick={onTick}
-            onDone={() => onStreamDone?.(message.id)}
-          />
-        </p>
+        <WordStream
+          text={message.content}
+          animate={message.status === "streaming"}
+          onTick={onTick}
+          onDone={() => onStreamDone?.(message.id)}
+          render={(visible) => <MarkdownContent tone={tone}>{visible}</MarkdownContent>}
+        />
 
         <TraceAccordion trace={message.trace ?? []} tone={tone} />
       </div>

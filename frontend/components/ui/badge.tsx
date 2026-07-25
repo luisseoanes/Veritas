@@ -9,11 +9,10 @@ const badgeVariants = cva(
     variants: {
       tone: {
         neutral: "border-dash-border bg-dash-surface-2 text-dash-text-muted",
-        accent: "border-[var(--dash-accent)] bg-[var(--dash-accent-soft)] text-dash-accent",
-        ok: "border-[color-mix(in_oklab,var(--dash-ok),transparent_55%)] bg-[var(--dash-ok-soft)] text-dash-ok",
-        warn: "border-[color-mix(in_oklab,var(--dash-warn),transparent_55%)] bg-[var(--dash-warn-soft)] text-dash-warn",
-        danger:
-          "border-[color-mix(in_oklab,var(--dash-danger),transparent_55%)] bg-[var(--dash-danger-soft)] text-dash-danger",
+        accent: "border-transparent bg-[var(--dash-accent-soft)] text-dash-accent",
+        ok: "border-transparent bg-[var(--dash-ok-soft)] text-dash-ok",
+        warn: "border-transparent bg-[var(--dash-warn-soft)] text-dash-warn",
+        danger: "border-transparent bg-[var(--dash-danger-soft)] text-dash-danger",
         onDark: "border-[var(--ghost-border)] bg-[var(--ghost-bg)] text-ice backdrop-blur-md",
       },
       size: {

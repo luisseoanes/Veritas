@@ -63,24 +63,31 @@
   --chat-danger-border: #f3c2c2;
   --chat-danger-text: #96222d;
 
-  /* ---------- Dashboard premium ---------- */
-  --dash-bg: #06122e;
-  --dash-surface: #0b1d3f;
-  --dash-surface-2: #102a56;
-  --dash-border: rgba(241, 241, 248, 0.1);
-  --dash-border-strong: rgba(241, 241, 248, 0.2);
-  --dash-text: #f1f1f8;
-  --dash-text-muted: #a8b6cd;
-  --dash-text-aux: #7d8ba3;
-  --dash-accent: #28b9da;
-  --dash-accent-soft: rgba(40, 185, 218, 0.14);
-  --dash-ok: #34d399;
-  --dash-ok-soft: rgba(52, 211, 153, 0.14);
-  --dash-warn: #fbbf24;
-  --dash-warn-soft: rgba(251, 191, 36, 0.14);
-  --dash-danger: #f87171;
-  --dash-danger-soft: rgba(248, 113, 113, 0.14);
-  --dash-dominated: #64748b;
+  /* ---------- Dashboard SaaS (Stripe / Linear standard) ----------
+     Base neutra. Color escaso y semántico. Sin glows ni neón. */
+  --dash-bg: #f6f7f9;
+  --dash-sidebar: #eaf3f9; /* azul muy clarito */
+  --dash-surface: #ffffff;
+  --dash-surface-2: #f3f4f6;
+  --dash-surface-inset: #f0f1f3;
+  --dash-border: rgba(15, 23, 42, 0.08);
+  --dash-border-strong: rgba(15, 23, 42, 0.14);
+  --dash-text: #0f172a;
+  --dash-text-muted: #64748b;
+  --dash-text-aux: #94a3b8;
+  --dash-accent: #0064a6; /* único acento de marca */
+  --dash-accent-soft: rgba(0, 100, 166, 0.08);
+  --dash-accent-2: #475569;
+  --dash-accent-2-soft: rgba(71, 85, 105, 0.08);
+  --dash-ok: #15803d;
+  --dash-ok-soft: rgba(21, 128, 61, 0.08);
+  --dash-warn: #b45309;
+  --dash-warn-soft: rgba(180, 83, 9, 0.08);
+  --dash-danger: #b91c1c;
+  --dash-danger-soft: rgba(185, 28, 28, 0.08);
+  --dash-dominated: #94a3b8;
+  --dash-coral: #b91c1c;
+  --dash-slate: #64748b;
 
   /* ---------- escala de espaciado (4/8/12/16/24/32/48/64) ---------- */
   --space-1: 4px;
@@ -92,15 +99,17 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* ---------- elevación (0 plano · 1 card · 2 hover · 3 toast/modal) ---------- */
-  --elev-1: 0 1px 2px rgba(2, 8, 23, 0.28);
-  --elev-2: 0 6px 20px rgba(2, 8, 23, 0.34);
-  --elev-3: 0 18px 48px rgba(2, 8, 23, 0.48);
-  --elev-card-light: 0 18px 48px rgba(6, 18, 46, 0.18);
+  /* ---------- elevación sutil (confianza, no drama) ---------- */
+  --elev-1: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --elev-2: 0 4px 12px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --elev-3: 0 12px 28px rgba(15, 23, 42, 0.1), 0 2px 6px rgba(15, 23, 42, 0.05);
+  --elev-card-light: var(--elev-2);
+  --elev-inset: inset 0 1px 2px rgba(15, 23, 42, 0.04);
 
-  /* ---------- radios ---------- */
-  --radius-card: 16px;
+  /* ---------- radios consistentes ---------- */
+  --radius-card: 12px;
   --radius-control: 8px;
+  --radius-panel: 12px;
 }
 
 @theme inline {
@@ -155,7 +164,7 @@
   --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
 
   /* radios / sombras como utilidades */
-  --radius-card: 16px;
+  --radius-card: 12px;
   --radius-control: 8px;
   --shadow-elev-1: var(--elev-1);
   --shadow-elev-2: var(--elev-2);
@@ -179,10 +188,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Foco visible en todo control interactivo (accesibilidad mínima §1.2) */
-:focus-visible {
-  outline: 2px solid var(--weg-blue-bright);
+/* Foco visible en controles interactivos — no en campos de texto (evita el rectángulo azul al escribir). */
+:focus-visible:not(input):not(textarea):not([contenteditable="true"]) {
+  outline: 2px solid var(--dash-accent);
   outline-offset: 2px;
+}
+
+textarea:focus,
+textarea:focus-visible,
+input:focus,
+input:focus-visible {
+  outline: none;
 }
 
 /* Métricas siempre tabulares: los números no deben "bailar" con el polling */
@@ -225,7 +241,7 @@ body {
   background: linear-gradient(
     90deg,
     var(--dash-surface-2) 0%,
-    rgba(241, 241, 248, 0.12) 50%,
+    color-mix(in oklab, var(--dash-surface-2), white 55%) 50%,
     var(--dash-surface-2) 100%
   );
   background-size: 200% 100%;
@@ -233,40 +249,80 @@ body {
   border-radius: var(--radius-control);
 }
 
+/* ------------------------------------------------- atmósfera del dashboard */
+
+.dash-atmosphere {
+  background-color: var(--dash-bg);
+}
+
+.dash-glass {
+  background: var(--dash-sidebar);
+}
+
 /* ------------------------------------------------- punto elegido (Pareto) */
 
 @keyframes chosen-halo {
   0%,
   100% {
-    opacity: 0.14;
+    opacity: 0.2;
+    transform: scale(1);
   }
   50% {
-    opacity: 0.34;
+    opacity: 0.35;
+    transform: scale(1.04);
   }
 }
 
 .chosen-halo {
-  animation: chosen-halo 1.9s ease-in-out infinite;
+  animation: chosen-halo 2.8s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
 }
 
-/* --------------------------------------------------- cards del dashboard
-   Un solo lenguaje de card: padding 24, radio 16, elevación 1, borde sutil. */
+/* --------------------------------------------------- superficies del dashboard
+   Blanco + borde fino + sombra mínima. Jerarquía por tipografía, no por glow. */
 
 .dash-card {
-  background-color: var(--dash-surface);
+  background: var(--dash-surface);
   border: 1px solid var(--dash-border);
   border-radius: var(--radius-card);
   padding: var(--space-6);
   box-shadow: var(--elev-1);
   transition:
-    box-shadow 180ms ease,
-    border-color 180ms ease,
-    background-color 180ms ease;
+    box-shadow 160ms ease,
+    border-color 160ms ease;
 }
 
 .dash-card-interactive:hover {
   border-color: var(--dash-border-strong);
   box-shadow: var(--elev-2);
+}
+
+.dash-panel {
+  background: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--radius-panel);
+  padding: var(--space-8);
+  box-shadow: var(--elev-1);
+}
+
+.dash-counter {
+  background: var(--dash-surface-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-card);
+}
+
+.dash-bar-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--dash-surface-2);
+  overflow: hidden;
+}
+
+.dash-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--dash-accent);
 }
 
 @media (prefers-reduced-motion: reduce) {

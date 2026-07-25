@@ -18,6 +18,8 @@ interface ComposerProps {
   autoFocus?: boolean;
   className?: string;
   ariaLabel?: string;
+  /** Sin hover/focus ring en la barra (chatbot admin). */
+  quietChrome?: boolean;
 }
 
 const MAX_HEIGHT_PX = 168;
@@ -37,6 +39,7 @@ export function Composer({
   autoFocus = false,
   className,
   ariaLabel = "Mensaje para el asesor",
+  quietChrome = false,
 }: ComposerProps) {
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const light = tone === "light";
@@ -64,10 +67,11 @@ export function Composer({
         if (canSend) onSubmit();
       }}
       className={cn(
-        "flex w-full items-end gap-3 rounded-[2rem] border p-2.5 pl-5 transition-shadow duration-200",
+        "flex w-full items-end gap-3 rounded-[2rem] border p-2.5 pl-5 outline-none focus-within:outline-none focus-within:shadow-none",
         light
           ? "border-chat-assistant-border bg-white shadow-[var(--elev-card-light)]"
           : "border-dash-border bg-dash-surface shadow-[var(--elev-2)]",
+        !quietChrome && "transition-shadow duration-200",
         className,
       )}
     >
@@ -82,7 +86,7 @@ export function Composer({
         autoFocus={autoFocus}
         disabled={disabled}
         className={cn(
-          "min-h-10 flex-1 resize-none self-center bg-transparent py-2 text-[15px] leading-relaxed outline-none scroll-slim",
+          "min-h-10 flex-1 resize-none self-center bg-transparent py-2 text-[15px] leading-relaxed outline-none focus:outline-none focus-visible:outline-none scroll-slim",
           light
             ? "scroll-slim-light text-chat-text placeholder:text-chat-text-muted"
             : "text-dash-text placeholder:text-dash-text-aux",
@@ -94,11 +98,18 @@ export function Composer({
         disabled={!canSend}
         aria-label="Enviar mensaje"
         className={cn(
-          "flex size-11 shrink-0 items-center justify-center rounded-full transition-[background-color,transform,opacity] duration-150 disabled:opacity-40",
-          light
-            ? "bg-chat-user text-chat-user-text hover:bg-brand-dark"
-            : "bg-dash-accent text-navy-950 hover:brightness-110",
-          canSend && "active:scale-95",
+          "flex size-11 shrink-0 items-center justify-center rounded-full outline-none focus:outline-none focus-visible:outline-none disabled:opacity-40",
+          quietChrome
+            ? light
+              ? "bg-chat-user text-chat-user-text"
+              : "bg-dash-accent text-white"
+            : cn(
+                "transition-[background-color,transform,opacity] duration-150",
+                light
+                  ? "bg-chat-user text-chat-user-text hover:bg-brand-dark"
+                  : "bg-dash-accent text-white hover:bg-brand-dark",
+                canSend && "active:scale-95",
+              ),
         )}
       >
         {busy ? (

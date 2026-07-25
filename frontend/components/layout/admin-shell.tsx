@@ -18,7 +18,6 @@ interface AdminShellProps {
   onReset: () => void;
   resetting?: boolean;
   onLogout: () => void;
-  /** `true` para vistas que manejan su propio scroll interno (chatbot). */
   fill?: boolean;
   children: React.ReactNode;
 }
@@ -34,77 +33,93 @@ export function AdminShell({
   children,
 }: AdminShellProps) {
   return (
-    <div className="flex h-dvh bg-dash-bg text-dash-text">
-      <aside className="hidden w-[220px] shrink-0 flex-col border-r border-dash-border bg-[color-mix(in_oklab,var(--dash-bg),black_18%)] md:flex">
-        <div className="flex h-16 items-center px-6">
-          <Logo width={72} height={50} className="max-h-10 w-auto" />
+    <div className="dash-atmosphere flex h-dvh text-dash-text">
+      <aside className="dash-glass relative z-10 hidden w-[220px] shrink-0 flex-col md:flex">
+        <div className="relative flex h-14 shrink-0 items-center bg-navy-950 px-5">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[var(--banner-bg)] backdrop-blur-xl"
+          />
+          <Logo width={68} height={48} className="relative z-10 max-h-8 w-auto brightness-0 invert" />
         </div>
 
-        <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
-          {ADMIN_VIEWS.map((item) => {
-            const active = item.key === view;
-            return (
-              <button
-                key={item.key}
-                type="button"
-                onClick={() => onViewChange(item.key)}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "flex items-center gap-3 rounded-[var(--radius-control)] px-3 py-2.5 text-left text-[14px] transition-colors duration-150",
-                  active
-                    ? "bg-[var(--dash-accent-soft)] text-dash-accent"
-                    : "text-dash-text-muted hover:bg-dash-surface hover:text-dash-text",
-                )}
-              >
-                <item.icon className="size-[18px] shrink-0" strokeWidth={1.75} />
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
+        <div className="flex min-h-0 flex-1 flex-col border-r border-[color-mix(in_oklab,var(--weg-blue)_12%,transparent)]">
+          <nav className="flex flex-1 flex-col gap-0.5 px-2.5 py-1">
+            <p className="mb-1.5 px-2.5 text-[11px] font-medium text-dash-text-aux">Menú</p>
+            {ADMIN_VIEWS.map((item) => {
+              const active = item.key === view;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => onViewChange(item.key)}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "group flex items-center gap-2.5 rounded-[var(--radius-control)] px-2.5 py-2 text-left text-[13px] font-medium transition-colors duration-150",
+                    active
+                      ? "bg-white text-dash-accent shadow-[var(--elev-1)]"
+                      : "text-dash-text-muted hover:bg-white/70 hover:text-dash-text",
+                  )}
+                >
+                  <item.icon
+                    className={cn(
+                      "size-4 shrink-0",
+                      active ? "text-dash-accent" : "text-dash-text-aux group-hover:text-dash-text-muted",
+                    )}
+                    strokeWidth={1.75}
+                  />
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
 
-        <div className="border-t border-dash-border p-3">
-          <Button variant="quiet" size="sm" onClick={onLogout} className="w-full justify-start gap-3 px-3">
-            <LogOut className="size-[18px]" strokeWidth={1.75} />
-            Salir
-          </Button>
+          <div className="border-t border-[color-mix(in_oklab,var(--weg-blue)_12%,transparent)] p-2.5">
+            <Button variant="quiet" size="sm" onClick={onLogout} className="w-full justify-start gap-2.5 px-2.5">
+              <LogOut className="size-4" strokeWidth={1.75} />
+              Salir
+            </Button>
+          </div>
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-16 shrink-0 items-center gap-4 border-b border-dash-border bg-[color-mix(in_oklab,var(--dash-bg),black_10%)] px-6">
-          <Badge tone="accent" size="lg" className="gap-2">
-            <Target className="size-3.5" strokeWidth={2} />
-            Objetivo: {objectiveLabel(objetivoActivo)}
+      <div className="relative flex min-w-0 flex-1 flex-col">
+        <header className="relative flex h-14 shrink-0 items-center gap-3 border-b border-[var(--banner-border)] bg-navy-950 px-5 lg:px-8">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[var(--banner-bg)] backdrop-blur-xl"
+          />
+          <Badge tone="onDark" size="md" className="relative z-10 gap-1.5">
+            <Target className="size-3.5" strokeWidth={1.75} />
+            {objectiveLabel(objetivoActivo)}
           </Badge>
 
-          <div className="ml-auto flex items-center gap-3">
-            <Button variant="dash" size="sm" onClick={onReset} disabled={resetting}>
+          <div className="relative z-10 ml-auto flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={onReset} disabled={resetting}>
               <RotateCcw className={cn("size-3.5", resetting && "animate-spin")} strokeWidth={1.75} />
               Reset demo
             </Button>
-            <Link href="/" className={buttonVariants({ variant: "dash", size: "sm" })}>
+            <Link href="/" className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}>
               <ArrowLeft className="size-3.5" strokeWidth={1.75} />
-              Volver al asesor
+              Asesor
             </Link>
           </div>
         </header>
 
-        {/* Nav móvil: el sidebar se colapsa a chips scrollables */}
-        <div className="flex gap-2 overflow-x-auto border-b border-dash-border px-4 py-3 md:hidden">
+        <div className="flex gap-1.5 overflow-x-auto border-b border-dash-border bg-[var(--dash-sidebar)] px-4 py-2 md:hidden">
           {ADMIN_VIEWS.map((item) => (
             <button
               key={item.key}
               type="button"
               onClick={() => onViewChange(item.key)}
               className={cn(
-                "flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-[13px]",
+                "flex shrink-0 items-center gap-1.5 rounded-[var(--radius-control)] px-2.5 py-1.5 text-[12px] font-medium",
                 item.key === view
-                  ? "border-dash-accent bg-[var(--dash-accent-soft)] text-dash-accent"
-                  : "border-dash-border text-dash-text-muted",
+                  ? "bg-white text-dash-accent shadow-[var(--elev-1)]"
+                  : "text-dash-text-muted hover:bg-white/70",
               )}
             >
-              <item.icon className="size-4" strokeWidth={1.75} />
+              <item.icon className="size-3.5" strokeWidth={1.75} />
               {item.label}
             </button>
           ))}
@@ -123,7 +138,6 @@ export function AdminShell({
   );
 }
 
-/** Contenedor de contenido: max 1200px y márgenes laterales de 24–32px. */
 export function AdminContent({ children }: { children: React.ReactNode }) {
-  return <div className="mx-auto w-full max-w-[1200px] px-6 py-8 lg:px-8">{children}</div>;
+  return <div className="mx-auto w-full max-w-[1120px] px-5 py-8 lg:px-8">{children}</div>;
 }

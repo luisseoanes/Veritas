@@ -9,10 +9,19 @@ interface WordStreamProps {
   speedMs?: number;
   onTick?: () => void;
   onDone?: () => void;
+  /** Permite renderizar el tramo revelado (p. ej. Markdown). */
+  render?: (visible: string) => React.ReactNode;
 }
 
 /** Respuesta del asesor palabra por palabra (~30–40 ms/palabra, §3.6.5). */
-export function WordStream({ text, animate = true, speedMs = 34, onTick, onDone }: WordStreamProps) {
+export function WordStream({
+  text,
+  animate = true,
+  speedMs = 34,
+  onTick,
+  onDone,
+  render,
+}: WordStreamProps) {
   const words = React.useMemo(() => text.split(" "), [text]);
   const [revealed, setRevealed] = React.useState(animate ? 0 : words.length);
 
@@ -40,5 +49,7 @@ export function WordStream({ text, animate = true, speedMs = 34, onTick, onDone 
     return () => window.clearInterval(timer);
   }, [animate, speedMs, words]);
 
-  return <span>{words.slice(0, revealed).join(" ")}</span>;
+  const visible = words.slice(0, revealed).join(" ");
+  if (render) return <>{render(visible)}</>;
+  return <span>{visible}</span>;
 }

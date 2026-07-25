@@ -1,15 +1,23 @@
 /**
- * Recharts pinta atributos SVG y necesita valores concretos, no `var(--…)`.
- * Este archivo es el único lugar del front con colores literales y refleja
- * exactamente los tokens de `app/globals.css`. Si cambia allí, cambia aquí.
+ * Colores literales para Recharts (SVG no resuelve `var(--…)`).
+ * Alineados al dashboard light: neutros + semántica escasa.
  */
 export const CHART = {
-  frontier: "#28b9da", // --dash-accent
-  dominated: "#64748b", // --dash-dominated
-  chosen: "#f1f1f8", // --dash-text (halo del punto elegido)
-  chosenFill: "#28b9da", // --dash-accent
-  grid: "rgba(241, 241, 248, 0.10)", // --dash-border
-  axis: "#7d8ba3", // --dash-text-aux
-  surface: "#0b1d3f", // --dash-surface
-  border: "rgba(241, 241, 248, 0.20)", // --dash-border-strong
+  frontier: "#0064a6",
+  frontierSoft: "#3d8fbf",
+  dominated: "#94a3b8",
+  chosen: "#0f172a",
+  chosenFill: "#b45309",
+  chosenHalo: "rgba(180, 83, 9, 0.18)",
+  grid: "rgba(15, 23, 42, 0.06)",
+  axis: "#94a3b8",
+  surface: "#ffffff",
+  surfaceSoft: "#f3f4f6",
+  border: "rgba(15, 23, 42, 0.1)",
+  tooltipBg: "#ffffff",
+  ok: "#15803d",
+  danger: "#b91c1c",
+  accent2: "#475569",
+  coral: "#b91c1c",
+  pie: ["#0064a6", "#b91c1c", "#475569", "#b45309", "#15803d"],
 } as const;

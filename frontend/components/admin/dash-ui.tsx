@@ -7,11 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-/* ==========================================================================
-   Primitivas del dashboard. Un solo lenguaje de card, una sola escala de
-   espaciado y tipografía: si algo se ve distinto es porque significa distinto.
-   ========================================================================== */
-
 export function DashCard({
   className,
   interactive = false,
@@ -22,6 +17,19 @@ export function DashCard({
       className={cn("dash-card", interactive && "dash-card-interactive", className)}
       {...props}
     />
+  );
+}
+
+/** Contenedor de composición (bento / stage). */
+export function DashPanel({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("dash-panel", className)} {...props}>
+      {children}
+    </div>
   );
 }
 
@@ -41,10 +49,10 @@ export function DashSection({
   return (
     <section className={cn("mb-12 last:mb-0", className)}>
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h2 className="text-[22px] font-medium leading-tight text-dash-text">{title}</h2>
+        <div className="min-w-0">
+          <h2 className="text-[15px] font-semibold tracking-tight text-dash-text">{title}</h2>
           {subtitle ? (
-            <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-dash-text-muted">
+            <p className="mt-1 max-w-2xl text-[13px] leading-relaxed text-dash-text-muted">
               {subtitle}
             </p>
           ) : null}
@@ -57,7 +65,7 @@ export function DashSection({
 }
 
 type MetricTone = "neutral" | "accent" | "ok" | "warn" | "danger";
-type MetricSize = "hero" | "large" | "base";
+type MetricSize = "hero" | "large" | "base" | "sm";
 
 const METRIC_TONE: Record<MetricTone, string> = {
   neutral: "text-dash-text",
@@ -76,10 +84,33 @@ const METRIC_ICON_TONE: Record<MetricTone, string> = {
 };
 
 const METRIC_SIZE: Record<MetricSize, string> = {
-  hero: "text-[clamp(2.75rem,5.5vw,4.25rem)] leading-[0.95]",
-  large: "text-[clamp(2rem,3vw,2.5rem)] leading-[1]",
-  base: "text-[26px] leading-[1.1]",
+  hero: "text-[clamp(2.75rem,4.5vw,3.5rem)] font-semibold leading-none tracking-tight",
+  large: "text-[2rem] font-semibold leading-none tracking-tight",
+  base: "text-[1.5rem] font-semibold leading-none tracking-tight",
+  sm: "text-[1.25rem] font-semibold leading-none tracking-tight",
 };
+
+/** Métrica inline: el número manda; la etiqueta es secundaria. */
+export function DashCounter({
+  label,
+  value,
+  tone = "neutral",
+  size = "large",
+  className,
+}: {
+  label: string;
+  value: React.ReactNode;
+  tone?: MetricTone;
+  size?: MetricSize;
+  className?: string;
+}) {
+  return (
+    <div className={cn("dash-counter flex flex-col gap-2 px-5 py-4", className)}>
+      <p className="text-[12px] font-medium text-dash-text-muted">{label}</p>
+      <p className={cn("tnum", METRIC_SIZE[size], METRIC_TONE[tone])}>{value}</p>
+    </div>
+  );
+}
 
 export function DashMetricBlock({
   label,
@@ -102,30 +133,28 @@ export function DashMetricBlock({
 }) {
   return (
     <DashCard className={cn("flex flex-col justify-between gap-6", className)}>
-      <div className="flex items-start justify-between gap-4">
-        <p className="text-[13px] font-medium uppercase tracking-[0.12em] text-dash-text-muted">
-          {label}
-        </p>
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-[12px] font-medium text-dash-text-muted">{label}</p>
         {Icon ? (
           <span
             className={cn(
-              "flex size-10 shrink-0 items-center justify-center rounded-full",
+              "flex size-8 shrink-0 items-center justify-center rounded-lg",
               METRIC_ICON_TONE[tone],
             )}
           >
-            <Icon className="size-5" strokeWidth={1.75} />
+            <Icon className="size-4" strokeWidth={1.75} />
           </span>
         ) : null}
       </div>
 
       <div>
         {loading ? (
-          <Skeleton className="h-12 w-40" />
+          <Skeleton className="h-10 w-36" />
         ) : (
-          <p className={cn("tnum font-medium", METRIC_SIZE[size], METRIC_TONE[tone])}>{value}</p>
+          <p className={cn("tnum", METRIC_SIZE[size], METRIC_TONE[tone])}>{value}</p>
         )}
         {hint ? (
-          <p className="mt-3 text-[13px] leading-relaxed text-dash-text-muted">{hint}</p>
+          <p className="mt-2 text-[13px] leading-relaxed text-dash-text-aux">{hint}</p>
         ) : null}
       </div>
     </DashCard>
@@ -145,12 +174,12 @@ export function DashKeyValue({
 }) {
   return (
     <div>
-      <p className="text-[12px] uppercase tracking-[0.1em] text-dash-text-aux">{label}</p>
+      <p className="text-[12px] font-medium text-dash-text-aux">{label}</p>
       <p
         className={cn(
-          "tnum mt-1 text-[15px] font-medium",
+          "tnum mt-1 text-[14px] font-semibold",
           METRIC_TONE[tone],
-          mono && "font-mono text-[14px]",
+          mono && "font-mono text-[13px] font-medium",
         )}
       >
         {value}
@@ -159,24 +188,21 @@ export function DashKeyValue({
   );
 }
 
-/** La fórmula del detector siempre visible, nunca en tooltip (§3.7). */
 export function FormulaBlock({ formula, label = "Fórmula" }: { formula: string; label?: string }) {
   return (
-    <div className="rounded-[var(--radius-control)] border border-dash-border bg-dash-bg p-3">
-      <p className="mb-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-dash-text-aux">
-        {label}
+    <div className="rounded-[var(--radius-control)] border border-dash-border bg-dash-surface-2 px-3.5 py-3">
+      <p className="mb-1 text-[11px] font-medium text-dash-text-aux">{label}</p>
+      <p className="font-mono text-[12px] leading-relaxed break-words text-dash-text-muted">
+        {formula}
       </p>
-      <p className="font-mono text-[13px] leading-relaxed break-words text-dash-text">{formula}</p>
     </div>
   );
 }
 
 export function RecommendationBlock({ text }: { text: string }) {
   return (
-    <div className="rounded-[var(--radius-control)] border border-[color-mix(in_oklab,var(--dash-accent),transparent_70%)] bg-[var(--dash-accent-soft)] p-3">
-      <p className="mb-1.5 text-[11px] font-medium uppercase tracking-[0.12em] text-dash-accent">
-        Recomendación
-      </p>
+    <div className="rounded-[var(--radius-control)] border border-dash-border bg-[var(--dash-accent-soft)] px-3.5 py-3">
+      <p className="mb-1 text-[11px] font-semibold text-dash-accent">Recomendación</p>
       <p className="text-[13px] leading-relaxed text-dash-text">{text}</p>
     </div>
   );
@@ -184,27 +210,27 @@ export function RecommendationBlock({ text }: { text: string }) {
 
 export function DashEmpty({ message }: { message: string }) {
   return (
-    <DashCard className="flex items-center gap-4">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-dash-surface-2 text-dash-text-aux">
-        <Inbox className="size-5" strokeWidth={1.75} />
+    <DashCard className="flex items-center gap-3.5 py-5">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-dash-surface-2 text-dash-text-aux">
+        <Inbox className="size-4" strokeWidth={1.75} />
       </span>
-      <p className="text-[14px] text-dash-text-muted">{message}</p>
+      <p className="text-[13px] text-dash-text-muted">{message}</p>
     </DashCard>
   );
 }
 
 export function DashError({ message, onRetry }: { message: string; onRetry?: () => void }) {
   return (
-    <DashCard className="border-[color-mix(in_oklab,var(--dash-danger),transparent_60%)]">
-      <div className="flex items-start gap-4">
-        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--dash-danger-soft)] text-dash-danger">
-          <AlertTriangle className="size-5" strokeWidth={1.75} />
+    <DashCard>
+      <div className="flex items-start gap-3.5">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--dash-danger-soft)] text-dash-danger">
+          <AlertTriangle className="size-4" strokeWidth={1.75} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-medium text-dash-text">No se pudo cargar</p>
-          <p className="mt-1.5 text-[13px] leading-relaxed text-dash-text-muted">{message}</p>
+          <p className="text-[14px] font-semibold text-dash-text">No se pudo cargar</p>
+          <p className="mt-1 text-[13px] leading-relaxed text-dash-text-muted">{message}</p>
           {onRetry ? (
-            <Button variant="dash" size="sm" onClick={onRetry} className="mt-4">
+            <Button variant="dash" size="sm" onClick={onRetry} className="mt-3">
               <RotateCcw className="size-3.5" strokeWidth={1.75} />
               Reintentar
             </Button>
@@ -217,9 +243,9 @@ export function DashError({ message, onRetry }: { message: string; onRetry?: () 
 
 export function DashCardSkeleton({ lines = 3 }: { lines?: number }) {
   return (
-    <DashCard className="space-y-4">
-      <Skeleton className="h-4 w-32" />
-      <Skeleton className="h-10 w-44" />
+    <DashCard className="space-y-3">
+      <Skeleton className="h-3.5 w-28" />
+      <Skeleton className="h-9 w-40" />
       {Array.from({ length: lines }).map((_, index) => (
         <Skeleton key={index} className="h-3 w-full" />
       ))}
@@ -227,12 +253,11 @@ export function DashCardSkeleton({ lines = 3 }: { lines?: number }) {
   );
 }
 
-/** Barra de peso de objetivo: sutil, sin gradientes ni sombras extra. */
 export function WeightBar({ value }: { value: number }) {
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-dash-surface-2">
+    <div className="dash-bar-track">
       <div
-        className="h-full rounded-full bg-dash-accent transition-[width] duration-200"
+        className="dash-bar-fill transition-[width] duration-300"
         style={{ width: `${Math.max(0, Math.min(1, value)) * 100}%` }}
       />
     </div>

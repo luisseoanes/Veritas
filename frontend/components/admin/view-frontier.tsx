@@ -11,6 +11,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  ZAxis,
 } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
@@ -22,14 +23,14 @@ import { isFrontierOk } from "@/lib/api/types";
 import { DEMO_FRONTIER_BODY } from "@/lib/demo";
 import { describeError } from "@/lib/errors";
 import { formatCop, formatCopCompact, formatNumber, humanizeConstraint } from "@/lib/format";
-import { cn } from "@/lib/utils";
 
 import { CHART } from "./chart-tokens";
-import { DashCard, DashError, DashSection } from "./dash-ui";
+import { DashCard, DashCounter, DashError, DashPanel, DashSection } from "./dash-ui";
 
 interface PointDatum {
   x: number;
   y: number;
+  z: number;
   ids: string[];
   availability: number;
   efficiency: number;
@@ -70,7 +71,6 @@ export function ViewFrontier({ activo }: { activo: string | undefined }) {
     }
   }, []);
 
-  // Se calcula el escenario del guion al entrar: la vista nunca aparece vacía.
   const bootstrapped = React.useRef(false);
   React.useEffect(() => {
     if (bootstrapped.current) return;
@@ -96,11 +96,11 @@ export function ViewFrontier({ activo }: { activo: string | undefined }) {
   return (
     <DashSection
       title="Frontera de Pareto"
-      subtitle="El front manda el escenario técnico; el backend resuelve, devuelve la frontera y qué punto elegiría cada objetivo. El objetivo activo vive en el servidor, no en este formulario."
+      subtitle="Escenario técnico → solver → frontera. El objetivo activo elige un punto válido; nunca sale de la frontera."
     >
       <form onSubmit={handleSubmit}>
-        <DashCard>
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        <DashPanel className="!py-5">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <Field
               label="Potencia (kW)"
               value={form.power_kw}
@@ -130,40 +130,43 @@ export function ViewFrontier({ activo }: { activo: string | undefined }) {
             />
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center gap-6">
-            <label className="flex cursor-pointer items-center gap-2.5 text-[14px] text-dash-text-muted">
+          <div className="mt-5 flex flex-wrap items-center gap-4">
+            <label className="flex cursor-pointer items-center gap-2 text-[13px] text-dash-text-muted">
               <input
                 type="checkbox"
                 checked={form.require_stock}
                 onChange={(event) =>
                   setForm((current) => ({ ...current, require_stock: event.target.checked }))
                 }
-                className="size-4 accent-[var(--dash-accent)]"
+                className="size-3.5 accent-[var(--dash-accent)]"
               />
               Exigir stock disponible
             </label>
 
-            <div className="ml-auto flex flex-wrap items-center gap-3">
+            <div className="ml-auto flex flex-wrap items-center gap-2">
               <Button variant="dash" size="md" onClick={useDemoScenario} disabled={loading}>
-                <Sparkles className="size-4" strokeWidth={1.75} />
+                <Sparkles className="size-3.5" strokeWidth={1.75} />
                 Escenario demo
               </Button>
               <Button variant="dashAccent" size="md" type="submit" disabled={loading}>
                 {loading ? (
-                  <Loader2 className="size-4 animate-spin" strokeWidth={2} />
+                  <Loader2 className="size-3.5 animate-spin" strokeWidth={2} />
                 ) : (
-                  <Target className="size-4" strokeWidth={2} />
+                  <Target className="size-3.5" strokeWidth={2} />
                 )}
                 Calcular frontera
               </Button>
             </div>
           </div>
-        </DashCard>
+        </DashPanel>
       </form>
 
       {error ? (
-        <div className="mt-6">
-          <DashError message={error} onRetry={() => void compute(toSolveRequest(form) ?? DEMO_FRONTIER_BODY)} />
+        <div className="mt-4">
+          <DashError
+            message={error}
+            onRetry={() => void compute(toSolveRequest(form) ?? DEMO_FRONTIER_BODY)}
+          />
         </div>
       ) : null}
 
@@ -193,38 +196,54 @@ function FrontierChart({
   const chosenDatum = React.useMemo(() => {
     if (!chosen) return [];
     const match = frontier.find((point) => sameIds(point.ids, chosen.ids));
-    return match ? [match] : [];
+    return match ? [{ ...match, z: 220 }] : [];
   }, [chosen, frontier]);
 
   return (
-    <>
-      <div className="mt-6 grid gap-6 lg:grid-cols-3">
-        <LegendCard
-          title="Frontera"
-          swatch={CHART.frontier}
-          value={`${formatNumber(result.frontera.length)} puntos`}
-          description="Configuraciones no dominadas: mejorar una dimensión obliga a ceder en otra."
+    <div className="mt-6 space-y-4">
+      <div className="grid gap-3 sm:grid-cols-12">
+        <DashCounter
+          label="Puntos en frontera"
+          value={formatNumber(result.frontera.length)}
+          tone="accent"
+          size="hero"
+          className="sm:col-span-5"
         />
-        <LegendCard
-          title="Dominadas"
-          swatch={CHART.dominated}
-          value={`${formatNumber(result.dominadas.length)} puntos`}
-          description="Peores en todo. Ningún objetivo puede elegirlas: son inalcanzables por construcción."
+        <DashCounter
+          label="Dominadas"
+          value={formatNumber(result.dominadas.length)}
+          tone="neutral"
+          size="base"
+          className="sm:col-span-3"
         />
-        <LegendCard
-          title="Elegida"
-          swatch={CHART.chosenFill}
-          value={chosen ? formatCop(chosen.precio_cop) : "—"}
-          description="El punto que selecciona el objetivo activo del servidor."
-          highlight
+        <DashCounter
+          label="Elegida"
+          value={chosen ? formatCopCompact(chosen.precio_cop) : "—"}
+          tone="warn"
+          size="base"
+          className="sm:col-span-4"
         />
       </div>
 
-      <DashCard className="mt-6">
-        <div className="h-[420px] w-full">
+      <DashPanel className="overflow-hidden !px-4 !py-5 sm:!px-6">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3 px-1">
+          <div>
+            <p className="text-[13px] font-semibold text-dash-text">Costo × margen</p>
+            <p className="mt-0.5 text-[12px] text-dash-text-muted">
+              Cada punto es una configuración válida. El ámbar es la elegida por el objetivo activo.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-4">
+            <Swatch color={CHART.frontier} label="Frontera" />
+            <Swatch color={CHART.dominated} label="Dominadas" />
+            <Swatch color={CHART.chosenFill} label="Elegida" />
+          </div>
+        </div>
+
+        <div className="relative h-[420px] w-full overflow-hidden rounded-[var(--radius-card)] border border-dash-border bg-dash-surface-2">
           <ResponsiveContainer width="100%" height="100%">
-            <ScatterChart margin={{ top: 12, right: 24, bottom: 44, left: 28 }}>
-              <CartesianGrid stroke={CHART.grid} />
+            <ScatterChart margin={{ top: 24, right: 24, bottom: 44, left: 16 }}>
+              <CartesianGrid stroke={CHART.grid} strokeDasharray="3 6" vertical={false} />
               <XAxis
                 type="number"
                 dataKey="x"
@@ -232,13 +251,15 @@ function FrontierChart({
                 domain={["dataMin - 300000", "dataMax + 300000"]}
                 tickFormatter={(value: number) => formatCopCompact(value)}
                 stroke={CHART.axis}
-                tick={{ fill: CHART.axis, fontSize: 12 }}
+                tick={{ fill: CHART.axis, fontSize: 11 }}
+                axisLine={{ stroke: CHART.border }}
+                tickLine={false}
                 label={{
                   value: "Costo total (COP)",
                   position: "insideBottom",
-                  offset: -24,
+                  offset: -26,
                   fill: CHART.axis,
-                  fontSize: 12,
+                  fontSize: 11,
                 }}
               />
               <YAxis
@@ -248,37 +269,52 @@ function FrontierChart({
                 domain={["dataMin - 150000", "dataMax + 150000"]}
                 tickFormatter={(value: number) => formatCopCompact(value)}
                 stroke={CHART.axis}
-                tick={{ fill: CHART.axis, fontSize: 12 }}
-                width={80}
+                tick={{ fill: CHART.axis, fontSize: 11 }}
+                axisLine={{ stroke: CHART.border }}
+                tickLine={false}
+                width={72}
                 label={{
                   value: "Margen (COP)",
                   angle: -90,
                   position: "insideLeft",
                   fill: CHART.axis,
-                  fontSize: 12,
+                  fontSize: 11,
                 }}
               />
-              <Tooltip content={<FrontierTooltip />} />
-              <Scatter name="Dominadas" data={dominated} fill={CHART.dominated} opacity={0.65} />
-              <Scatter name="Frontera" data={frontier} fill={CHART.frontier} />
+              <ZAxis type="number" dataKey="z" range={[36, 180]} />
+              <Tooltip
+                content={<FrontierTooltip />}
+                cursor={{ strokeDasharray: "3 4", stroke: CHART.axis }}
+              />
+              <Scatter
+                name="Dominadas"
+                data={dominated}
+                fill={CHART.dominated}
+                fillOpacity={0.7}
+                shape={<SoftDot fill={CHART.dominated} r={4.5} />}
+              />
+              <Scatter
+                name="Frontera"
+                data={frontier}
+                fill={CHART.frontier}
+                shape={<SoftDot fill={CHART.frontier} r={5.5} />}
+              />
               <Scatter name="Elegida" data={chosenDatum} shape={<ChosenDot />} />
             </ScatterChart>
           </ResponsiveContainer>
         </div>
-      </DashCard>
+      </DashPanel>
 
       {chosen ? (
-        <DashCard className="mt-6 border-dash-accent">
+        <DashCard>
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="min-w-0">
-              <p className="text-[13px] font-medium uppercase tracking-[0.12em] text-dash-accent">
-                Configuración elegida por el objetivo activo
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <p className="text-[12px] font-medium text-dash-warn">Configuración elegida</p>
+              <div className="mt-3 flex flex-wrap gap-1.5">
                 {chosen.ids.map((id) => (
                   <code
                     key={id}
-                    className="rounded-full border border-dash-border bg-dash-surface-2 px-3 py-1 font-mono text-[12px] text-dash-text"
+                    className="rounded-[var(--radius-control)] border border-dash-border bg-dash-surface-2 px-2.5 py-1 font-mono text-[11px] text-dash-text-muted"
                   >
                     {id}
                   </code>
@@ -288,37 +324,77 @@ function FrontierChart({
 
             <motion.p
               key={chosen.precio_cop}
-              initial={{ opacity: 0, y: 10, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ type: "spring", stiffness: 240, damping: 22 }}
-              className="tnum text-[clamp(2rem,3.4vw,2.75rem)] font-medium leading-none text-dash-accent"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25 }}
+              className="tnum text-[clamp(1.75rem,3vw,2.35rem)] font-semibold leading-none tracking-tight text-dash-text"
             >
               {formatCop(chosen.precio_cop)}
             </motion.p>
           </div>
         </DashCard>
       ) : null}
-    </>
+    </div>
+  );
+}
+
+function SoftDot({
+  cx,
+  cy,
+  fill,
+  r = 5,
+}: {
+  cx?: number;
+  cy?: number;
+  fill: string;
+  r?: number;
+}) {
+  if (cx === undefined || cy === undefined) return null;
+  return <circle cx={cx} cy={cy} r={r} fill={fill} />;
+}
+
+function ChosenDot({ cx, cy }: { cx?: number; cy?: number }) {
+  if (cx === undefined || cy === undefined) return null;
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r={14} fill={CHART.chosenHalo} className="chosen-halo" />
+      <circle
+        cx={cx}
+        cy={cy}
+        r={6}
+        fill={CHART.chosenFill}
+        stroke="#ffffff"
+        strokeWidth={2}
+      />
+    </g>
+  );
+}
+
+function Swatch({ color, label }: { color: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 text-[12px] text-dash-text-muted">
+      <span className="size-2 rounded-full" style={{ backgroundColor: color }} />
+      {label}
+    </span>
   );
 }
 
 function UnsatPanel({ core }: { core: string[] }) {
   return (
-    <DashCard className="mt-6 border-[color-mix(in_oklab,var(--dash-danger),transparent_60%)]">
-      <div className="flex items-start gap-4">
-        <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--dash-danger-soft)] text-dash-danger">
-          <CircleOff className="size-5" strokeWidth={1.75} />
+    <DashCard className="mt-6">
+      <div className="flex items-start gap-3.5">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[var(--dash-danger-soft)] text-dash-danger">
+          <CircleOff className="size-4" strokeWidth={1.75} />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="text-[19px] font-medium text-dash-text">Este escenario no tiene frontera</h3>
-          <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-dash-text-muted">
-            No existe configuración válida: el solver devolvió el núcleo mínimo insatisfacible, es
-            decir el conjunto de restricciones que hace imposible el problema. Ajusta el escenario y
-            vuelve a calcular.
+          <h3 className="text-[15px] font-semibold text-dash-text">Este escenario no tiene frontera</h3>
+          <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-dash-text-muted">
+            No existe configuración válida: el solver devolvió el núcleo mínimo insatisfacible.
+            Ajusta el escenario y vuelve a calcular.
           </p>
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-4 flex flex-wrap gap-1.5">
             {core.map((constraint) => (
-              <Badge key={constraint} tone="danger" size="lg" className="font-mono">
+              <Badge key={constraint} tone="danger" className="font-mono">
                 {humanizeConstraint(constraint)}
               </Badge>
             ))}
@@ -326,43 +402,6 @@ function UnsatPanel({ core }: { core: string[] }) {
         </div>
       </div>
     </DashCard>
-  );
-}
-
-function LegendCard({
-  title,
-  swatch,
-  value,
-  description,
-  highlight = false,
-}: {
-  title: string;
-  swatch: string;
-  value: string;
-  description: string;
-  highlight?: boolean;
-}) {
-  return (
-    <DashCard className={cn(highlight && "border-dash-accent")}>
-      <div className="flex items-center gap-3">
-        <span className="size-3 shrink-0 rounded-full" style={{ backgroundColor: swatch }} />
-        <p className="text-[13px] font-medium uppercase tracking-[0.12em] text-dash-text-muted">
-          {title}
-        </p>
-      </div>
-      <p className="tnum mt-4 text-[26px] font-medium leading-none text-dash-text">{value}</p>
-      <p className="mt-3 text-[13px] leading-relaxed text-dash-text-muted">{description}</p>
-    </DashCard>
-  );
-}
-
-function ChosenDot({ cx, cy }: { cx?: number; cy?: number }) {
-  if (cx === undefined || cy === undefined) return null;
-  return (
-    <g>
-      <circle cx={cx} cy={cy} r={18} fill={CHART.chosenFill} className="chosen-halo" />
-      <circle cx={cx} cy={cy} r={8} fill={CHART.chosenFill} stroke={CHART.chosen} strokeWidth={2} />
-    </g>
   );
 }
 
@@ -378,11 +417,13 @@ function FrontierTooltip({
 
   return (
     <div
-      className="rounded-[var(--radius-card)] border p-4 shadow-[var(--elev-3)]"
-      style={{ backgroundColor: CHART.surface, borderColor: CHART.border }}
+      className="rounded-[var(--radius-control)] border border-dash-border px-3.5 py-3 shadow-[var(--elev-2)]"
+      style={{ backgroundColor: CHART.tooltipBg }}
     >
-      <p className="font-mono text-[12px] leading-relaxed text-dash-text">{datum.ids.join(" · ")}</p>
-      <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-[12px]">
+      <p className="font-mono text-[11px] leading-relaxed text-dash-text-muted">
+        {datum.ids.join(" · ")}
+      </p>
+      <dl className="mt-2.5 grid grid-cols-2 gap-x-5 gap-y-1.5 text-[12px]">
         <TooltipRow label="Precio" value={formatCop(datum.precio)} />
         <TooltipRow label="Costo" value={formatCop(datum.x)} />
         <TooltipRow label="Margen" value={formatCop(datum.y)} />
@@ -397,7 +438,7 @@ function TooltipRow({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <dt className="text-dash-text-aux">{label}</dt>
-      <dd className="tnum font-medium text-dash-text">{value}</dd>
+      <dd className="tnum font-semibold text-dash-text">{value}</dd>
     </div>
   );
 }
@@ -418,14 +459,16 @@ function Field({
   const id = `frontier-${label.toLowerCase().replace(/[^a-z]+/g, "-")}`;
   return (
     <div>
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id} className="!text-dash-text-muted !text-[12px]">
+        {label}
+      </Label>
       <Input
         id={id}
         value={value}
         placeholder={placeholder}
         inputMode={inputMode}
         onChange={(event) => onChange(event.target.value)}
-        className="mt-2"
+        className="mt-1.5 rounded-[var(--radius-control)] border-dash-border bg-dash-surface shadow-none focus:border-dash-accent focus:ring-1 focus:ring-dash-accent/25"
       />
     </div>
   );
@@ -435,6 +478,7 @@ function toDatum(point: FrontierPoint): PointDatum {
   return {
     x: point.objectives.cost,
     y: point.objectives.margin,
+    z: 90,
     ids: point.ids,
     availability: point.objectives.availability,
     efficiency: point.objectives.efficiency,
@@ -446,7 +490,6 @@ function sameIds(a: string[], b: string[]): boolean {
   return a.length === b.length && a.every((id, index) => id === b[index]);
 }
 
-/** Solo viajan los campos con valor válido: el backend exige `gt=0` si se envían. */
 function toSolveRequest(form: ScenarioForm): SolveRequest | null {
   const scenario: SolveRequest = { require_stock: form.require_stock };
 

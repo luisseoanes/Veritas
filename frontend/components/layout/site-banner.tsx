@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 export function SiteBanner() {
   return (
     <header className="shrink-0 border-b border-[var(--banner-border)] bg-[var(--banner-bg)] backdrop-blur-xl">
-      <div className="mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between px-5 sm:px-8">
+      <div className="flex h-16 w-full items-center justify-between px-3 sm:px-4 lg:px-5">
         <Logo className="max-h-10 w-auto" />
         <Link
           href="/admin/login"
