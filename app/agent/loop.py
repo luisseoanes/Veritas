@@ -117,8 +117,11 @@ CLIENTE = AgentProfile(
     system_prompt=SYSTEM_PROMPT,
     tool_names=(
         "solve_configuration", "explain_configuration",
-        "check_compatibility", "search_catalog",
+        "check_compatibility", "search_catalog", "compare_products",
         "suggest_requirements", "cite_datasheet",
+        # Unica tool que EJECUTA una accion (emite y persiste un documento).
+        # Solo el perfil de cliente la tiene: es el cierre de su venta.
+        "generate_quote",
     ),
 )
 
