@@ -235,3 +235,60 @@ export interface AdminChatResponse {
   trace?: TraceStep[];
   business_objective?: string;
 }
+
+// ---------------------------------------------------------- simulador
+// `POST /admin/simulate`: contrafactual sobre las ventas perdidas reales.
+
+export interface SimulateRequest {
+  power_kw: number;
+  voltage: number;
+  price_cop: number;
+  kind?: "motor" | "drive" | "protection" | "cable";
+  features?: string[];
+}
+
+/** Presente solo si un producto NO puede formar configuración válida. */
+export interface ViabilityDiagnosis {
+  producto: string;
+  utilizable: false;
+  motivo: "SIN_COMPATIBLES" | "COMPAÑEROS_INCOMPATIBLES";
+  explicacion: string;
+  para_cerrar_la_brecha?: string;
+  slots_en_conflicto?: string[];
+  slots_sin_opcion?: string[];
+}
+
+export interface SimulatedProfile {
+  clientes: number;
+  perfil: {
+    power_kw: number | null;
+    voltage: number | null;
+    features: string[];
+    presupuesto_cop: number | null;
+  };
+  presupuesto_promedio_cop: number | null;
+  valor_recuperable_cop?: number;
+  sigue_bloqueado_por?: string[];
+}
+
+export interface SimulateResponse {
+  status: "OK" | "SIN_HISTORICO";
+  nota?: string;
+  productos_simulados?: Array<{
+    id: string;
+    tipo: string;
+    precio_cop: number;
+    atributos: Record<string, unknown>;
+  }>;
+  diagnostico_de_viabilidad?: ViabilityDiagnosis[] | null;
+  consultas_perdidas_analizadas?: number;
+  perfiles_distintos?: number;
+  clientes_recuperados?: number;
+  clientes_que_siguen_sin_solucion?: number;
+  tasa_de_recuperacion?: number;
+  valor_recuperable_cop?: number;
+  formula?: string;
+  metodo?: string;
+  detalle_recuperados?: SimulatedProfile[];
+  detalle_no_recuperados?: SimulatedProfile[];
+}

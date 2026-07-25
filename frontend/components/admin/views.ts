@@ -1,4 +1,4 @@
-import { Bot, Lightbulb, ScatterChart, Target, Gauge } from "lucide-react";
+import { Bot, FlaskConical, Lightbulb, ScatterChart, Target, Gauge } from "lucide-react";
 
 /** Una sola fuente para el sidebar y para el parámetro `?view=`. */
 export const ADMIN_VIEWS = [
@@ -6,6 +6,7 @@ export const ADMIN_VIEWS = [
   { key: "objetivo", label: "Objetivo", icon: Target },
   { key: "frontera", label: "Frontera", icon: ScatterChart },
   { key: "oportunidades", label: "Oportunidades", icon: Lightbulb },
+  { key: "simulador", label: "Simulador", icon: FlaskConical },
   { key: "chatbot", label: "Chatbot", icon: Bot },
 ] as const;
 

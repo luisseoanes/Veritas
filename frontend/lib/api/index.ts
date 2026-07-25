@@ -15,6 +15,8 @@ import type {
   HealthResponse,
   ObjectivesResponse,
   SetObjectiveResponse,
+  SimulateRequest,
+  SimulateResponse,
   SolveRequest,
   TraceResponse,
   VerifyResponse,
@@ -85,7 +87,17 @@ export const api = {
     return { data, simulado: false };
   },
 
-  /** Copiloto de admin. El endpoint aún no existe: ver `ADMIN_CHAT_PATH`. */
+  /** `POST /admin/simulate` — contrafactual: re-resuelve las ventas perdidas
+   *  con un producto hipotético en el catálogo. No modifica nada en el backend. */
+  simulate: (payload: SimulateRequest, signal?: AbortSignal): Promise<SimulateResponse> =>
+    request<SimulateResponse>("/admin/simulate", {
+      method: "POST",
+      body: payload,
+      admin: true,
+      signal,
+    }),
+
+  /** Copiloto de admin, ya publicado por el backend en `ADMIN_CHAT_PATH`. */
   adminChat: async ({
     message,
     session_id,

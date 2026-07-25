@@ -8,6 +8,7 @@ import { ViewChatbot } from "@/components/admin/view-chatbot";
 import { ViewFrontier } from "@/components/admin/view-frontier";
 import { ViewObjective } from "@/components/admin/view-objective";
 import { ViewOpportunities } from "@/components/admin/view-opportunities";
+import { ViewSimulator } from "@/components/admin/view-simulator";
 import { ViewSummary } from "@/components/admin/view-summary";
 import { parseView, type AdminView } from "@/components/admin/views";
 import { AdminContent, AdminShell } from "@/components/layout/admin-shell";
@@ -134,6 +135,8 @@ function AdminDashboard() {
           {view === "oportunidades" ? (
             <ViewOpportunities data={data} loading={loading} error={error} onRetry={refresh} />
           ) : null}
+
+          {view === "simulador" ? <ViewSimulator /> : null}
         </AdminContent>
       )}
     </AdminShell>
