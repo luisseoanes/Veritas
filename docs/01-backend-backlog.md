@@ -31,8 +31,13 @@ real.
 
 > **Workstream paralelo — dual chatbot (C1–C6):** el chatbot admin sobre el mismo motor se
 > rastrea en [03-chatbot-dual.md](03-chatbot-dual.md) §11. Es backend (C1–C5) + ML/DS (C6).
-> **C1 ✅ hecho (2026-07-25):** `run_agent` parametrizado por `AgentProfile`, namespacing de
-> sesión por perfil y guardrail de tools; regresión pura (35 tests verdes). No toca el dominio.
+> **C1–C5 ✅ hechos (2026-07-25) — backend del dual chatbot COMPLETO:** `run_agent` parametrizado
+> por `AgentProfile`, namespacing de sesión por perfil, guardrail de tools (C1); split del system
+> prompt en `CLIENT_SYSTEM_PROMPT` + stub `ADMIN_SYSTEM_PROMPT` (C2); `app/agent/admin_tools.py` con
+> las 5 tools que envuelven `detect_all`/`sole_option_bottlenecks`/`solve+pareto`/`state` + perfil
+> `ADMIN` (C3); `POST /admin/chat` bajo `require_admin` (C4, contrato en `docs/02` §Superficie 3.e);
+> `tests/test_admin_chat.py` con 8 tests (C5). Ninguna admin tool contamina el `event_log`. Suite:
+> **43 passed** (era 35). Solo queda **C6** (ML/DS: redactar `ADMIN_SYSTEM_PROMPT` real).
 
 ---
 

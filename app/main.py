@@ -21,7 +21,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.agent.loop import CLIENTE, run_agent
+from app.agent.loop import ADMIN, CLIENTE, run_agent
 from app.agent.memory import memory
 from app.agent.tracing import tracer
 from app.config import settings
@@ -259,6 +259,19 @@ def verify_admin(_: None = Depends(require_admin)) -> dict:
     """Valida el token de admin. La pantalla de login del front la usa para
     comprobar el token antes de entrar al panel."""
     return {"ok": True}
+
+
+@app.post("/admin/chat", tags=["admin"], dependencies=[Depends(require_admin)])
+def admin_chat(request: ChatRequest) -> dict:
+    """Un turno de conversacion con el analista de inteligencia de negocio.
+
+    Mismo motor que /chat (un solo loop parametrizado), pero con el perfil ADMIN:
+    tools de BI (lectura) + cambio de objetivo (escritura), NUNCA
+    `solve_configuration`. Por eso no escribe en el log de mercado. La sesion se
+    namespacea por perfil, asi que no comparte memoria ni traza con /chat.
+    Protegido por require_admin, igual que el resto de /admin/*.
+    """
+    return run_agent(request.message, session_id=request.session_id, profile=ADMIN)
 
 
 @app.get("/admin/dashboard", tags=["admin"], dependencies=[Depends(require_admin)])

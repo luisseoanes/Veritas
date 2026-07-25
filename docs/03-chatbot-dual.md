@@ -219,11 +219,34 @@ C1–C5 son tuyos (backend) y no dependen de ML/DS. C6 es de ellos y puede ir en
   - **`GET /trace/{session_id}`** ahora resuelve bajo el namespace `cliente:` → sigue devolviendo
     la traza del cliente igual que antes, y de paso **no expone** trazas del futuro chatbot admin.
   - `POST /chat` pasa `profile=CLIENTE` explícito.
-- [ ] **C2** · partir el system prompt (`CLIENT_SYSTEM_PROMPT` + `ADMIN_SYSTEM_PROMPT` stub).
-- [ ] **C3** · `admin_tools.py` (4 wrappers de lectura).
-- [ ] **C4** · endpoint `POST /admin/chat` (perfil `ADMIN`). ← *al cerrar esta, actualizar §8 y
-  `docs/02-frontend-guia.md` con el contrato del widget de chat admin.*
-- [ ] **C5** · `tests/test_admin_chat.py` (§7).
+- [x] **C2** · partir el system prompt — ✅ *hecho (2026-07-25):* en `app/agent/loop.py` el
+  `SYSTEM_PROMPT` se renombró a **`CLIENT_SYSTEM_PROMPT`** (contenido idéntico, cero cambios de
+  conducta del cliente) y `CLIENTE.system_prompt` lo referencia. Se añadió
+  **`ADMIN_SYSTEM_PROMPT`** como **stub para ML/DS (C6)** con la persona de analista + las
+  condiciones duras de backend que el prompt final debe conservar (no inventar cifras; confirmar
+  antes de aplicar `set_business_objective`; advertir que el cambio de objetivo es global — §5). El
+  perfil `ADMIN` como tal se crea en C3/C4, junto a sus tools. Regresión: 35 tests verdes.
+- [x] **C3** · `admin_tools.py` — ✅ *hecho (2026-07-25):* nuevo `app/agent/admin_tools.py` con
+  las 5 tools, cada una **envolviendo código existente** (cero lógica nueva):
+  `get_opportunities` (`detect_all`), `get_bottlenecks` (`sole_option_bottlenecks`), `get_frontier`
+  (`solve`+`pareto_frontier`, reutiliza `_build_requirements` de `tools.py`), `get_active_objective`
+  (`state`/`BUSINESS_OBJECTIVES`) y `set_business_objective` (`state.set_objective`, escritura). Se
+  registran en el mismo `registry`; se importan desde `loop.py` para que se registren al arrancar.
+  El perfil **`ADMIN`** ya está definido en `loop.py` con estas 5 tools (sin `solve_configuration`).
+  Verificado: ninguna toca el `event_log` (ni las lecturas ni la escritura — `solve` es puro y el
+  registro vive solo en `solve_configuration`), `set_business_objective` con preset inválido lanza
+  `ValueError` sin cambiar estado, cero solape de tools con `CLIENTE`, y **B11 (arquitectura) sigue
+  verde** (agente → intelligence/graph/solver es import permitido). 35 tests verdes.
+- [x] **C4** · endpoint `POST /admin/chat` — ✅ *hecho (2026-07-25):* en `app/main.py`, llama
+  `run_agent(..., profile=ADMIN)` y va bajo `dependencies=[Depends(require_admin)]` (mismo guard que
+  el resto de `/admin/*`). Reutiliza `ChatRequest` tal cual. Verificado: sin token → **401**, con
+  token → **200** con `reply`; `/chat` sigue abierto. `docs/02` actualizado con el contrato del
+  widget de chat admin (§Superficie 3.e + tabla de endpoints). 35 tests verdes.
+- [x] **C5** · `tests/test_admin_chat.py` — ✅ *hecho (2026-07-25):* 8 tests que cubren §7 sin LLM
+  real: auth (`/admin/chat` 401/200, `/chat` abierto), separación de perfiles (admin sin
+  `solve_configuration`, cero solape con cliente), aislamiento del `event_log` (una vuelta de
+  `/admin/chat` no crea `SOLVED`/`UNMET`) y validación de `set_business_objective` (preset válido
+  cambia estado; desconocido → `ValueError` sin cambiarlo). Suite total: **43 passed** (35 → 43).
 - [ ] **C6** · ML/DS: `ADMIN_SYSTEM_PROMPT` + descripciones de tools.
 
 ## 10. Decisiones de ML/DS (2026-07-25) — resueltas
