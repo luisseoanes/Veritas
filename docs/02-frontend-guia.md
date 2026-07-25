@@ -142,6 +142,38 @@ objetivo en (b). Ese salto ES la demo.
 { "keep_history": true }   // true = conserva las 400 sesiones del dashboard
 ```
 
+### e) Chat del administrador — BI conversacional
+**`POST /admin/chat`** ✅ *(ya existe — C4)* · exige `X-Admin-Token`.
+
+Un segundo widget de chat, esta vez dentro del panel de admin. **Mismo formato de
+request/response que `/chat`** (mismos campos: `message`, `session_id` → `reply`, `trace`,
+`business_objective`, `known_requirements`), así que puedes **reutilizar el mismo componente de
+chat** del cliente, cambiando solo la URL y añadiendo el header del token.
+
+```jsonc
+// request  (manda el header X-Admin-Token)
+{ "message": "¿qué producto me falta y para cuántos clientes?", "session_id": "admin-abc-123" }
+
+// response  (idéntico shape a /chat)
+{ "session_id": "admin-abc-123", "reply": "...", "business_objective": "balanced",
+  "trace": [ /* ... */ ], "known_requirements": {} }
+```
+
+Qué sabe hacer este chat (pregúntale en lenguaje natural): oportunidades/demanda insatisfecha,
+cuellos de botella del catálogo, la frontera de Pareto de un escenario, el objetivo activo y
+**cambiar el objetivo de negocio** (te pedirá confirmación antes de aplicarlo — es un cambio global
+que afecta lo que el asesor del cliente recomienda).
+
+> **Notas de integración:**
+> - Usa un `session_id` **distinto** al del chat de cliente. El backend ya aísla las sesiones por
+>   perfil (no se mezclan aunque coincida el id), pero mantenerlos separados en el front evita
+>   confusión.
+> - `GET /trace/{id}` es **solo para el chat de cliente**; no expone la traza del admin. La traza
+>   del admin viene **inline** en el campo `trace` de la respuesta de `/admin/chat` — úsala de ahí.
+> - Para el **momento clave del pitch**, cambiar el objetivo con el botón determinista
+>   `POST /admin/objective` es más seguro que depender de que el modelo interprete la orden; usa el
+>   chat-write como demo adicional, no como el mecanismo del que depende la demo.
+
 ### (opcional) Analítica del grafo
 `GET /admin/bottlenecks`, `GET /graph/stats`, `GET /graph/evidence?a=&b=` — todas ya existen, por
 si quieres enriquecer el dashboard.
@@ -171,6 +203,7 @@ Modelo simple a propósito: **un solo token compartido**, no hay usuarios. *(bac
 | Chatbot | `POST /chat`, `GET /trace/{id}` | ✅ existe |
 | Dashboard | `GET /admin/dashboard`, `GET /admin/objectives`, `POST /admin/objective` | ✅ existe |
 | Dashboard | `POST /admin/frontier` (gráfico Pareto) | ✅ existe (B2) |
+| Dashboard | `POST /admin/chat` (chat BI del admin) | ✅ existe (C4) |
 | Dashboard | `POST /demo/reset` | ✅ existe (B3) |
 | Login | `GET /admin/verify` | ✅ existe |
 | Todo admin | header `X-Admin-Token` + `401` | ✅ existe (B1) |

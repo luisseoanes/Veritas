@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from app.agent import admin_tools as _admin_tools  # noqa: F401  (registra tools admin)
 from app.agent import tools as _tools  # noqa: F401  (registra las herramientas)
 from app.agent.memory import Session, memory
 from app.agent.registry import registry
@@ -21,7 +22,7 @@ from app.llm.base import LLMProvider, Message
 from app.llm.factory import get_provider
 from app.state import state
 
-SYSTEM_PROMPT = """\
+CLIENT_SYSTEM_PROMPT = """\
 Eres un asesor comercial tecnico de {brand}, especializado en accionamientos
 industriales (motores, variadores de frecuencia, proteccion y cableado).
 
@@ -96,6 +97,37 @@ Contexto de la sesion:
 """
 
 
+# STUB — lo redacta ML/DS en C6 (persona + descripciones finales de tools).
+# Backend deja aqui la persona minima y las CONDICIONES DURAS que el prompt debe
+# respetar (ver docs/03 §5): no inventar cifras y confirmar antes de escribir el
+# objetivo. No amplies el alcance mas alla de esto sin coordinar con ML/DS.
+ADMIN_SYSTEM_PROMPT = """\
+Eres un analista de inteligencia de negocio de {brand}. Respondes preguntas del
+ADMINISTRADOR sobre el estado comercial usando SOLO las herramientas
+disponibles: oportunidades, cuellos de botella, frontera de Pareto y objetivo
+de negocio activo.
+
+REGLA ABSOLUTA — no la rompas nunca:
+NUNCA inventes cifras. Cada numero que reportes viene de una herramienta y trae
+su formula o su origen en el solver; si no tienes la tool para responder algo,
+dilo. No recomiendas productos a clientes: eso es del asesor comercial.
+
+Sobre cambiar el objetivo de negocio (`set_business_objective`) — unica accion
+con efecto:
+- Solo existen 4 presets validos; la herramienta rechaza cualquier otro valor.
+- CONFIRMA SIEMPRE antes de aplicar ("¿confirmo que cambie a maximizar
+  margen?"). Nunca cambies el objetivo ante una pregunta hipotetica
+  ("¿y si liberara stock?") — eso es analisis, no una orden.
+- Es un cambio de POLITICA global: afecta de inmediato lo que el asesor
+  recomienda a los clientes. Adviertelo al confirmar.
+
+Responde en espanol, con precision analitica y sin relleno.
+
+Contexto de la sesion:
+{session_context}
+"""
+
+
 @dataclass(frozen=True)
 class AgentProfile:
     """Perfil que parametriza `run_agent`: un solo loop, distintas audiencias.
@@ -110,11 +142,11 @@ class AgentProfile:
     tool_names: tuple[str, ...]    # subconjunto del registry que este agente usa
 
 
-# Perfil del asesor comercial (el chatbot que ya existia). En C1 reutiliza el
-# SYSTEM_PROMPT actual sin cambios; C2 partira los prompts en CLIENT_/ADMIN_.
+# Perfil del asesor comercial (el chatbot que ya existia). Usa el prompt del
+# cliente, sin cambios respecto al comportamiento historico.
 CLIENTE = AgentProfile(
     key="cliente",
-    system_prompt=SYSTEM_PROMPT,
+    system_prompt=CLIENT_SYSTEM_PROMPT,
     tool_names=(
         "solve_configuration", "explain_configuration",
         "check_compatibility", "search_catalog", "compare_products",
@@ -122,6 +154,19 @@ CLIENTE = AgentProfile(
         # Unica tool que EJECUTA una accion (emite y persiste un documento).
         # Solo el perfil de cliente la tiene: es el cierre de su venta.
         "generate_quote",
+    ),
+)
+
+
+# Perfil del analista de negocio (chatbot admin). BI de lectura + una unica tool
+# de escritura (set_business_objective). NO incluye `solve_configuration` -> por
+# eso nunca registra eventos en el log de mercado. Ver docs/03 §5.
+ADMIN = AgentProfile(
+    key="admin",
+    system_prompt=ADMIN_SYSTEM_PROMPT,
+    tool_names=(
+        "get_opportunities", "get_bottlenecks", "get_frontier",
+        "get_active_objective", "set_business_objective",
     ),
 )
 
