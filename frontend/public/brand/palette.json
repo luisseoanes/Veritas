@@ -1,0 +1,43 @@
+{
+  "$comment": "Documentación de la paleta. La fuente de verdad ejecutable es app/globals.css.",
+  "marca": {
+    "navy-950": "#06122e",
+    "navy-900": "#0d2760",
+    "navy-800": "#0a2d6d",
+    "blue": "#0064a6",
+    "blue-dark": "#00579d",
+    "blue-mid": "#1061a3",
+    "blue-bright": "#28b9da",
+    "ice": "#f1f1f1",
+    "body": "#595959",
+    "muted": "#9a9a9a"
+  },
+  "semanticos": {
+    "ok": "#198754",
+    "warn": "#ffc107",
+    "danger": "#dc3545"
+  },
+  "chat": {
+    "stage": "#edf2f7",
+    "sidebar": "#e4ebf3",
+    "user": "#0064a6",
+    "assistant": "#ffffff",
+    "text": "#0d2760",
+    "trace": "#f0f4f8"
+  },
+  "dashboard": {
+    "bg": "#06122e",
+    "surface": "#0b1d3f",
+    "surface-2": "#102a56",
+    "accent": "#28b9da",
+    "ok": "#34d399",
+    "warn": "#fbbf24",
+    "danger": "#f87171",
+    "dominated": "#64748b"
+  },
+  "tipografia": {
+    "display": "Roboto",
+    "body": "Roboto",
+    "mono": "Roboto Mono"
+  }
+}

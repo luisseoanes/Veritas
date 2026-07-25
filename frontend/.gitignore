@@ -1,0 +1,65 @@
+# dependencias
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+package-lock.json.bak
+
+# build / cache de Next
+.next/
+out/
+build/
+dist/
+.turbo/
+.swc/
+
+# secretos y entorno local (solo se versiona .env.example)
+.env
+.env.*
+!.env.example
+
+# TypeScript / linters / caches
+*.tsbuildinfo
+next-env.d.ts
+.eslintcache
+*.pem
+
+# deploy
+.vercel
+.output
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+
+# scripts locales de verificación (no van al repo)
+scripts/
+
+# assets de marca opcionales (logo.png SÍ se versiona)
+public/brand/videos/
+public/brand/images/
+public/brand/logo.svg
+
+# cobertura / e2e / reportes
+coverage/
+playwright-report/
+test-results/
+.nyc_output/
+
+# SO / editores
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.sublime-*

@@ -1,0 +1,280 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Design system — Veritas / WEG
+   Fuente de verdad visual: tokens de weg.net + ajustes UX del front.
+   Regla: cero hex sueltos en JSX. Todo color sale de una variable de aquí.
+   ========================================================================== */
+
+:root {
+  /* ---------- marca WEG ---------- */
+  --weg-navy-950: #06122e; /* app chrome */
+  --weg-navy-900: #0d2760; /* navbar weg.net */
+  --weg-navy-800: #0a2d6d;
+  --weg-blue: #0064a6; /* azul marca oficial */
+  --weg-blue-dark: #00579d;
+  --weg-blue-mid: #1061a3;
+  --weg-blue-bright: #28b9da; /* acento cian del sitio */
+  --weg-ice: #f1f1f1;
+  --weg-body: #595959;
+  --weg-muted: #9a9a9a;
+  --weg-muted-strong: #7d7d7d;
+  --weg-line: rgba(241, 241, 248, 0.14);
+  --weg-ok: #198754;
+  --weg-warn: #ffc107;
+  --weg-danger: #dc3545;
+
+  /* ---------- superficies compuestas (evitan opacidades a ojo en JSX) ---------- */
+  --banner-bg: rgba(0, 100, 166, 0.35);
+  --banner-border: rgba(241, 241, 248, 0.16);
+  --hero-veil: linear-gradient(
+    180deg,
+    rgba(6, 18, 46, 0.82) 0%,
+    rgba(6, 18, 46, 0.62) 45%,
+    rgba(6, 18, 46, 0.88) 100%
+  );
+  --login-veil: radial-gradient(
+      1200px 600px at 15% -10%,
+      rgba(0, 100, 166, 0.55) 0%,
+      transparent 60%
+    ),
+    radial-gradient(900px 500px at 85% 110%, rgba(40, 185, 218, 0.28) 0%, transparent 60%);
+  --ghost-bg: rgba(241, 241, 248, 0.08);
+  --ghost-bg-hover: rgba(241, 241, 248, 0.16);
+  --ghost-border: rgba(241, 241, 248, 0.28);
+
+  /* ---------- Chat ACTIVO — paleta propia (no hereda el velo del hero) ---------- */
+  --chat-stage: #edf2f7;
+  --chat-stage-soft: #f7f9fc;
+  --chat-sidebar: #e4ebf3;
+  --chat-sidebar-border: #d0dae6;
+  --chat-text: #0d2760;
+  --chat-text-muted: #5a6b7d;
+  --chat-user: #0064a6;
+  --chat-user-text: #ffffff;
+  --chat-assistant: #ffffff;
+  --chat-assistant-border: #d5dee8;
+  --chat-assistant-text: #0d2760;
+  --chat-composer-bar: rgba(237, 242, 247, 0.92);
+  --chat-trace-bg: #f0f4f8;
+  --chat-loading: #e8eef5;
+  --chat-accent: #0064a6;
+  --chat-danger-bg: #fdecec;
+  --chat-danger-border: #f3c2c2;
+  --chat-danger-text: #96222d;
+
+  /* ---------- Dashboard premium ---------- */
+  --dash-bg: #06122e;
+  --dash-surface: #0b1d3f;
+  --dash-surface-2: #102a56;
+  --dash-border: rgba(241, 241, 248, 0.1);
+  --dash-border-strong: rgba(241, 241, 248, 0.2);
+  --dash-text: #f1f1f8;
+  --dash-text-muted: #a8b6cd;
+  --dash-text-aux: #7d8ba3;
+  --dash-accent: #28b9da;
+  --dash-accent-soft: rgba(40, 185, 218, 0.14);
+  --dash-ok: #34d399;
+  --dash-ok-soft: rgba(52, 211, 153, 0.14);
+  --dash-warn: #fbbf24;
+  --dash-warn-soft: rgba(251, 191, 36, 0.14);
+  --dash-danger: #f87171;
+  --dash-danger-soft: rgba(248, 113, 113, 0.14);
+  --dash-dominated: #64748b;
+
+  /* ---------- escala de espaciado (4/8/12/16/24/32/48/64) ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ---------- elevación (0 plano · 1 card · 2 hover · 3 toast/modal) ---------- */
+  --elev-1: 0 1px 2px rgba(2, 8, 23, 0.28);
+  --elev-2: 0 6px 20px rgba(2, 8, 23, 0.34);
+  --elev-3: 0 18px 48px rgba(2, 8, 23, 0.48);
+  --elev-card-light: 0 18px 48px rgba(6, 18, 46, 0.18);
+
+  /* ---------- radios ---------- */
+  --radius-card: 16px;
+  --radius-control: 8px;
+}
+
+@theme inline {
+  /* colores → utilidades Tailwind (bg-navy-950, text-ice, border-line, …) */
+  --color-navy-950: var(--weg-navy-950);
+  --color-navy-900: var(--weg-navy-900);
+  --color-navy-800: var(--weg-navy-800);
+  --color-brand: var(--weg-blue);
+  --color-brand-dark: var(--weg-blue-dark);
+  --color-brand-mid: var(--weg-blue-mid);
+  --color-brand-bright: var(--weg-blue-bright);
+  --color-ice: var(--weg-ice);
+  --color-body: var(--weg-body);
+  --color-muted: var(--weg-muted);
+  --color-muted-strong: var(--weg-muted-strong);
+  --color-line: var(--weg-line);
+  --color-ok: var(--weg-ok);
+  --color-warn: var(--weg-warn);
+  --color-danger: var(--weg-danger);
+
+  --color-chat-stage: var(--chat-stage);
+  --color-chat-stage-soft: var(--chat-stage-soft);
+  --color-chat-sidebar: var(--chat-sidebar);
+  --color-chat-sidebar-border: var(--chat-sidebar-border);
+  --color-chat-text: var(--chat-text);
+  --color-chat-text-muted: var(--chat-text-muted);
+  --color-chat-user: var(--chat-user);
+  --color-chat-user-text: var(--chat-user-text);
+  --color-chat-assistant: var(--chat-assistant);
+  --color-chat-assistant-border: var(--chat-assistant-border);
+  --color-chat-assistant-text: var(--chat-assistant-text);
+  --color-chat-trace: var(--chat-trace-bg);
+  --color-chat-loading: var(--chat-loading);
+  --color-chat-accent: var(--chat-accent);
+
+  --color-dash-bg: var(--dash-bg);
+  --color-dash-surface: var(--dash-surface);
+  --color-dash-surface-2: var(--dash-surface-2);
+  --color-dash-border: var(--dash-border);
+  --color-dash-border-strong: var(--dash-border-strong);
+  --color-dash-text: var(--dash-text);
+  --color-dash-text-muted: var(--dash-text-muted);
+  --color-dash-text-aux: var(--dash-text-aux);
+  --color-dash-accent: var(--dash-accent);
+  --color-dash-ok: var(--dash-ok);
+  --color-dash-warn: var(--dash-warn);
+  --color-dash-danger: var(--dash-danger);
+
+  /* tipografía */
+  --font-display: var(--font-roboto), system-ui, sans-serif;
+  --font-body: var(--font-roboto), system-ui, sans-serif;
+  --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
+
+  /* radios / sombras como utilidades */
+  --radius-card: 16px;
+  --radius-control: 8px;
+  --shadow-elev-1: var(--elev-1);
+  --shadow-elev-2: var(--elev-2);
+  --shadow-elev-3: var(--elev-3);
+  --shadow-card-light: var(--elev-card-light);
+}
+
+* {
+  border-color: var(--weg-line);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--weg-navy-950);
+  color: var(--weg-ice);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Foco visible en todo control interactivo (accesibilidad mínima §1.2) */
+:focus-visible {
+  outline: 2px solid var(--weg-blue-bright);
+  outline-offset: 2px;
+}
+
+/* Métricas siempre tabulares: los números no deben "bailar" con el polling */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------- scrollbars */
+
+.scroll-slim {
+  scrollbar-width: thin;
+}
+.scroll-slim::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-slim::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-slim::-webkit-scrollbar-thumb {
+  background: var(--dash-border-strong);
+  border-radius: 999px;
+}
+.scroll-slim-light::-webkit-scrollbar-thumb {
+  background: var(--chat-sidebar-border);
+}
+
+/* ---------------------------------------------------------------- skeletons */
+
+@keyframes dash-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.dash-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--dash-surface-2) 0%,
+    rgba(241, 241, 248, 0.12) 50%,
+    var(--dash-surface-2) 100%
+  );
+  background-size: 200% 100%;
+  animation: dash-shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius-control);
+}
+
+/* ------------------------------------------------- punto elegido (Pareto) */
+
+@keyframes chosen-halo {
+  0%,
+  100% {
+    opacity: 0.14;
+  }
+  50% {
+    opacity: 0.34;
+  }
+}
+
+.chosen-halo {
+  animation: chosen-halo 1.9s ease-in-out infinite;
+}
+
+/* --------------------------------------------------- cards del dashboard
+   Un solo lenguaje de card: padding 24, radio 16, elevación 1, borde sutil. */
+
+.dash-card {
+  background-color: var(--dash-surface);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-6);
+  box-shadow: var(--elev-1);
+  transition:
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.dash-card-interactive:hover {
+  border-color: var(--dash-border-strong);
+  box-shadow: var(--elev-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
