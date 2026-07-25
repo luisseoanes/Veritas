@@ -9,7 +9,10 @@ class Settings(BaseSettings):
     llm_provider: str = "mock"
 
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-2.5-flash"
+    # gemini-2.5-flash devuelve 404 en cuentas nuevas ("no longer available to
+    # new users"). Se fija un modelo estable y NO un alias '-latest': un alias
+    # puede cambiar de version solo, en medio de la demo.
+    gemini_model: str = "gemini-3.6-flash"
 
     # --- Retrieval (RAG) ---
     # Vacio = sigue a llm_provider. Ponerlo explicito solo para desacoplarlos

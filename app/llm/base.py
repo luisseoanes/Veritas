@@ -19,6 +19,15 @@ class ToolCall:
     id: str
     name: str
     arguments: dict
+    # Datos OPACOS del proveedor, que este necesita recibir de vuelta en el
+    # siguiente turno. Ninguna otra capa los lee ni los serializa: el agente,
+    # las tools y el solver los ignoran por completo.
+    #
+    # Existe por un caso real: Gemini 3.x rechaza con 400 cualquier functionCall
+    # que vuelva sin su `thought_signature`. Sin este campo el loop no avanza de
+    # la primera llamada a tool. Se modela generico y no como 'thought_signature'
+    # para no meter un concepto de Gemini en el contrato comun.
+    provider_meta: dict = field(default_factory=dict)
 
 
 @dataclass

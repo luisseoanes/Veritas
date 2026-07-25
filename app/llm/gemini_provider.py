@@ -48,9 +48,18 @@ class GeminiProvider:
                 if msg.content:
                     parts.append(types.Part.from_text(text=msg.content))
                 for call in msg.tool_calls:
-                    parts.append(
-                        types.Part.from_function_call(name=call.name, args=call.arguments)
+                    # No se usa Part.from_function_call: esa helper no permite
+                    # adjuntar la firma, y Gemini 3.x devuelve 400 si la
+                    # functionCall vuelve sin ella (ver ToolCall.provider_meta).
+                    part = types.Part(
+                        function_call=types.FunctionCall(
+                            name=call.name, args=call.arguments
+                        )
                     )
+                    signature = call.provider_meta.get("thought_signature")
+                    if signature:
+                        part.thought_signature = signature
+                    parts.append(part)
                 if parts:
                     contents.append(types.Content(role="model", parts=parts))
 
@@ -114,11 +123,17 @@ class GeminiProvider:
             for part in candidates[0].content.parts:
                 if getattr(part, "function_call", None):
                     fc = part.function_call
+                    # La firma viaja en el Part, no en la FunctionCall, y hay
+                    # que conservarla para devolverla en el proximo turno.
+                    signature = getattr(part, "thought_signature", None)
                     tool_calls.append(
                         ToolCall(
                             id=fc.id or f"call_{uuid.uuid4().hex[:8]}",
                             name=fc.name,
                             arguments=dict(fc.args or {}),
+                            provider_meta=(
+                                {"thought_signature": signature} if signature else {}
+                            ),
                         )
                     )
                 elif getattr(part, "text", None):
