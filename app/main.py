@@ -72,6 +72,33 @@ def _validate_config() -> None:
         )
 
 
+def _seed_history_if_empty() -> None:
+    """Siembra el historico sintetico si el log esta vacio (despliegues efimeros).
+
+    En local el historico vive en `data/generated/events.jsonl`, que esta
+    gitignorado. En un contenedor recien desplegado ese archivo NO existe, asi
+    que el dashboard, los detectores y el simulador arrancarian sin nada que
+    analizar — y esa es justo la evidencia de negocio del producto.
+
+    Se siembra SOLO si el log esta vacio: nunca pisa conversaciones reales.
+    Es opt-in por `SEED_HISTORY_SESSIONS` (0 lo desactiva) y usa la misma
+    semilla fija que el script, asi que el resultado es reproducible.
+
+    HONESTIDAD: lo sintetico son los PERFILES de cliente. Cada uno se resuelve
+    con el solver de verdad sobre el grafo de verdad; los eventos registrados
+    —incluidos los nucleos insatisfacibles— son salidas autenticas del motor.
+    """
+    if settings.seed_history_sessions <= 0 or len(event_log) > 0:
+        return
+    from scripts.generate_history import generate
+
+    stats = generate(settings.seed_history_sessions)
+    logger.info(
+        "Historico sembrado: %s sesiones (%s resueltas / %s sin solucion)",
+        stats["sessions"], stats["solved"], stats["unmet"],
+    )
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Arranque de la app en un solo lugar (reemplaza los @app.on_event).
@@ -83,6 +110,7 @@ async def lifespan(app: FastAPI):
     """
     _validate_config()
     event_log.load_from_disk()
+    _seed_history_if_empty()
     state.retrieval.bootstrap_profiles()
     yield
 

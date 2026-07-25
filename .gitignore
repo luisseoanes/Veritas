@@ -20,8 +20,16 @@ htmlcov/
 .tox/
 .nox/
 
-# Datos generados
-data/generated/
+# Datos generados. Se versionan DOS artefactos a proposito (ver excepciones):
+# el indice vectorial y el historico. Motivo: el contenedor de Railway arranca
+# desde el repo y su disco es efimero. Sin esto, cada despliegue tendria el
+# dashboard vacio y cite_datasheet en SIN_CORPUS hasta reconstruirlos a mano
+# — y reconstruir el indice cuesta 778 llamadas de embedding a Gemini.
+data/generated/*
+!data/generated/chroma/
+!data/generated/events.jsonl
+# Las cotizaciones SI son efimeras: se emiten durante la demo.
+data/generated/quotes/
 *.log
 
 # Memoria local de Claude (personal, fuera del repo)

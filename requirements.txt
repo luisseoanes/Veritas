@@ -1,30 +1,35 @@
+# VERSIONES FIJADAS a proposito. El indice vectorial de Chroma se versiona
+# con el repo (data/generated/chroma), y un chromadb distinto en el servidor
+# podria no poder leerlo. Fijar tambien evita que un despliegue el dia del
+# evento traiga una version nueva con un cambio incompatible.
+
 # --- API ---
-fastapi
-uvicorn[standard]
-pydantic
-pydantic-settings
-python-dotenv
+fastapi==0.139.2
+uvicorn[standard]==0.51.0
+pydantic==2.13.4
+pydantic-settings==2.14.2
+python-dotenv==1.2.2
 
 # --- Grafo de conocimiento ---
-networkx
+networkx==3.6.1
 
 # --- LLM ---
-google-genai
+google-genai==2.14.0
 
 # --- Retrieval / RAG ---
 # Chroma persiste en disco y trae su propio HNSW. Se usa con
 # embedding_function=None: los vectores los calcula app/retrieval/embedder.py,
 # para que Chroma no descargue su modelo ONNX por defecto (~80 MB) la primera
 # vez que se consulta — en una demo eso es un cuelgue o un fallo sin internet.
-chromadb
-numpy
-pypdf
+chromadb==1.5.9
+numpy==2.5.1
+pypdf==6.14.2
 
 # --- Dev / tests ---
 # El test de arquitectura (tests/test_architecture.py) corre solo con stdlib
 # (ast), pero la suite completa y el TestClient de FastAPI usan pytest + httpx.
-pytest
-httpx
+pytest==9.1.1
+httpx==0.28.1
 
 # NOTA: el solver CSP y la extraccion de nucleo insatisfacible (MUS) son
 # implementacion propia en app/solver/ — sin dependencias pesadas. El espacio

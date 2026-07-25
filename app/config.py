@@ -37,6 +37,11 @@ class Settings(BaseSettings):
     # en un fallo de arranque para que no pase desapercibido.
     admin_token: str = ""
 
+    # Siembra del historico al arrancar SI el log esta vacio. Existe por los
+    # despliegues efimeros (Railway): el contenedor no trae data/generated/, asi
+    # que sin esto el dashboard arrancaria sin nada que analizar. 0 lo desactiva.
+    seed_history_sessions: int = 400
+
     # Origenes permitidos por CORS (front en dev). Coma-separado en .env, ej.
     # CORS_ORIGINS="http://localhost:3000,http://localhost:5173". El front del
     # dashboard corre en localhost:3000 por defecto.
