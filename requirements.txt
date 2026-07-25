@@ -1,0 +1,33 @@
+# --- API ---
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+
+# --- Grafo de conocimiento ---
+networkx
+
+# --- LLM ---
+google-genai
+
+# --- Retrieval / RAG ---
+# Chroma persiste en disco y trae su propio HNSW. Se usa con
+# embedding_function=None: los vectores los calcula app/retrieval/embedder.py,
+# para que Chroma no descargue su modelo ONNX por defecto (~80 MB) la primera
+# vez que se consulta — en una demo eso es un cuelgue o un fallo sin internet.
+chromadb
+numpy
+pypdf
+
+# --- Dev / tests ---
+# El test de arquitectura (tests/test_architecture.py) corre solo con stdlib
+# (ast), pero la suite completa y el TestClient de FastAPI usan pytest + httpx.
+pytest
+httpx
+
+# NOTA: el solver CSP y la extraccion de nucleo insatisfacible (MUS) son
+# implementacion propia en app/solver/ — sin dependencias pesadas. El espacio
+# de configuracion de producto es pequeno (cientos de candidatos), asi que la
+# enumeracion exhaustiva es exacta y rapida, y el algoritmo queda auditable
+# frente al jurado.

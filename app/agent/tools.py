@@ -1,0 +1,464 @@
+"""Herramientas del agente comercial.
+
+Aqui esta la frontera entre el modelo y la verdad. El LLM traduce lenguaje
+natural a los ARGUMENTOS de estas funciones — nada mas. La configuracion la
+decide el solver, los numeros los calcula el codigo, la evidencia sale del
+grafo. Si el modelo alucina, alucina argumentos, y el solver lo rechaza.
+
+Las herramientas se dividen en tres grupos, y el orden importa:
+
+  DECIDEN     solve_configuration        <- la unica que produce recomendaciones
+  EXPLICAN    explain_configuration, check_compatibility, search_catalog
+  PREPARAN    suggest_requirements, cite_datasheet   (capa RAG)
+
+Las de RAG no deciden ni pueden: `suggest_requirements` devuelve restricciones
+para que el cliente confirme y el solver valide, y `cite_datasheet` devuelve
+texto citable. Ninguna de las dos puede armar una configuracion.
+"""
+from __future__ import annotations
+
+import contextvars
+import json
+
+from app.agent.registry import registry
+from app.config import settings
+from app.graph.schema import Kind
+from app.intelligence.events import Event, EventType, event_log
+from app.solver.engine import explain, solve
+from app.solver.pareto import (
+    frontier_payload,
+    pareto_frontier,
+    select_on_frontier,
+)
+from app.solver.requirements import (
+    AttributeRequirement,
+    BudgetRequirement,
+    FeatureRequirement,
+    Requirement,
+    StockRequirement,
+)
+from app.state import state
+
+# Sesion en curso, AISLADA POR REQUEST.
+#
+# Antes esto era un dict global mutable. El problema: run_agent() hace varias
+# llamadas de red al LLM entre set_session() y el momento en que una tool lee el
+# id (dentro de event_log.record). Con dos /chat concurrentes, el segundo pisaba
+# el id del primero y los eventos quedaban mal atribuidos — envenenando el
+# dashboard, que es la evidencia de negocio.
+#
+# Un ContextVar se copia por tarea/hilo: FastAPI corre cada request en su propio
+# contexto (tambien los endpoints sincronos, via el threadpool de anyio), asi que
+# cada request ve su propio id sin tener que pasarlo a mano por toda la cadena de
+# tools. Fuera de un request, queda el default "default".
+_current_session: contextvars.ContextVar[str] = contextvars.ContextVar(
+    "current_session", default="default"
+)
+
+
+def set_session(session_id: str) -> None:
+    _current_session.set(session_id)
+
+
+def _build_requirements(
+    power_kw: float | None,
+    voltage: int | None,
+    budget_cop: int | None,
+    features: list[str] | None,
+    require_stock: bool,
+) -> list[Requirement]:
+    """Traduce los argumentos del agente a restricciones nombradas."""
+    reqs: list[Requirement] = []
+    if power_kw is not None:
+        reqs.append(AttributeRequirement(
+            Kind.MOTOR, "power_kw", ">=", power_kw,
+            f"El motor debe entregar al menos {power_kw:g} kW",
+        ))
+    if voltage is not None:
+        reqs.append(AttributeRequirement(
+            Kind.MOTOR, "voltage", "==", voltage,
+            f"La red disponible es de {voltage} V",
+        ))
+    for feature in features or []:
+        reqs.append(FeatureRequirement(feature))
+    if require_stock:
+        reqs.append(StockRequirement(1))
+    if budget_cop is not None:
+        reqs.append(BudgetRequirement(int(budget_cop)))
+    return reqs
+
+
+@registry.tool(
+    name="solve_configuration",
+    description=(
+        "Resuelve una configuracion completa de accionamiento (motor, variador, "
+        "proteccion y cable) que satisfaga los requerimientos del cliente. "
+        "Devuelve la recomendacion principal y alternativas de la frontera de "
+        "Pareto. Si NO existe solucion, devuelve el nucleo insatisfacible: las "
+        "restricciones exactas que hacen imposible el problema, y el minimo "
+        "viable. USA SIEMPRE esta herramienta antes de recomendar productos: "
+        "nunca propongas una configuracion por tu cuenta."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "power_kw": {"type": "number", "description": "Potencia minima requerida en kW"},
+            "voltage": {"type": "integer", "description": "Voltaje de la red disponible (220 o 440)"},
+            "budget_cop": {"type": "integer", "description": "Presupuesto maximo total en pesos colombianos"},
+            "features": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Caracteristicas exigidas: soft_start, modbus, profibus, pid, ip66",
+            },
+            "require_stock": {
+                "type": "boolean",
+                "description": "Exigir disponibilidad inmediata en inventario (por defecto true)",
+            },
+        },
+        "required": [],
+    },
+)
+def solve_configuration(
+    power_kw: float | None = None,
+    voltage: int | None = None,
+    budget_cop: int | None = None,
+    features: list[str] | None = None,
+    require_stock: bool = True,
+) -> str:
+    graph = state.graph
+    objective = state.objective
+    requirements = _build_requirements(power_kw, voltage, budget_cop, features, require_stock)
+
+    if not requirements:
+        return json.dumps({
+            "error": "Sin requerimientos. Pregunta al cliente potencia, voltaje y presupuesto.",
+        }, ensure_ascii=False)
+
+    result = solve(graph, requirements)
+    req_summary = {
+        "power_kw": power_kw, "voltage": voltage, "budget_cop": budget_cop,
+        "features": features or [], "require_stock": require_stock,
+    }
+
+    # ------------------------------------------------------------ SIN SOLUCION
+    if not result.satisfiable:
+        minimum = next(
+            (r["minimum_viable_cop"] for r in result.relaxations if "minimum_viable_cop" in r),
+            None,
+        )
+        event_log.record(Event(
+            type=EventType.UNMET,
+            session_id=_current_session.get(),
+            requirements=req_summary,
+            unsat_core=[r.name for r in result.unsat_core],
+            minimum_viable_cop=minimum,
+            business_objective=state.objective_key,
+        ))
+        return json.dumps({
+            "status": "SIN_SOLUCION",
+            "explicacion": (
+                "No existe ninguna configuracion valida. Las restricciones listadas "
+                "en 'nucleo_insatisfacible' son, juntas, imposibles de cumplir. "
+                "Es un nucleo MINIMO: quitar cualquiera de ellas vuelve el problema resoluble."
+            ),
+            "nucleo_insatisfacible": [
+                {"restriccion": r.name, "descripcion": r.description} for r in result.unsat_core
+            ],
+            "relajaciones": result.relaxations,
+            "configuraciones_evaluadas": result.considered,
+        }, ensure_ascii=False, default=str)
+
+    # ------------------------------------------------------------ CON SOLUCION
+    frontier = pareto_frontier(result.solutions)
+    chosen, ranking = select_on_frontier(frontier, objective)
+
+    event_log.record(Event(
+        type=EventType.SOLVED,
+        session_id=_current_session.get(),
+        requirements=req_summary,
+        configuration=list(chosen.ids),
+        considered=sorted({cid for c in result.solutions for cid in c.ids}),
+        total_price_cop=chosen.total_price_cop,
+        total_margin_cop=chosen.total_margin_cop,
+        business_objective=state.objective_key,
+    ))
+
+    alternatives = [
+        {
+            "componentes": entry["ids"],
+            "precio_total_cop": entry["objectives"]["cost"],
+            "eficiencia_motor_pct": entry["objectives"]["efficiency"],
+            "disponibilidad": entry["objectives"]["availability"],
+        }
+        for entry in ranking[1:4]
+    ]
+
+    return json.dumps({
+        "status": "RESUELTO",
+        "recomendacion": {
+            "componentes": {
+                kind.value: {"id": c.id, "nombre": c.name, "precio_cop": c.price_cop}
+                for kind, c in chosen.components.items()
+            },
+            "precio_total_cop": chosen.total_price_cop,
+            "disponibilidad_minima": chosen.min_stock,
+        },
+        "alternativas_pareto": alternatives,
+        "soluciones_factibles": result.count,
+        "soluciones_en_frontera_pareto": len(frontier),
+        "objetivo_de_negocio_activo": {
+            "clave": state.objective_key,
+            "etiqueta": objective.label,
+            "nota": (
+                "El objetivo de negocio solo elige un punto DENTRO de la frontera de "
+                "Pareto. Nunca puede recomendar una solucion dominada."
+            ),
+        },
+    }, ensure_ascii=False, default=str)
+
+
+@registry.tool(
+    name="explain_configuration",
+    description=(
+        "Devuelve el rastro de evidencia de una configuracion: cada par de "
+        "componentes, las reglas tecnicas que los gobiernan y si las cumplen. "
+        "Usala cuando el cliente pregunte POR QUE una recomendacion es valida."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "component_ids": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "IDs de los componentes de la configuracion",
+            }
+        },
+        "required": ["component_ids"],
+    },
+)
+def explain_configuration(component_ids: list[str]) -> str:
+    from app.graph.schema import Configuration
+
+    graph = state.graph
+    components = {}
+    for cid in component_ids:
+        component = graph.get(cid)
+        components[component.kind] = component
+
+    return json.dumps(
+        explain(graph, Configuration(components=components)),
+        ensure_ascii=False, default=str,
+    )
+
+
+@registry.tool(
+    name="check_compatibility",
+    description=(
+        "Verifica si dos componentes concretos son compatibles y devuelve las "
+        "reglas tecnicas evaluadas con su resultado."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "component_a": {"type": "string"},
+            "component_b": {"type": "string"},
+        },
+        "required": ["component_a", "component_b"],
+    },
+)
+def check_compatibility(component_a: str, component_b: str) -> str:
+    return json.dumps(
+        state.graph.evidence(component_a, component_b),
+        ensure_ascii=False, default=str,
+    )
+
+
+@registry.tool(
+    name="search_catalog",
+    description=(
+        "Lista componentes del catalogo filtrando por tipo. Util para responder "
+        "que hay disponible antes de resolver una configuracion completa."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "kind": {
+                "type": "string",
+                "enum": ["motor", "drive", "protection", "cable"],
+                "description": "Tipo de componente",
+            },
+            "voltage": {"type": "integer", "description": "Filtrar por voltaje operativo"},
+        },
+        "required": ["kind"],
+    },
+)
+def search_catalog(kind: str, voltage: int | None = None) -> str:
+    components = state.graph.of_kind(Kind(kind))
+    if voltage is not None:
+        components = [c for c in components if c.accepts_voltage(voltage)]
+
+    return json.dumps({
+        "cantidad": len(components),
+        "componentes": [
+            {
+                "id": c.id, "nombre": c.name, "precio_cop": c.price_cop,
+                "stock": c.stock, **{k: v for k, v in c.attrs.items() if k != "tags"},
+            }
+            for c in components
+        ],
+    }, ensure_ascii=False, default=str)
+
+
+# ===========================================================================
+# CAPA RAG — prepara y respalda. Nunca decide.
+# ===========================================================================
+
+
+@registry.tool(
+    name="suggest_requirements",
+    description=(
+        "Traduce la descripcion de la APLICACION del cliente (que va a mover, en "
+        "que ambiente trabaja, con que urgencia) a restricciones tecnicas "
+        "CANDIDATAS. Usala cuando el cliente describe su problema en sus propias "
+        "palabras pero no da especificaciones. "
+        "NO devuelve productos ni configuraciones: devuelve sugerencias que "
+        "debes CONFIRMAR con el cliente antes de usarlas. Solo lo que el cliente "
+        "confirme se pasa a solve_configuration. "
+        "No infiere potencia ni voltaje: esos siempre se preguntan."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "application": {
+                "type": "string",
+                "description": (
+                    "Descripcion de la aplicacion en las palabras del cliente. "
+                    "Pasala lo mas literal posible: no la traduzcas a jerga tecnica."
+                ),
+            }
+        },
+        "required": ["application"],
+    },
+)
+def suggest_requirements(application: str) -> str:
+    from app.retrieval import profiles as profile_corpus
+
+    hits = state.retrieval.profiles.search(application, k=settings.retrieval_top_k)
+
+    if not hits:
+        return json.dumps({
+            "status": "SIN_COINCIDENCIAS",
+            "instruccion": (
+                "No hay un perfil de aplicacion que coincida. No inventes "
+                "restricciones: preguntale al cliente directamente por potencia, "
+                "voltaje, ambiente de trabajo y urgencia."
+            ),
+        }, ensure_ascii=False)
+
+    merged, conflicts = profile_corpus.combine(
+        [chunk.meta.get("suggests", {}) for chunk, _ in hits]
+    )
+
+    return json.dumps({
+        "status": "SUGERENCIAS_SIN_CONFIRMAR",
+        "instruccion": (
+            "Estas son HIPOTESIS derivadas de como el cliente describio su "
+            "aplicacion, no requerimientos. Presentaselas como preguntas "
+            "('entiendo que hay lavado a presion, te confirmo IP66?') citando el "
+            "motivo. Solo lo que el cliente confirme entra a solve_configuration. "
+            "Nunca las apliques por tu cuenta ni las presentes como decididas."
+        ),
+        "sugerencias": [
+            {
+                "perfil": chunk.meta.get("key"),
+                "restricciones": chunk.meta.get("suggests"),
+                "porque": chunk.meta.get("rationale"),
+                "confianza": round(score, 3),
+            }
+            for chunk, score in hits
+        ],
+        "combinado_si_el_cliente_confirma_todo": merged,
+        "conflictos": conflicts,
+        "faltante_obligatorio": [
+            "power_kw: depende de la carga real, no se infiere de la aplicacion",
+            "voltage: depende de la acometida del sitio (220 o 440)",
+        ],
+    }, ensure_ascii=False, default=str)
+
+
+@registry.tool(
+    name="cite_datasheet",
+    description=(
+        "Busca en las hojas de datos oficiales de WEG el respaldo documental de "
+        "una pregunta tecnica (instalacion, derating, condiciones de operacion, "
+        "normas, garantia) y devuelve los fragmentos literales con su documento "
+        "y numero de pagina. "
+        "NO recomienda ni elige productos, y NO es fuente de precios ni de "
+        "especificaciones: para eso estan search_catalog y solve_configuration. "
+        "Si no devuelve respaldo, dilo: no completes con conocimiento propio."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "question": {
+                "type": "string",
+                "description": "Pregunta tecnica concreta del cliente",
+            },
+            "component_id": {
+                "type": "string",
+                "description": "Opcional: acotar la busqueda a un producto concreto",
+            },
+        },
+        "required": ["question"],
+    },
+)
+def cite_datasheet(question: str, component_id: str | None = None) -> str:
+    index = state.retrieval.datasheets
+
+    if index.count() == 0:
+        return json.dumps({
+            "status": "SIN_CORPUS",
+            "instruccion": (
+                "No hay hojas de datos indexadas en este despliegue. Dile al "
+                "cliente que no puedes respaldarlo documentalmente y ofrece "
+                "responder con datos del catalogo (search_catalog), que si son "
+                "exactos. No inventes citas ni numeros de pagina."
+            ),
+        }, ensure_ascii=False)
+
+    hits = index.search(question, k=settings.retrieval_top_k)
+
+    if component_id:
+        # Se prefiere lo que menciona el componente, pero no se descarta el
+        # resto: una nota general de instalacion sigue siendo respaldo valido.
+        focused = [(c, s) for c, s in hits if component_id in c.component_ids]
+        hits = focused or hits
+
+    if not hits:
+        return json.dumps({
+            "status": "SIN_RESPALDO",
+            "instruccion": (
+                "La documentacion indexada no responde esto. Dilo explicitamente "
+                "('no tengo respaldo documental para eso') en vez de afirmar. "
+                "Puedes ofrecer consultarlo con soporte tecnico."
+            ),
+        }, ensure_ascii=False)
+
+    return json.dumps({
+        "status": "CON_RESPALDO",
+        "instruccion": (
+            "Cita de forma fiel y menciona documento y pagina. No extrapoles mas "
+            "alla de lo que dice el texto, y no tomes de aqui precios ni "
+            "especificaciones numericas."
+        ),
+        "fragmentos": [
+            {
+                "texto": chunk.text,
+                "documento": chunk.source,
+                "pagina": chunk.page,
+                "componentes_mencionados": chunk.component_ids,
+                "similitud": round(score, 3),
+            }
+            for chunk, score in hits
+        ],
+    }, ensure_ascii=False, default=str)
