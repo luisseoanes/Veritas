@@ -75,6 +75,13 @@ Como conversar:
   herramienta.
 - Si pregunta en que se diferencian dos productos, cual le conviene o para que
   tipo de usuario es cada uno, usa `compare_products`. No compares de memoria.
+- Si RECHAZA una recomendacion ("esa no me sirve", "muestrame otra"), llama a
+  `discard_configuration` con esos componentes y vuelve a resolver. No repitas
+  una opcion que ya rechazo.
+- No vuelvas a preguntar datos que el cliente YA dio: la herramienta los
+  recuerda. Si en su respuesta aparece 'completado_desde_memoria', significa
+  que se reutilizo lo que ya habia dicho; no lo presentes como un supuesto tuyo
+  ni se lo vuelvas a preguntar.
 - Si el cliente pregunta por que una configuracion es valida, usa
   `explain_configuration` y cita las reglas tecnicas concretas.
 - Para preguntas de instalacion, condiciones de operacion, normas o garantia,
@@ -119,6 +126,8 @@ CLIENTE = AgentProfile(
         "solve_configuration", "explain_configuration",
         "check_compatibility", "search_catalog", "compare_products",
         "suggest_requirements", "cite_datasheet",
+        # Memoria con efecto: lo descartado deja de ofrecerse en el proximo solve.
+        "discard_configuration",
         # Unica tool que EJECUTA una accion (emite y persiste un documento).
         # Solo el perfil de cliente la tiene: es el cierre de su venta.
         "generate_quote",

@@ -23,7 +23,7 @@ import json
 from app.agent.quotes import quotes
 from app.agent.registry import registry
 from app.config import settings
-from app.graph.schema import Kind
+from app.graph.schema import Kind, SOLUTION_SLOTS
 from app.intelligence.events import Event, EventType, event_log
 from app.solver.engine import explain, solve
 from app.solver.pareto import (
@@ -59,6 +59,27 @@ _current_session: contextvars.ContextVar[str] = contextvars.ContextVar(
 
 def set_session(session_id: str) -> None:
     _current_session.set(session_id)
+
+
+def _session() -> "Session":
+    """Sesion en curso. La memoria vive por sesion y el id ya esta aislado por
+    request (ver `_current_session`)."""
+    from app.agent.memory import memory
+
+    return memory.get(_current_session.get())
+
+
+# Hechos del cliente que se COMPLETAN desde memoria si el modelo no los repite.
+#
+# Solo datos duros del sitio y del proyecto: la potencia de la carga, el voltaje
+# de la acometida y el presupuesto no cambian de un turno a otro, y si el modelo
+# se olvida de repetirlos el solver resolveria OTRO problema sin que nadie lo
+# note.
+#
+# `features` queda deliberadamente FUERA: es justo lo que el cliente retira
+# ("quita el IP66"). Rellenarla desde memoria resucitaria una restriccion que
+# acaba de descartar — un fallo peor que el que esto arregla.
+REMEMBERED_FIELDS = ("power_kw", "voltage", "budget_cop")
 
 
 def _build_requirements(
@@ -128,6 +149,21 @@ def solve_configuration(
 ) -> str:
     graph = state.graph
     objective = state.objective
+    session = _session()
+
+    # La memoria COMPLETA lo que el modelo no repitio (nunca lo sobreescribe:
+    # un valor explicito de este turno siempre gana). Sin esto, que el agente
+    # recuerde el voltaje dependia de que el LLM lo re-enviara en cada llamada.
+    completado_de_memoria = {}
+    valores = {"power_kw": power_kw, "voltage": voltage, "budget_cop": budget_cop}
+    for campo in REMEMBERED_FIELDS:
+        if valores[campo] is None and session.known.get(campo) is not None:
+            valores[campo] = session.known[campo]
+            completado_de_memoria[campo] = valores[campo]
+    power_kw, voltage, budget_cop = (
+        valores["power_kw"], valores["voltage"], valores["budget_cop"]
+    )
+
     requirements = _build_requirements(power_kw, voltage, budget_cop, features, require_stock)
 
     if not requirements:
@@ -192,7 +228,16 @@ def solve_configuration(
 
     # ------------------------------------------------------------ CON SOLUCION
     frontier = pareto_frontier(result.solutions)
-    chosen, ranking = select_on_frontier(frontier, objective)
+
+    # Lo que el cliente ya rechazo no se le vuelve a ofrecer. Aqui es donde la
+    # memoria deja de ser un resumen en el prompt y cambia la recomendacion.
+    # Si TODO lo que queda esta descartado se conserva la frontera completa: es
+    # preferible repetir una opcion que quedarse sin nada que responder.
+    descartadas = set(session.discarded)
+    vigentes = [c for c in frontier if tuple(c.ids) not in descartadas]
+    frontier_efectiva = vigentes or frontier
+
+    chosen, ranking = select_on_frontier(frontier_efectiva, objective)
 
     event_log.record(Event(
         type=EventType.SOLVED,
@@ -228,6 +273,10 @@ def solve_configuration(
         "alternativas_pareto": alternatives,
         "soluciones_factibles": result.count,
         "soluciones_en_frontera_pareto": len(frontier),
+        # Trazabilidad de la memoria: que se completo sin que el cliente lo
+        # repitiera, y cuantas opciones se excluyeron por rechazo previo.
+        "completado_desde_memoria": completado_de_memoria or None,
+        "descartadas_por_el_cliente": len(frontier) - len(frontier_efectiva),
         "objetivo_de_negocio_activo": {
             "clave": state.objective_key,
             "etiqueta": objective.label,
@@ -328,6 +377,64 @@ def search_catalog(kind: str, voltage: int | None = None) -> str:
             }
             for c in components
         ],
+    }, ensure_ascii=False, default=str)
+
+
+@registry.tool(
+    name="discard_configuration",
+    description=(
+        "Registra que el cliente RECHAZO una configuracion concreta, para no "
+        "volver a ofrecersela. Usala cuando diga que no le sirve, que no le "
+        "gusta, que ya la tiene o que quiere ver otra cosa. "
+        "Despues vuelve a llamar a solve_configuration: la siguiente "
+        "recomendacion evitara automaticamente lo descartado."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "component_ids": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "IDs de la configuracion que el cliente rechazo",
+            },
+            "reason": {
+                "type": "string",
+                "description": "Por que la rechazo, en palabras del cliente (opcional)",
+            },
+        },
+        "required": ["component_ids"],
+    },
+)
+def discard_configuration(component_ids: list[str], reason: str = "") -> str:
+    """Anota el rechazo en la memoria de la sesion.
+
+    No es un registro decorativo: `solve_configuration` excluye lo descartado
+    de la frontera antes de elegir, asi que esto cambia de verdad la siguiente
+    recomendacion.
+    """
+    session = _session()
+    graph = state.graph
+
+    # Se normaliza al orden canonico de la configuracion para que el descarte
+    # coincida aunque el modelo liste los ids en otro orden.
+    try:
+        ordered = tuple(
+            sorted(component_ids, key=lambda cid: SOLUTION_SLOTS.index(graph.get(cid).kind))
+        )
+    except KeyError as exc:
+        return json.dumps({"error": f"Componente inexistente: {exc}"}, ensure_ascii=False)
+
+    session.discard(ordered)
+
+    return json.dumps({
+        "status": "DESCARTADA",
+        "configuracion": list(ordered),
+        "motivo": reason or "no indicado",
+        "total_descartadas": len(session.discarded),
+        "instruccion": (
+            "Confirma brevemente que no volveras a proponerla y vuelve a llamar "
+            "a solve_configuration para ofrecer la siguiente mejor opcion."
+        ),
     }, ensure_ascii=False, default=str)
 
 
