@@ -39,6 +39,9 @@ TRES DECISIONES DE DATOS, DECLARADAS:
 """
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 from app.graph.schema import Component, Kind
 
 # ---------------------------------------------------------------- MOTORES ---
@@ -373,8 +376,83 @@ CABLES = [
 ALL_COMPONENTS: list[Component] = [*MOTORS, *DRIVES, *PROTECTIONS, *CABLES]
 
 
-def load_graph():
-    """Construye el grafo de conocimiento a partir del catalogo semilla.
+# ------------------------------------------------- catalogo REAL de WEG ---
+
+# Vive en data/ y NO en data/generated/ a proposito: es dato curado que se
+# versiona con el repo, no un artefacto reconstruible. Un clon limpio trae los
+# productos reales sin tener que descargar 13 MB de PDF primero. Los PDF de
+# origen si quedan fuera del repo (copyright de WEG).
+WEG_CATALOG = Path("data/weg_catalog.json")
+# Compatibilidad: si alguien acaba de correr el ingestor, su salida sigue ahi.
+WEG_CATALOG_GENERATED = Path("data/generated/weg_catalog.json")
+
+
+def load_real_components() -> list[Component]:
+    """Carga los productos REALES extraidos de los PDF oficiales de WEG.
+
+    Los genera `python -m scripts.ingest_weg --pdf ... --kind ...` a partir de
+    las tablas de los catalogos publicados en static.weg.net: numero de parte
+    real, potencia, corriente, rango de voltaje y PRECIO DE LISTA en USD, cada
+    fila con la pagina de la que salio.
+
+    Si el archivo no existe, se devuelve lista vacia y el sistema corre solo
+    con la semilla. No es un fallo: es el modo por defecto en un clon limpio.
+
+    HONESTIDAD, y hay que decirlo antes de que lo pregunten: el precio en USD
+    es de WEG; la conversion a COP es un supuesto NUESTRO (la tasa viaja
+    declarada en el propio JSON). Especificaciones y numeros de parte son del
+    fabricante; el stock es simulado, porque WEG no publica inventario.
+    """
+    path = WEG_CATALOG if WEG_CATALOG.exists() else WEG_CATALOG_GENERATED
+    if not path.exists():
+        return []
+
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    components: list[Component] = []
+
+    for item in raw.get("components", []):
+        attrs = dict(item.get("attrs", {}))
+        attrs["tags"] = [*attrs.get("tags", []), "weg_real"]
+        features = list(attrs.get("features", []))
+
+        # Los PDF no traen una columna de "caracteristicas", asi que un
+        # variador real llegaria sin ninguna y jamas podria satisfacer un
+        # FeatureRequirement — quedaria fuera de toda solucion.
+        #
+        # Se anade UNA sola, y por una razon fisica, no comercial: todo
+        # variador de frecuencia arranca el motor con rampa; el arranque suave
+        # es lo que hace un VFD por definicion. NO se infieren las demas
+        # (modbus, ip66, profibus): esas dependen del modelo concreto y
+        # deducirlas del numero de parte seria inventar.
+        if item["kind"] == Kind.DRIVE.value and "soft_start" not in features:
+            features.append("soft_start")
+        attrs["features"] = features
+        # Procedencia por componente: el juez puede pedir la fuente de
+        # cualquier fila y sale de aqui, no de la memoria del modelo.
+        attrs["source"] = item.get("source")
+        attrs["price_usd"] = item.get("price_usd")
+
+        components.append(Component(
+            id=item["id"],
+            kind=Kind(item["kind"]),
+            name=item.get("name", item["id"]),
+            price_cop=int(item["price_cop"]),
+            # WEG no publica margen comercial: es un supuesto declarado, igual
+            # para todo el catalogo real para no fingir precision que no hay.
+            margin_pct=float(item.get("margin_pct", 0.25)),
+            stock=int(item.get("stock", 5)),
+            attrs=attrs,
+        ))
+
+    return components
+
+
+def load_graph(include_real: bool = True):
+    """Construye el grafo de conocimiento.
+
+    Combina la semilla con el catalogo real de WEG si existe. Los ids reales
+    son numeros de parte (CFW500A07P3T4...), asi que no chocan con los de la
+    semilla (DRV-CFW500-7-220) y ambos conviven sin ambiguedad.
 
     Importa aqui adentro para evitar un ciclo de importacion con app.graph.
     """
@@ -382,4 +460,6 @@ def load_graph():
 
     graph = KnowledgeGraph()
     graph.add_many(ALL_COMPONENTS)
+    if include_real:
+        graph.add_many(load_real_components())
     return graph.build()

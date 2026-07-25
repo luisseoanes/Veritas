@@ -20,6 +20,7 @@ from __future__ import annotations
 import contextvars
 import json
 
+from app.agent.quotes import quotes
 from app.agent.registry import registry
 from app.config import settings
 from app.graph.schema import Kind
@@ -165,6 +166,27 @@ def solve_configuration(
                 {"restriccion": r.name, "descripcion": r.description} for r in result.unsat_core
             ],
             "relajaciones": result.relaxations,
+            # Cada relajacion viable trae una configuracion REAL y cotizable.
+            # Es lo que convierte el "no" en una oferta que el cliente puede
+            # aceptar en el mismo turno.
+            "alternativas_aceptables": [
+                {
+                    "si_cede_en": r["requirement"],
+                    "que_significa": r["description"],
+                    "te_puedo_ofrecer": r["proposal"]["components"],
+                    "precio_total_cop": r["proposal"]["total_price_cop"],
+                    "componentes": r["proposal"]["configuration"],
+                    "disponibilidad_minima": r["proposal"]["min_stock"],
+                }
+                for r in result.relaxations
+                if "proposal" in r
+            ],
+            "instruccion": (
+                "Presenta las 'alternativas_aceptables' como ofertas concretas, "
+                "con su precio exacto: 'si puedes ceder en X, te ofrezco esto por "
+                "$Y'. Si el cliente ACEPTA una, llama a generate_quote con esos "
+                "componentes. No inventes configuraciones distintas a estas."
+            ),
             "configuraciones_evaluadas": result.considered,
         }, ensure_ascii=False, default=str)
 
@@ -306,6 +328,181 @@ def search_catalog(kind: str, voltage: int | None = None) -> str:
             }
             for c in components
         ],
+    }, ensure_ascii=False, default=str)
+
+
+@registry.tool(
+    name="compare_products",
+    description=(
+        "Compara dos o mas productos del catalogo lado a lado: precio, "
+        "especificaciones tecnicas y en que se diferencian exactamente. "
+        "Usala cuando el cliente pregunte en que se diferencian dos productos, "
+        "cual le conviene, o para que tipo de usuario es cada uno. "
+        "Solo compara: NO elige por el cliente ni arma configuraciones."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "component_ids": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "IDs de los productos a comparar (2 o mas)",
+            }
+        },
+        "required": ["component_ids"],
+    },
+)
+def compare_products(component_ids: list[str]) -> str:
+    """Comparativa lado a lado, con las diferencias ya calculadas.
+
+    El LLM no tiene que deducir en que se diferencian: el codigo determina que
+    atributos difieren y cuales coinciden. Asi la respuesta no depende de que
+    el modelo compare bien dos listas de numeros.
+    """
+    graph = state.graph
+    if len(component_ids) < 2:
+        return json.dumps({
+            "error": "Se necesitan al menos 2 productos para comparar.",
+        }, ensure_ascii=False)
+
+    components = [graph.get(cid) for cid in component_ids]
+
+    kinds = {c.kind for c in components}
+    # Atributos numericos/textuales presentes en alguno de los productos.
+    attr_names = sorted({k for c in components for k in c.attrs if k != "tags"})
+
+    diferencias, comunes = {}, {}
+    for name in attr_names:
+        values = {c.id: c.attrs.get(name) for c in components}
+        distinct = {json.dumps(v, sort_keys=True, default=str) for v in values.values()}
+        (diferencias if len(distinct) > 1 else comunes)[name] = values
+
+    precios = {c.id: c.price_cop for c in components}
+    barato = min(precios, key=precios.get)
+    caro = max(precios, key=precios.get)
+
+    return json.dumps({
+        "comparables": len(kinds) == 1,
+        "nota_de_comparabilidad": (
+            "Todos son del mismo tipo, la comparacion es directa."
+            if len(kinds) == 1 else
+            "OJO: son de tipos distintos; cumplen funciones diferentes dentro de "
+            "la solucion y no son sustitutos entre si. Dilo antes de compararlos."
+        ),
+        "productos": [
+            {
+                "id": c.id, "nombre": c.name, "tipo": c.kind.value,
+                "precio_cop": c.price_cop, "stock": c.stock,
+                "caracteristicas": sorted(c.features),
+                "atributos": {k: v for k, v in c.attrs.items() if k != "tags"},
+            }
+            for c in components
+        ],
+        "en_que_se_diferencian": diferencias,
+        "en_que_coinciden": comunes,
+        "diferencia_de_precio_cop": precios[caro] - precios[barato],
+        "mas_economico": barato,
+        "mas_costoso": caro,
+        "instruccion": (
+            "Explica las diferencias que importan para el uso del cliente, no "
+            "todas. Los numeros son exactos: reportalos tal cual. Si el cliente "
+            "pregunta cual le conviene, apoyate en las diferencias pero recuerda "
+            "que la configuracion final la decide solve_configuration."
+        ),
+    }, ensure_ascii=False, default=str)
+
+
+@registry.tool(
+    name="generate_quote",
+    description=(
+        "ACCION REAL: emite una cotizacion formal para una configuracion que el "
+        "cliente ya ACEPTO, con numero consecutivo, desglose por componente y "
+        "validez. Devuelve el numero de cotizacion y la deja registrada. "
+        "Usala SOLO cuando el cliente haya aceptado explicitamente una "
+        "configuracion concreta — no para mostrarle opciones."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "component_ids": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "IDs de los componentes aceptados por el cliente",
+            },
+            "customer_name": {
+                "type": "string",
+                "description": "Nombre del cliente o de su empresa, si lo dijo",
+            },
+            "notes": {
+                "type": "string",
+                "description": "Observaciones a dejar en la cotizacion (opcional)",
+            },
+        },
+        "required": ["component_ids"],
+    },
+)
+def generate_quote(
+    component_ids: list[str],
+    customer_name: str = "Cliente",
+    notes: str = "",
+) -> str:
+    """Emite la cotizacion y la persiste.
+
+    Es la unica tool que CAMBIA algo fuera del proceso: escribe un documento y
+    consume un consecutivo. Por eso valida antes de emitir — una cotizacion de
+    una configuracion invalida seria un compromiso comercial sobre algo que no
+    se puede entregar.
+    """
+    from app.graph.schema import Configuration
+
+    graph = state.graph
+    components = {}
+    for cid in component_ids:
+        component = graph.get(cid)
+        components[component.kind] = component
+
+    config = Configuration(components=components)
+
+    # GUARDRAIL: no se cotiza lo que el grafo no aprueba.
+    evidence = explain(graph, config)
+    if not evidence["all_rules_pass"]:
+        return json.dumps({
+            "status": "RECHAZADA",
+            "motivo": (
+                "La combinacion no cumple las reglas tecnicas del grafo, asi que "
+                "no se emite cotizacion. Vuelve a resolver con solve_configuration."
+            ),
+            "evidencia": evidence["checks"],
+        }, ensure_ascii=False, default=str)
+
+    sin_stock = [c.id for c in components.values() if c.stock < 1]
+
+    quote = quotes.issue(
+        config=config,
+        customer_name=customer_name,
+        notes=notes,
+        objective_key=state.objective_key,
+        session_id=_current_session.get(),
+    )
+
+    return json.dumps({
+        "status": "EMITIDA",
+        "numero": quote["numero"],
+        "cliente": quote["cliente"],
+        "emitida": quote["emitida"],
+        "valida_hasta": quote["valida_hasta"],
+        "items": quote["items"],
+        "total_cop": quote["total_cop"],
+        "advertencia_stock": (
+            f"Sin inventario inmediato: {sin_stock}. Confirmar plazo de entrega."
+            if sin_stock else None
+        ),
+        "archivo": quote["archivo"],
+        "instruccion": (
+            "Confirmale al cliente el NUMERO de cotizacion, el total y hasta "
+            "cuando es valida. Los importes son los del documento emitido: no "
+            "los recalcules ni los redondees."
+        ),
     }, ensure_ascii=False, default=str)
 
 

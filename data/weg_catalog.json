@@ -1,0 +1,3258 @@
+{
+  "source": "weg-lv-drives.pdf",
+  "supuestos": {
+    "usd_to_cop": 4100,
+    "nota": "WEG publica precios de lista en USD. La conversion a COP es un supuesto declarado, no un dato del fabricante."
+  },
+  "components": [
+    {
+      "id": "CFW100A01P6S120G2",
+      "kind": "drive",
+      "name": "WEG CFW100A01P6S120G2",
+      "price_usd": 307,
+      "price_cop": 1258700,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.6,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 13,
+        "raw_row": "1/4 - 1/3 1.6 CFW100A01P6S120G2 A 4.0 x 2.2 x 5.1 1.1 $307 V1U (V1)"
+      }
+    },
+    {
+      "id": "CFW100B02P6S120G2",
+      "kind": "drive",
+      "name": "WEG CFW100B02P6S120G2",
+      "price_usd": 335,
+      "price_cop": 1373500,
+      "attrs": {
+        "power_kw_max": 0.56,
+        "hp": 0.75,
+        "current_a": 2.6,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 13,
+        "raw_row": "3/4 2.6 CFW100B02P6S120G2 B 4.6 x 2.2 x 5.1 1.3 $335 V1U (V1)"
+      }
+    },
+    {
+      "id": "CFW100A01P6S220G2",
+      "kind": "drive",
+      "name": "WEG CFW100A01P6S220G2",
+      "price_usd": 275,
+      "price_cop": 1127500,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.6,
+        "voltage_min": 240,
+        "voltage_max": 240,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 13,
+        "raw_row": "1/4 - 1/3 1.6 CFW100A01P6S220G2 A 4.0 x 2.2 x 5.1 1.1 $275 V1U (V1)"
+      }
+    },
+    {
+      "id": "CFW100B02P6S220G2",
+      "kind": "drive",
+      "name": "WEG CFW100B02P6S220G2",
+      "price_usd": 296,
+      "price_cop": 1213600,
+      "attrs": {
+        "power_kw_max": 0.56,
+        "hp": 0.75,
+        "current_a": 2.6,
+        "voltage_min": 240,
+        "voltage_max": 240,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 13,
+        "raw_row": "3/4 2.6 CFW100B02P6S220G2 B 4.6 x 2.2 x 5.1 1.3 $296 V1U (V1)"
+      }
+    },
+    {
+      "id": "CFW100C04P2S220G2",
+      "kind": "drive",
+      "name": "WEG CFW100C04P2S220G2",
+      "price_usd": 315,
+      "price_cop": 1291500,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.2,
+        "voltage_min": 240,
+        "voltage_max": 240,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 13,
+        "raw_row": "1 4.2 CFW100C04P2S220G2 C 5.0 x 2.2 x 5.1 1.4 $315 V1U (V1)"
+      }
+    },
+    {
+      "id": "CFW320A01P6S1NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A01P6S1NB20",
+      "price_usd": 361,
+      "price_cop": 1480100,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.6,
+        "voltage_min": 110,
+        "voltage_max": 127,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1/4 or 1/3 1.6 CFW320A01P6S1NB20 No A 6.22 x 2.76 x 5.84 1.98 $361 V1M"
+      }
+    },
+    {
+      "id": "CFW320A02P6S1NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A02P6S1NB20",
+      "price_usd": 394,
+      "price_cop": 1615400,
+      "attrs": {
+        "power_kw_max": 0.56,
+        "hp": 0.75,
+        "current_a": 2.6,
+        "voltage_min": 110,
+        "voltage_max": 127,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "3/4 2.6 CFW320A02P6S1NB20 No A 6.22 x 2.76 x 5.84 1.98 $394 V1M"
+      }
+    },
+    {
+      "id": "CFW320A04P2S1NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A04P2S1NB20",
+      "price_usd": 420,
+      "price_cop": 1722000,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.2,
+        "voltage_min": 110,
+        "voltage_max": 127,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1 4.2 CFW320A04P2S1NB20 No A 6.22 x 2.76 x 5.84 1.98 $420 V1M"
+      }
+    },
+    {
+      "id": "CFW320A06P0S1NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A06P0S1NB20",
+      "price_usd": 507,
+      "price_cop": 2078700,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 6.0,
+        "voltage_min": 110,
+        "voltage_max": 127,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "2 6.0 CFW320A06P0S1NB20 No A 6.22 x 2.76 x 5.84 1.98 $507 V1M"
+      }
+    },
+    {
+      "id": "CFW320A01P6S2NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A01P6S2NB20",
+      "price_usd": 323,
+      "price_cop": 1324300,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.6,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1/4 or 1/3 1.6 CFW320A01P6S2NB20 No A 6.22 x 2.76 x 5.84 1.98 $323 V1M"
+      }
+    },
+    {
+      "id": "CFW320A02P6S2NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A02P6S2NB20",
+      "price_usd": 348,
+      "price_cop": 1426800,
+      "attrs": {
+        "power_kw_max": 0.56,
+        "hp": 0.75,
+        "current_a": 2.6,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "3/4 2.6 CFW320A02P6S2NB20 No A 6.22 x 2.76 x 5.84 1.98 $348 V1M"
+      }
+    },
+    {
+      "id": "CFW320A04P2S2NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A04P2S2NB20",
+      "price_usd": 371,
+      "price_cop": 1521100,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.2,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1 4.2 CFW320A04P2S2NB20 No A 6.22 x 2.76 x 5.84 1.98 $371 V1M"
+      }
+    },
+    {
+      "id": "CFW320A06P0S2NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A06P0S2NB20",
+      "price_usd": 461,
+      "price_cop": 1890100,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 6.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "2 6.0 CFW320A06P0S2NB20 No A 6.22 x 2.76 x 5.84 1.98 $461 V1M"
+      }
+    },
+    {
+      "id": "CFW320A07P3S2NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A07P3S2NB20",
+      "price_usd": 543,
+      "price_cop": 2226300,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 7.3,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "2 7.3 CFW320A07P3S2NB20 No A 6.22 x 2.76 x 5.84 1.98 $543 V1M"
+      }
+    },
+    {
+      "id": "CFW320B10P0B2DB20",
+      "kind": "drive",
+      "name": "WEG CFW320B10P0B2DB20",
+      "price_usd": 648,
+      "price_cop": 2656800,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 10.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "3 10.0 CFW320B10P0B2DB20 3 Yes B 8.08 x 2.76 x 6.24 2.95 $648 V1M"
+      }
+    },
+    {
+      "id": "CFW320A01P6T2NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A01P6T2NB20",
+      "price_usd": 343,
+      "price_cop": 1406300,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.6,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1/4 or 1/3 1.6 CFW320A01P6T2NB20 No A 6.22 x 2.76 x 5.84 1.98 $343 V1M"
+      }
+    },
+    {
+      "id": "CFW320A02P6T2NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A02P6T2NB20",
+      "price_usd": 376,
+      "price_cop": 1541600,
+      "attrs": {
+        "power_kw_max": 0.56,
+        "hp": 0.75,
+        "current_a": 2.6,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "3/4 2.6 CFW320A02P6T2NB20 No A 6.22 x 2.76 x 5.84 1.98 $376 V1M"
+      }
+    },
+    {
+      "id": "CFW320A04P2T2NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A04P2T2NB20",
+      "price_usd": 399,
+      "price_cop": 1635900,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.2,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1 4.2 CFW320A04P2T2NB20 No A 6.22 x 2.76 x 5.84 1.98 $399 V1M"
+      }
+    },
+    {
+      "id": "CFW320A06P0T2NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A06P0T2NB20",
+      "price_usd": 484,
+      "price_cop": 1984400,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 6.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "2 6.0 CFW320A06P0T2NB20 No A 6.22 x 2.76 x 5.84 1.98 $484 V1M"
+      }
+    },
+    {
+      "id": "CFW320A07P3T2NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A07P3T2NB20",
+      "price_usd": 571,
+      "price_cop": 2341100,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 7.3,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "2 7.3 CFW320A07P3T2NB20 No A 6.22 x 2.76 x 5.84 1.98 $571 V1M"
+      }
+    },
+    {
+      "id": "CFW320B15P2T2DB20",
+      "kind": "drive",
+      "name": "WEG CFW320B15P2T2DB20",
+      "price_usd": 792,
+      "price_cop": 3247200,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 15.2,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "5 15.2 CFW320B15P2T2DB20 Yes B 8.08 x 2.76 x 6.24 2.95 $792 V1M"
+      }
+    },
+    {
+      "id": "CFW320A01P1T4NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A01P1T4NB20",
+      "price_usd": 466,
+      "price_cop": 1910600,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 1.1,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1/2 1.1 CFW320A01P1T4NB20 No A 6.22 x 2.76 x 5.84 1.98 $466 V1M"
+      }
+    },
+    {
+      "id": "CFW320A01P8T4NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A01P8T4NB20",
+      "price_usd": 474,
+      "price_cop": 1943400,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 1.8,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1 1.8 CFW320A01P8T4NB20 No A 6.22 x 2.76 x 5.84 1.98 $474 V1M"
+      }
+    },
+    {
+      "id": "CFW320A02P6T4NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A02P6T4NB20",
+      "price_usd": 483,
+      "price_cop": 1980300,
+      "attrs": {
+        "power_kw_max": 1.12,
+        "hp": 1.5,
+        "current_a": 2.6,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1 1/2 2.6 CFW320A02P6T4NB20 No A 6.22 x 2.76 x 5.84 1.98 $483 V1M"
+      }
+    },
+    {
+      "id": "CFW320A03P5T4NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A03P5T4NB20",
+      "price_usd": 519,
+      "price_cop": 2127900,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 3.5,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "2 3.5 CFW320A03P5T4NB20 No A 6.22 x 2.76 x 5.84 1.98 $519 V1M"
+      }
+    },
+    {
+      "id": "CFW320A04P8T4NB20",
+      "kind": "drive",
+      "name": "WEG CFW320A04P8T4NB20",
+      "price_usd": 639,
+      "price_cop": 2619900,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 4.8,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "3 4.8 CFW320A04P8T4NB20 No A 6.22 x 2.76 x 5.84 1.98 $639 V1M"
+      }
+    },
+    {
+      "id": "CFW320B05P6T4NB20",
+      "kind": "drive",
+      "name": "WEG CFW320B05P6T4NB20",
+      "price_usd": 786,
+      "price_cop": 3222600,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 5.6,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "3 5.6 CFW320B05P6T4NB20 No B 8.08 x 2.76 x 6.24 2.95 $786 V1M"
+      }
+    },
+    {
+      "id": "CFW320B07P6T4NB20",
+      "kind": "drive",
+      "name": "WEG CFW320B07P6T4NB20",
+      "price_usd": 809,
+      "price_cop": 3316900,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 7.6,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "5 7.6 CFW320B07P6T4NB20 No B 8.08 x 2.76 x 6.24 2.95 $809 V1M"
+      }
+    },
+    {
+      "id": "CFW320C08P3T4NB20",
+      "kind": "drive",
+      "name": "WEG CFW320C08P3T4NB20",
+      "price_usd": 886,
+      "price_cop": 3632600,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 8.3,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "5 8.3 CFW320C08P3T4NB20 No C 8.43 x 3.5 x 6.45 3.30 $886 V1M"
+      }
+    },
+    {
+      "id": "CFW320C11P0T4NB20",
+      "kind": "drive",
+      "name": "WEG CFW320C11P0T4NB20",
+      "price_usd": 919,
+      "price_cop": 3767900,
+      "attrs": {
+        "power_kw_max": 5.59,
+        "hp": 7.5,
+        "current_a": 11.0,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "7 1/2 11.0 CFW320C11P0T4NB20 No C 8.43 x 3.5 x 6.45 3.30 $919 V1M"
+      }
+    },
+    {
+      "id": "CFW320C14P0T4NB20",
+      "kind": "drive",
+      "name": "WEG CFW320C14P0T4NB20",
+      "price_usd": 1137,
+      "price_cop": 4661700,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 14.0,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "10 14.0 CFW320C14P0T4NB20 No C 8.43 x 3.5 x 6.45 3.30 $1,137 V1M"
+      }
+    },
+    {
+      "id": "CFW320B01P1T4DB20",
+      "kind": "drive",
+      "name": "WEG CFW320B01P1T4DB20",
+      "price_usd": 488,
+      "price_cop": 2000800,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 1.1,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1/2 1.1 CFW320B01P1T4DB20 Yes B 8.08 x 2.76 x 6.24 2.95 $488 V1M"
+      }
+    },
+    {
+      "id": "CFW320B01P8T4DB20",
+      "kind": "drive",
+      "name": "WEG CFW320B01P8T4DB20",
+      "price_usd": 498,
+      "price_cop": 2041800,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 1.8,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1 1.8 CFW320B01P8T4DB20 Yes B 8.08 x 2.76 x 6.24 2.95 $498 V1M"
+      }
+    },
+    {
+      "id": "CFW320B02P6T4DB20",
+      "kind": "drive",
+      "name": "WEG CFW320B02P6T4DB20",
+      "price_usd": 512,
+      "price_cop": 2099200,
+      "attrs": {
+        "power_kw_max": 1.12,
+        "hp": 1.5,
+        "current_a": 2.6,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "1 1/2 2.6 CFW320B02P6T4DB20 Yes B 8.08 x 2.76 x 6.24 2.95 $512 V1M"
+      }
+    },
+    {
+      "id": "CFW320B03P5T4DB20",
+      "kind": "drive",
+      "name": "WEG CFW320B03P5T4DB20",
+      "price_usd": 566,
+      "price_cop": 2320600,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 3.5,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "2 3.5 CFW320B03P5T4DB20 Yes B 8.08 x 2.76 x 6.24 2.95 $566 V1M"
+      }
+    },
+    {
+      "id": "CFW320B04P8T4DB20",
+      "kind": "drive",
+      "name": "WEG CFW320B04P8T4DB20",
+      "price_usd": 714,
+      "price_cop": 2927400,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 4.8,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "3 4.8 CFW320B04P8T4DB20 Yes B 8.08 x 2.76 x 6.24 2.95 $714 V1M"
+      }
+    },
+    {
+      "id": "CFW320B05P6T4DB20",
+      "kind": "drive",
+      "name": "WEG CFW320B05P6T4DB20",
+      "price_usd": 833,
+      "price_cop": 3415300,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 5.6,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "3 5.6 CFW320B05P6T4DB20 Yes B 8.08 x 2.76 x 6.24 2.95 $833 V1M"
+      }
+    },
+    {
+      "id": "CFW320B07P6T4DB20",
+      "kind": "drive",
+      "name": "WEG CFW320B07P6T4DB20",
+      "price_usd": 854,
+      "price_cop": 3501400,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 7.6,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "5 7.6 CFW320B07P6T4DB20 Yes B 8.08 x 2.76 x 6.24 2.95 $854 V1M"
+      }
+    },
+    {
+      "id": "CFW320C08P3T4DB20",
+      "kind": "drive",
+      "name": "WEG CFW320C08P3T4DB20",
+      "price_usd": 935,
+      "price_cop": 3833500,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 8.3,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "5 8.3 CFW320C08P3T4DB20 Yes C 8.43 x 3.5 x 6.45 3.30 $935 V1M"
+      }
+    },
+    {
+      "id": "CFW320C11P0T4DB20",
+      "kind": "drive",
+      "name": "WEG CFW320C11P0T4DB20",
+      "price_usd": 966,
+      "price_cop": 3960600,
+      "attrs": {
+        "power_kw_max": 5.59,
+        "hp": 7.5,
+        "current_a": 11.0,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "7 1/2 11.0 CFW320C11P0T4DB20 Yes C 8.43 x 3.5 x 6.45 3.30 $966 V1M"
+      }
+    },
+    {
+      "id": "CFW320C14P0T4DB20",
+      "kind": "drive",
+      "name": "WEG CFW320C14P0T4DB20",
+      "price_usd": 1196,
+      "price_cop": 4903600,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 14.0,
+        "voltage_min": 460,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 17,
+        "raw_row": "10 14.0 CFW320C14P0T4DB20 Yes C 8.43 x 3.5 x 6.45 3.30 $1,196 V1M"
+      }
+    },
+    {
+      "id": "CFW501A01P6T2NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A01P6T2NB20C3",
+      "price_usd": 563,
+      "price_cop": 2308300,
+      "attrs": {
+        "power_kw_max": 0.25,
+        "hp": 0.3333333333333333,
+        "current_a": 1.6,
+        "voltage_min": 220,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "1/3 1.6 CFW501A01P6T2NB20C3 No A 7.5 x 3.0 x 5.9 1.8  $563 V3"
+      }
+    },
+    {
+      "id": "CFW501A02P6T2NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A02P6T2NB20C3",
+      "price_usd": 601,
+      "price_cop": 2464100,
+      "attrs": {
+        "power_kw_max": 0.56,
+        "hp": 0.75,
+        "current_a": 2.6,
+        "voltage_min": 220,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "3/4 2.6 CFW501A02P6T2NB20C3 No A 7.5 x 3.0 x 5.9 1.8  $601 V3"
+      }
+    },
+    {
+      "id": "CFW501A04P3T2NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A04P3T2NB20C3",
+      "price_usd": 652,
+      "price_cop": 2673200,
+      "attrs": {
+        "power_kw_max": 1.12,
+        "hp": 1.5,
+        "current_a": 4.3,
+        "voltage_min": 220,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "1 1/2 4.3 CFW501A04P3T2NB20C3 No A 7.5 x 3.0 x 5.9 1.8  $652 V3"
+      }
+    },
+    {
+      "id": "CFW501A07P0T2NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A07P0T2NB20C3",
+      "price_usd": 736,
+      "price_cop": 3017600,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 7.0,
+        "voltage_min": 220,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "2 7.0 CFW501A07P0T2NB20C3 No A 7.5 x 3.0 x 5.9 1.8  $736 V3"
+      }
+    },
+    {
+      "id": "CFW501A09P6T2NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A09P6T2NB20C3",
+      "price_usd": 804,
+      "price_cop": 3296400,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 9.6,
+        "voltage_min": 220,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "3 9.6 CFW501A09P6T2NB20C3 No A 7.5 x 3.0 x 5.9 1.8  $804 V3"
+      }
+    },
+    {
+      "id": "CFW501A12P2T2NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A12P2T2NB20C3",
+      "price_usd": 873,
+      "price_cop": 3579300,
+      "attrs": {
+        "power_kw_max": 2.98,
+        "hp": 4.0,
+        "current_a": 12.2,
+        "voltage_min": 220,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "4 12.2 CFW501A12P2T2NB20C3 6 No A 7.5 x 3.0 x 5.9 1.8  $873 V3"
+      }
+    },
+    {
+      "id": "CFW501B16P0T2DB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501B16P0T2DB20C3",
+      "price_usd": 1009,
+      "price_cop": 4136900,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 16.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "5 16.0 CFW501B16P0T2DB20C3 Yes B 7.9 x 4.0 x 6.3 2.7  $1,009 V3"
+      }
+    },
+    {
+      "id": "CFW501B19P4T2DB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501B19P4T2DB20C3",
+      "price_usd": 1111,
+      "price_cop": 4555100,
+      "attrs": {
+        "power_kw_max": 5.59,
+        "hp": 7.5,
+        "current_a": 19.4,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "7 1/2 19.4 CFW501B19P4T2DB20C3 6 Yes B 7.9 x 4.0 x 6.3 2.7  $1,111 V3"
+      }
+    },
+    {
+      "id": "CFW501C24P0T2DB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501C24P0T2DB20C3",
+      "price_usd": 1552,
+      "price_cop": 6363200,
+      "attrs": {
+        "power_kw_max": 5.59,
+        "hp": 7.5,
+        "current_a": 24.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "7 1/2 24.0 CFW501C24P0T2DB20C3 Yes C 8.3 x 5.3 x 6.5 4.4  $1,552 V3"
+      }
+    },
+    {
+      "id": "CFW501A01P0T4NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A01P0T4NB20C3",
+      "price_usd": 745,
+      "price_cop": 3054500,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 1.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "1/2 1.0 CFW501A01P0T4NB20C3 No A 7.5 x 3.0 x 5.9 1.8  $745 V3"
+      }
+    },
+    {
+      "id": "CFW501A01P6T4NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A01P6T4NB20C3",
+      "price_usd": 761,
+      "price_cop": 3120100,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 1.6,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "1 1.6 CFW501A01P6T4NB20C3 No A 7.5 x 3.0 x 5.9 1.8  $761 V3"
+      }
+    },
+    {
+      "id": "CFW501A02P6T4NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A02P6T4NB20C3",
+      "price_usd": 799,
+      "price_cop": 3275900,
+      "attrs": {
+        "power_kw_max": 1.12,
+        "hp": 1.5,
+        "current_a": 2.6,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "1 1/2 2.6 CFW501A02P6T4NB20C3 No A 7.5 x 3.0 x 5.9 1.8  $799 V3"
+      }
+    },
+    {
+      "id": "CFW501A04P3T4NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A04P3T4NB20C3",
+      "price_usd": 917,
+      "price_cop": 3759700,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 4.3,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "3 4.3 CFW501A04P3T4NB20C3 No A 7.5 x 3.0 x 5.9 1.8  $917 V3"
+      }
+    },
+    {
+      "id": "CFW501A06P1T4NB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501A06P1T4NB20C3",
+      "price_usd": 1051,
+      "price_cop": 4309100,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 6.1,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "5 6.1 CFW501A06P1T4NB20C3 No A 7.5 x 3.0 x 5.9 1.8  $1,051 V3"
+      }
+    },
+    {
+      "id": "CFW501B02P6T4DB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501B02P6T4DB20C3",
+      "price_usd": 835,
+      "price_cop": 3423500,
+      "attrs": {
+        "power_kw_max": 1.12,
+        "hp": 1.5,
+        "current_a": 2.6,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "1 1/2 2.6 CFW501B02P6T4DB20C3 Yes B 7.9 x 4.0 x 6.3 2.7  $835 V3"
+      }
+    },
+    {
+      "id": "CFW501B04P3T4DB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501B04P3T4DB20C3",
+      "price_usd": 958,
+      "price_cop": 3927800,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 4.3,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "3 4.3 CFW501B04P3T4DB20C3 Yes B 7.9 x 4.0 x 6.3 2.7  $958 V3"
+      }
+    },
+    {
+      "id": "CFW501B06P5T4DB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501B06P5T4DB20C3",
+      "price_usd": 1092,
+      "price_cop": 4477200,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 6.5,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "5 6.5 CFW501B06P5T4DB20C3 Yes B 7.9 x 4.0 x 6.3 2.7  $1,092 V3"
+      }
+    },
+    {
+      "id": "CFW501B10P0T4DB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501B10P0T4DB20C3",
+      "price_usd": 1299,
+      "price_cop": 5325900,
+      "attrs": {
+        "power_kw_max": 5.59,
+        "hp": 7.5,
+        "current_a": 10.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "7 1/2 10.0 CFW501B10P0T4DB20C3 Yes B 7.9 x 4.0 x 6.3 2.7  $1,299 V3"
+      }
+    },
+    {
+      "id": "CFW501C14P0T4DB20C2",
+      "kind": "drive",
+      "name": "WEG CFW501C14P0T4DB20C2",
+      "price_usd": 1609,
+      "price_cop": 6596900,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 14.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "10 14.0 CFW501C14P0T4DB20C2 Yes C 8.3 x 5.3 x 6.5 4.4  $1,609 V3"
+      }
+    },
+    {
+      "id": "CFW501C16P0T4DB20C2",
+      "kind": "drive",
+      "name": "WEG CFW501C16P0T4DB20C2",
+      "price_usd": 1886,
+      "price_cop": 7732600,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 16.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "10 16.0 CFW501C16P0T4DB20C2 Yes C 8.3 x 5.3 x 6.5 4.4  $1,886 V3"
+      }
+    },
+    {
+      "id": "CFW501D24P0T4DB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501D24P0T4DB20C3",
+      "price_usd": 2321,
+      "price_cop": 9516100,
+      "attrs": {
+        "power_kw_max": 11.19,
+        "hp": 15.0,
+        "current_a": 24.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "15 24.0 CFW501D24P0T4DB20C3 Yes D 12.1 x 7.1 x 6.6 9.5  $2,321 V3"
+      }
+    },
+    {
+      "id": "CFW501D31P0T4DB20C3",
+      "kind": "drive",
+      "name": "WEG CFW501D31P0T4DB20C3",
+      "price_usd": 2716,
+      "price_cop": 11135600,
+      "attrs": {
+        "power_kw_max": 18.64,
+        "hp": 25.0,
+        "current_a": 31.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 70,
+        "raw_row": "25 31.0 CFW501D31P0T4DB20C3 Yes D 12.1 x 7.1 x 6.6 9.5  $2,716 V3"
+      }
+    },
+    {
+      "id": "CFW100016SAZ",
+      "kind": "drive",
+      "name": "WEG CFW100016SAZ",
+      "price_usd": 361,
+      "price_cop": 1480100,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.6,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1/4 1.6 CFW100016SAZ No 1.6 CFW320A01P6S1NB20 No  $361 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100026SAZ",
+      "kind": "drive",
+      "name": "WEG CFW100026SAZ",
+      "price_usd": 394,
+      "price_cop": 1615400,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 2.6,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1/2 2.6 CFW100026SAZ No 2.6 CFW320A02P6S1NB20 No  $394 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100040SAZ",
+      "kind": "drive",
+      "name": "WEG CFW100040SAZ",
+      "price_usd": 420,
+      "price_cop": 1722000,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.0,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1 4.0 CFW100040SAZ No 4.2 CFW320A04P2S1NB20 No  $420 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100016SAPLZ",
+      "kind": "drive",
+      "name": "WEG CFW100016SAPLZ",
+      "price_usd": 361,
+      "price_cop": 1480100,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.6,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1/4 1.6 CFW100016SAPLZ No 1.6 CFW320A01P6S1NB20 3 No  $361 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100026SAPLZ",
+      "kind": "drive",
+      "name": "WEG CFW100026SAPLZ",
+      "price_usd": 394,
+      "price_cop": 1615400,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 2.6,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1/2 2.6 CFW100026SAPLZ No 2.6 CFW320A02P6S1NB20 3 No  $394 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100040SAPLZ",
+      "kind": "drive",
+      "name": "WEG CFW100040SAPLZ",
+      "price_usd": 420,
+      "price_cop": 1722000,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.0,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1 4.0 CFW100040SAPLZ No 4.2 CFW320A04P2S1NB20 3 No  $420 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100016SDZ",
+      "kind": "drive",
+      "name": "WEG CFW100016SDZ",
+      "price_usd": 323,
+      "price_cop": 1324300,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.6,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1/4 1.6 CFW100016SDZ No 1.6 CFW320A01P6S2NB20 No  $323 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100026SDZ",
+      "kind": "drive",
+      "name": "WEG CFW100026SDZ",
+      "price_usd": 348,
+      "price_cop": 1426800,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 2.6,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1/2 2.6 CFW100026SDZ No 2.6 CFW320A02P6S2NB20 No  $348 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100040SDZ",
+      "kind": "drive",
+      "name": "WEG CFW100040SDZ",
+      "price_usd": 371,
+      "price_cop": 1521100,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1 4.0 CFW100040SDZ No 4.2 CFW320A04P2S2NB20 No  $371 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100073SDZ",
+      "kind": "drive",
+      "name": "WEG CFW100073SDZ",
+      "price_usd": 543,
+      "price_cop": 2226300,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 7.3,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "2 7.3 CFW100073SDZ Yes 7.3 CFW320A07P3S2NB20 No  $543 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100100SDZ",
+      "kind": "drive",
+      "name": "WEG CFW100100SDZ",
+      "price_usd": 648,
+      "price_cop": 2656800,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 10.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "3 10.0 CFW100100SDZ Yes 10.0 CFW320B10P0B2DB20 Yes  $648 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100016SDPLZ",
+      "kind": "drive",
+      "name": "WEG CFW100016SDPLZ",
+      "price_usd": 323,
+      "price_cop": 1324300,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.6,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1/4 1.6 CFW100016SDPLZ No 1.6 CFW320A01P6S2NB20 3 No  $323 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100026SDPLZ",
+      "kind": "drive",
+      "name": "WEG CFW100026SDPLZ",
+      "price_usd": 348,
+      "price_cop": 1426800,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 2.6,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1/2 2.6 CFW100026SDPLZ No 2.6 CFW320A02P6S2NB20 3 No  $348 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100040SDPLZ",
+      "kind": "drive",
+      "name": "WEG CFW100040SDPLZ",
+      "price_usd": 371,
+      "price_cop": 1521100,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "1 4.0 CFW100040SDPLZ No 4.2 CFW320A04P2S2NB20 3 No  $371 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100073SDPLZ",
+      "kind": "drive",
+      "name": "WEG CFW100073SDPLZ",
+      "price_usd": 543,
+      "price_cop": 2226300,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 7.3,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "2 7.3 CFW100073SDPLZ Yes 7.3 CFW320A07P3S2NB20 3 No  $543 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW100100SDPLZ",
+      "kind": "drive",
+      "name": "WEG CFW100100SDPLZ",
+      "price_usd": 648,
+      "price_cop": 2656800,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 10.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 153,
+        "raw_row": "3 10.0 CFW100100SDPLZ Yes 10.0 CFW320B10P0B2DB20 3 Yes  $648 V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A01P6S1NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A01P6S1NB20",
+      "price_usd": 361,
+      "price_cop": 1480100,
+      "attrs": {
+        "power_kw_max": 0.25,
+        "hp": 0.3333333333333333,
+        "current_a": 1.6,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "1/3 1.6 CFW300A01P6S1NB20 No 1.6 CFW320A01P6S1NB20 No  $361  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A02P6S1NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A02P6S1NB20",
+      "price_usd": 394,
+      "price_cop": 1615400,
+      "attrs": {
+        "power_kw_max": 0.56,
+        "hp": 0.75,
+        "current_a": 2.6,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "3/4 2.6 CFW300A02P6S1NB20 No 2.6 CFW320A02P6S1NB20 No  $394  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A04P2S1NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A04P2S1NB20",
+      "price_usd": 420,
+      "price_cop": 1722000,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.2,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "1 4.2 CFW300A04P2S1NB20 No 4.2 CFW320A04P2S1NB20 No  $420  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A06P0S1NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A06P0S1NB20",
+      "price_usd": 507,
+      "price_cop": 2078700,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 6.0,
+        "voltage_min": 120,
+        "voltage_max": 120,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "2 6.0 CFW300A06P0S1NB20 No 6.0 CFW320A06P0S1NB20 No  $507  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A01P6S2NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A01P6S2NB20",
+      "price_usd": 323,
+      "price_cop": 1324300,
+      "attrs": {
+        "power_kw_max": 0.25,
+        "hp": 0.3333333333333333,
+        "current_a": 1.6,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "1/3 1.6 CFW300A01P6S2NB20 No 1.6 CFW320A01P6S2NB20 No  $323  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A02P6S2NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A02P6S2NB20",
+      "price_usd": 348,
+      "price_cop": 1426800,
+      "attrs": {
+        "power_kw_max": 0.56,
+        "hp": 0.75,
+        "current_a": 2.6,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "3/4 2.6 CFW300A02P6S2NB20 No 2.6 CFW320A02P6S2NB20 No  $348  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A04P2S2NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A04P2S2NB20",
+      "price_usd": 371,
+      "price_cop": 1521100,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.2,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "1 4.2 CFW300A04P2S2NB20 No 4.2 CFW320A04P2S2NB20 No  $371  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A06P0S2NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A06P0S2NB20",
+      "price_usd": 461,
+      "price_cop": 1890100,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 6.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "2 6.0 CFW300A06P0S2NB20 No 6.0 CFW320A06P0S2NB20 No  $461  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A07P3S2NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A07P3S2NB20",
+      "price_usd": 543,
+      "price_cop": 2226300,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 7.3,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "2 7.3 CFW300A07P3S2NB20 No 7.3 CFW320A07P3S2NB20 No  $543  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300B10P0B2DB20",
+      "kind": "drive",
+      "name": "WEG CFW300B10P0B2DB20",
+      "price_usd": 648,
+      "price_cop": 2656800,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 10.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "3 10.0 CFW300B10P0B2DB20 Yes 10.0 CFW320B10P0B2DB20 Yes  $648  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A01P6T2NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A01P6T2NB20",
+      "price_usd": 343,
+      "price_cop": 1406300,
+      "attrs": {
+        "power_kw_max": 0.25,
+        "hp": 0.3333333333333333,
+        "current_a": 1.6,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "1/3 1.6 CFW300A01P6T2NB20 No 1.6 CFW320A01P6T2NB20 No  $343  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A02P6T2NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A02P6T2NB20",
+      "price_usd": 376,
+      "price_cop": 1541600,
+      "attrs": {
+        "power_kw_max": 0.56,
+        "hp": 0.75,
+        "current_a": 2.6,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "3/4 2.6 CFW300A02P6T2NB20 No 2.6 CFW320A02P6T2NB20 No  $376  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A04P2T2NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A04P2T2NB20",
+      "price_usd": 399,
+      "price_cop": 1635900,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.2,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "1 4.2 CFW300A04P2T2NB20 No 4.2 CFW320A04P2T2NB20 No  $399  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A06P0T2NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A06P0T2NB20",
+      "price_usd": 484,
+      "price_cop": 1984400,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 6.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "2 6.0 CFW300A06P0T2NB20 No 6.0 CFW320A06P0T2NB20 No  $484  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300A07P3T2NB20",
+      "kind": "drive",
+      "name": "WEG CFW300A07P3T2NB20",
+      "price_usd": 571,
+      "price_cop": 2341100,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 7.3,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "2 7.3 CFW300A07P3T2NB20 No 7.3 CFW320A07P3T2NB20 No  $571  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW300B15P2T2DB20",
+      "kind": "drive",
+      "name": "WEG CFW300B15P2T2DB20",
+      "price_usd": 792,
+      "price_cop": 3247200,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 15.2,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Single-Phase"
+      },
+      "source": {
+        "page": 154,
+        "raw_row": "5 15.2 CFW300B15P2T2DB20 Yes 15.2 CFW320B15P2T2DB20 Yes  $792  V1M (V1)"
+      }
+    },
+    {
+      "id": "CFW080016BDN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080016BDN1A1Z",
+      "price_usd": 456,
+      "price_cop": 1869600,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.6,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "1/4-1/3 1.6 CFW080016BDN1A1Z No 1.6 CFW500A01P6B2NB20G2 No  $456 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080026BDN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080026BDN1A1Z",
+      "price_usd": 467,
+      "price_cop": 1914700,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 2.6,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "1/2 2.6 CFW080026BDN1A1Z No 2.6 CFW500A02P6B2NB20G2 No  $467 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080040BDN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080040BDN1A1Z",
+      "price_usd": 506,
+      "price_cop": 2074600,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 4.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "1 4.0 CFW080040BDN1A1Z No 4.3 CFW500A04P3B2NB20G2 No  $506 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080070TDN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080070TDN1A1Z",
+      "price_usd": 628,
+      "price_cop": 2574800,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 7.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "2 7.0 CFW080070TDN1A1Z No 7.0 CFW500A07P0T2NB20G2 No  $628 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080073BDN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080073BDN1A1Z",
+      "price_usd": 678,
+      "price_cop": 2779800,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 7.3,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "2 7.3 CFW080073BDN1A1Z Yes 7.3 CFW500B07P3B2DB20G2 Yes  $678 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080100BDN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080100BDN1A1Z",
+      "price_usd": 789,
+      "price_cop": 3234900,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 10.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "3 10 CFW080100BDN1A1Z Yes 10 CFW500B10P0B2DB20G2 Yes  $789 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080160TDN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080160TDN1A1Z",
+      "price_usd": 842,
+      "price_cop": 3452200,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 16.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "5 16 CFW080160TDN1A1Z Yes 16 CFW500B16P0T2DB20G2 Yes  $842 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080220TDN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080220TDN1A1Z",
+      "price_usd": 1427,
+      "price_cop": 5850700,
+      "attrs": {
+        "power_kw_max": 5.59,
+        "hp": 7.5,
+        "current_a": 22.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "7 1/2 22 CFW080220TDN1A1Z Yes 24 CFW500C24P0T2DB20G2 Yes  $1,427 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080280TDN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080280TDN1A1Z",
+      "price_usd": 1777,
+      "price_cop": 7285700,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 28.0,
+        "voltage_min": 230,
+        "voltage_max": 230,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "10 28 CFW080280TDN1A1Z Yes 28 CFW500D28P0T2DB20G2 Yes  $1,777 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080010TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080010TGN1A1Z",
+      "price_usd": 582,
+      "price_cop": 2386200,
+      "attrs": {
+        "power_kw_max": 0.19,
+        "hp": 0.25,
+        "current_a": 1.0,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "1/4-1/3 1.0 CFW080010TGN1A1Z No 1.0 CFW500A01P0T4NB20G2 No  $582 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080016TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080016TGN1A1Z",
+      "price_usd": 604,
+      "price_cop": 2476400,
+      "attrs": {
+        "power_kw_max": 0.56,
+        "hp": 0.75,
+        "current_a": 1.6,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "3/4 1.6 CFW080016TGN1A1Z No 1.6 CFW500A01P6T4NB20G2 No  $604 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080026TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080026TGN1A1Z",
+      "price_usd": 649,
+      "price_cop": 2660900,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 2.6,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "1 2.6 CFW080026TGN1A1Z No 2.6 CFW500A02P6T4NB20G2 No  $649 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080027TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080027TGN1A1Z",
+      "price_usd": 708,
+      "price_cop": 2902800,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 2.7,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "1 2.7 CFW080027TGN1A1Z Yes 2.6 CFW500B02P6T4DB20G2 Yes  $708 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080040TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080040TGN1A1Z",
+      "price_usd": 799,
+      "price_cop": 3275900,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 4.0,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "2 4.0 CFW080040TGN1A1Z No 4.3 CFW500A04P3T4NB20G2 No  $799 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080043TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080043TGN1A1Z",
+      "price_usd": 892,
+      "price_cop": 3657200,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 4.3,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "2 4.3 CFW080043TGN1A1Z Yes 4.3 CFW500B04P3T4DB20G2 Yes  $892 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080065TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080065TGN1A1Z",
+      "price_usd": 1067,
+      "price_cop": 4374700,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 6.5,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "3 6.5 CFW080065TGN1A1Z Yes 6.5 CFW500B06P5T4DB20G2 Yes  $1,067 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080100TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080100TGN1A1Z",
+      "price_usd": 1207,
+      "price_cop": 4948700,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 10.0,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "5 10 CFW080100TGN1A1Z Yes 10 CFW500B10P0T4DB20G2 Yes  $1,207 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080130TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080130TGN1A1Z",
+      "price_usd": 1495,
+      "price_cop": 6129500,
+      "attrs": {
+        "power_kw_max": 5.59,
+        "hp": 7.5,
+        "current_a": 13.0,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "7 1/2 13 CFW080130TGN1A1Z Yes 14 CFW500C14P0T4DB20G2 Yes  $1,495 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080160TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080160TGN1A1Z",
+      "price_usd": 1684,
+      "price_cop": 6904400,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 16.0,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "10 16 CFW080160TGN1A1Z Yes 16 CFW500C16P0T4DB20G2 Yes  $1,684 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080240TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080240TGN1A1Z",
+      "price_usd": 2229,
+      "price_cop": 9138900,
+      "attrs": {
+        "power_kw_max": 11.19,
+        "hp": 15.0,
+        "current_a": 24.0,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "15 24 CFW080240TGN1A1Z Yes 24 CFW500D24P0T4DB20G2 Yes  $2,229 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080300TGN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080300TGN1A1Z",
+      "price_usd": 2783,
+      "price_cop": 11410300,
+      "attrs": {
+        "power_kw_max": 14.91,
+        "hp": 20.0,
+        "current_a": 30.0,
+        "voltage_min": 460,
+        "voltage_max": 460,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "20 30 CFW080300TGN1A1Z Yes 31 CFW500D31P0T4DB20G2 Yes  $2,783 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080017THN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080017THN1A1Z",
+      "price_usd": 910,
+      "price_cop": 3731000,
+      "attrs": {
+        "power_kw_max": 0.75,
+        "hp": 1.0,
+        "current_a": 1.7,
+        "voltage_min": 575,
+        "voltage_max": 575,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "1 1.7 CFW080017THN1A1Z Yes 1.7 CFW500C01P7T5DB20 Yes  $910 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080030THN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080030THN1A1Z",
+      "price_usd": 954,
+      "price_cop": 3911400,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 3.0,
+        "voltage_min": 575,
+        "voltage_max": 575,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "2 3.0 CFW080030THN1A1Z Yes 3.0 CFW500C03P0T5DB20 Yes  $954 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080043THN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080043THN1A1Z",
+      "price_usd": 1073,
+      "price_cop": 4399300,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 4.3,
+        "voltage_min": 575,
+        "voltage_max": 575,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "3 4.3 CFW080043THN1A1Z Yes 4.3 CFW500C04P3T5DB20 Yes  $1,073 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080070THN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080070THN1A1Z",
+      "price_usd": 1276,
+      "price_cop": 5231600,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 7.0,
+        "voltage_min": 575,
+        "voltage_max": 575,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "5 7.0 CFW080070THN1A1Z Yes 7.0 CFW500C07P0T5DB20 Yes  $1,276 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080100THN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080100THN1A1Z",
+      "price_usd": 1621,
+      "price_cop": 6646100,
+      "attrs": {
+        "power_kw_max": 5.59,
+        "hp": 7.5,
+        "current_a": 10.0,
+        "voltage_min": 575,
+        "voltage_max": 575,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "7 1/2 10 CFW080100THN1A1Z Yes 10 CFW500C10P0T5DB20 Yes  $1,621 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080120THN1A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080120THN1A1Z",
+      "price_usd": 1813,
+      "price_cop": 7433300,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 12.0,
+        "voltage_min": 575,
+        "voltage_max": 575,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 155,
+        "raw_row": "10 12 CFW080120THN1A1Z Yes 12 CFW500C12P0T5DB20 Yes  $1,813 V1G (V1)"
+      }
+    },
+    {
+      "id": "CFW080073BDN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080073BDN4A1Z",
+      "price_usd": 1015,
+      "price_cop": 4161500,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 7.3,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "2 7.3 CFW080073BDN4A1Z  USCFW080073B2024EON4A1Z CFW500A07P3B2DB66G2  $1,015 CFW500A07P3B2DB66DSG2  $1,170 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080100BDN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080100BDN4A1Z",
+      "price_usd": 1095,
+      "price_cop": 4489500,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 10.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "3 10 CFW080100BDN4A1Z  USCFW080100B2024EON4A1Z CFW500A10P0B2DB66G2  $1,095 CFW500A10P0B2DB66DSG2  $1,255 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080160TDN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080160TDN4A1Z",
+      "price_usd": 1350,
+      "price_cop": 5535000,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 16.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "5 16 CFW080160TDN4A1Z  USCFW080160T2024EON4A1Z CFW500A16P0T2DB66G2  $1,350 CFW500A16P0T2DB66DSG2  $1,555 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080220TDN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080220TDN4A1Z",
+      "price_usd": 1950,
+      "price_cop": 7995000,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 22.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "7-1/2 22 CFW080220TDN4A1Z  USCFW080220T2024EON4A1Z CFW500B24P0T2DB66G2  $1,950 CFW500B24P0T2DB66DSG2  $2,245 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080280TDN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080280TDN4A1Z",
+      "price_usd": 2275,
+      "price_cop": 9327500,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 28.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "10 28 CFW080280TDN4A1Z  USCFW080280T2024EON4A1Z CFW500B28P0T2DB66G2  $2,275 CFW500B28P0T2DB66DSG2  $2,620 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080330TDN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080330TDN4A1Z",
+      "price_usd": 2675,
+      "price_cop": 10967500,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 33.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "10 33 CFW080330TDN4A1Z  USCFW080330T2024EON4A1Z CFW500B33P0T2DB66G2  $2,675 CFW500B33P0T2DB66DSG2  $3,080 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080027TGN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080027TGN4A1Z",
+      "price_usd": 990,
+      "price_cop": 4059000,
+      "attrs": {
+        "power_kw_max": 1.49,
+        "hp": 2.0,
+        "current_a": 2.7,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "2 2.7 CFW080027TGN4A1Z  USCFW080027T3848EON4A1Z CFW500A02P6T4DB66G2  $990 CFW500A02P6T4DB66DSG2  $1,140 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080043TGN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080043TGN4A1Z",
+      "price_usd": 1175,
+      "price_cop": 4817500,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 4.3,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "3 4.3 CFW080043TGN4A1Z  USCFW080043T3848EON4A1Z CFW500A04P3T4DB66G2  $1,175 CFW500A04P3T4DB66DSG2  $1,350 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080065TGN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080065TGN4A1Z",
+      "price_usd": 1400,
+      "price_cop": 5740000,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 6.5,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "5 6.5 CFW080065TGN4A1Z  USCFW080065T3848EON4A1Z CFW500A06P5T4DB66G2  $1,400 CFW500A06P5T4DB66DSG2  $1,610 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080100TGN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080100TGN4A1Z",
+      "price_usd": 1650,
+      "price_cop": 6765000,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 10.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "7-1/2 10 CFW080100TGN4A1Z  USCFW080100T3848EON4A1Z CFW500A10P0T4DB66G2  $1,650 CFW500A10P0T4DB66DSG2  $1,900 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080130TGN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080130TGN4A1Z",
+      "price_usd": 2050,
+      "price_cop": 8405000,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 14.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "10 14 CFW080130TGN4A1Z  USCFW080130T3848EON4A1Z CFW500B14P0T4DB66G2  $2,050 CFW500B14P0T4DB66DSG2  $2,360 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080160TGN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080160TGN4A1Z",
+      "price_usd": 2275,
+      "price_cop": 9327500,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 16.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "10 16 CFW080160TGN4A1Z  USCFW080160T3848EON4A1Z CFW500B16P0T4DB66G2  $2,275 CFW500B16P0T4DB66DSG2  $2,620 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080240TGN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080240TGN4A1Z",
+      "price_usd": 3025,
+      "price_cop": 12402500,
+      "attrs": {
+        "power_kw_max": 11.19,
+        "hp": 15.0,
+        "current_a": 24.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "15 24 CFW080240TGN4A1Z  USCFW080240T3848EON4A1Z CFW500B24P0T4DB66G2  $3,025 CFW500B24P0T4DB66DSG2  $3,480 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080300TGN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080300TGN4A1Z",
+      "price_usd": 3650,
+      "price_cop": 14965000,
+      "attrs": {
+        "power_kw_max": 18.64,
+        "hp": 25.0,
+        "current_a": 30.0,
+        "voltage_min": 380,
+        "voltage_max": 480,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "25 30 CFW080300TGN4A1Z  USCFW080300T3848EON4A1Z CFW500B31P0T4DB66G2  $3,650 CFW500B31P0T4DB66DSG2  $4,200 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080017THN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080017THN4A1Z",
+      "price_usd": 1590,
+      "price_cop": 6519000,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 1.7,
+        "voltage_min": 500,
+        "voltage_max": 600,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "1-1/2 1.7 CFW080017THN4A1Z  USCFW080017T5060EON4A1Z CFW500B01P7T5DB66  $1,590 CFW500B01P7T5DB66DS  $1,830 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080030THN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080030THN4A1Z",
+      "price_usd": 1670,
+      "price_cop": 6847000,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 3.0,
+        "voltage_min": 500,
+        "voltage_max": 600,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "3 3 CFW080030THN4A1Z  USCFW080030T5060EON4A1Z CFW500B03P0T5DB66  $1,670 CFW500B03P0T5DB66DS  $1,925 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080043THN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080043THN4A1Z",
+      "price_usd": 1890,
+      "price_cop": 7749000,
+      "attrs": {
+        "power_kw_max": 2.24,
+        "hp": 3.0,
+        "current_a": 4.3,
+        "voltage_min": 500,
+        "voltage_max": 600,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "3 4.3 CFW080043THN4A1Z  USCFW080043T5060EON4A1Z CFW500B04P3T5DB66  $1,890 CFW500B04P3T5DB66DS  $2,175 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080070THN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080070THN4A1Z",
+      "price_usd": 2115,
+      "price_cop": 8671500,
+      "attrs": {
+        "power_kw_max": 0.37,
+        "hp": 0.5,
+        "current_a": 7.0,
+        "voltage_min": 500,
+        "voltage_max": 600,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "7-1/2 7 CFW080070THN4A1Z  USCFW080070T5060EON4A1Z CFW500B07P0T5DB66  $2,115 CFW500B07P0T5DB66DS  $2,435 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080100THN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080100THN4A1Z",
+      "price_usd": 2330,
+      "price_cop": 9553000,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 10.0,
+        "voltage_min": 500,
+        "voltage_max": 600,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "10 10 CFW080100THN4A1Z  USCFW080100T5060EON4A1Z CFW500B10P0T5DB66  $2,330 CFW500B10P0T5DB66DS  $2,680 V1W (V1)"
+      }
+    },
+    {
+      "id": "CFW080120THN4A1Z",
+      "kind": "drive",
+      "name": "WEG CFW080120THN4A1Z",
+      "price_usd": 2615,
+      "price_cop": 10721500,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 12.0,
+        "voltage_min": 500,
+        "voltage_max": 600,
+        "phase": "unknown"
+      },
+      "source": {
+        "page": 158,
+        "raw_row": "10 12 CFW080120THN4A1Z  USCFW080120T5060EON4A1Z CFW500B12P0T5DB66  $2,615 CFW500B12P0T5DB66DS  $3,005 V1W (V1)"
+      }
+    },
+    {
+      "id": "SSW060016T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060016T2257ESZ",
+      "price_usd": 1429,
+      "price_cop": 5858900,
+      "attrs": {
+        "power_kw_max": 3.73,
+        "hp": 5.0,
+        "current_a": 16.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "5 16 SSW060016T2257ESZ 5 17 SSW900A0017T5E2B  $1,429 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060023T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060023T2257ESZ",
+      "price_usd": 1572,
+      "price_cop": 6445200,
+      "attrs": {
+        "power_kw_max": 5.59,
+        "hp": 7.5,
+        "current_a": 23.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "7.5 23 SSW060023T2257ESZ 7.5 24 SSW900A0024T5E2B  $1,572 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060030T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060030T2257ESZ",
+      "price_usd": 1703,
+      "price_cop": 6982300,
+      "attrs": {
+        "power_kw_max": 7.46,
+        "hp": 10.0,
+        "current_a": 30.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "10 30 SSW060030T2257ESZ 10 30 SSW900A0030T5E2B  $1,703 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060045T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060045T2257ESZ",
+      "price_usd": 1976,
+      "price_cop": 8101600,
+      "attrs": {
+        "power_kw_max": 11.19,
+        "hp": 15.0,
+        "current_a": 45.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "15 45 SSW060045T2257ESZ 15 45 SSW900B0045T5E2B 3  $1,976 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060060T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060060T2257ESZ",
+      "price_usd": 2181,
+      "price_cop": 8942100,
+      "attrs": {
+        "power_kw_max": 14.91,
+        "hp": 20.0,
+        "current_a": 60.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "20 60 SSW060060T2257ESZ 20 61 SSW900B0061T5E2B 3  $2,181 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060130T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060130T2257ESZ",
+      "price_usd": 3547,
+      "price_cop": 14542700,
+      "attrs": {
+        "power_kw_max": 37.29,
+        "hp": 50.0,
+        "current_a": 130.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "50 130 SSW060130T2257ESZ 50 130 SSW900C0130T5E2B 3  $3,547 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060170T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060170T2257ESZ",
+      "price_usd": 4270,
+      "price_cop": 17507000,
+      "attrs": {
+        "power_kw_max": 44.74,
+        "hp": 60.0,
+        "current_a": 170.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "60 170 SSW060170T2257ESZ 60 171 SSW900C0171T5E2B 3  $4,270 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060205T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060205T2257ESZ",
+      "price_usd": 5354,
+      "price_cop": 21951400,
+      "attrs": {
+        "power_kw_max": 55.93,
+        "hp": 75.0,
+        "current_a": 205.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "75 205 SSW060205T2257ESZ 75 200 SSW900C0200T5E2B 3  $5,354 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060255T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060255T2257ESZ",
+      "price_usd": 7188,
+      "price_cop": 29470800,
+      "attrs": {
+        "power_kw_max": 74.57,
+        "hp": 100.0,
+        "current_a": 255.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "100 255 SSW060255T2257ESZ 100 255 SSW900D0255T5E3B  $7,188 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060312T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060312T2257ESZ",
+      "price_usd": 7896,
+      "price_cop": 32373600,
+      "attrs": {
+        "power_kw_max": 93.21,
+        "hp": 125.0,
+        "current_a": 312.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "125 312 SSW060312T2257ESZ 125 312 SSW900D0312T5E3B  $7,896 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060365T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060365T2257ESZ",
+      "price_usd": 8721,
+      "price_cop": 35756100,
+      "attrs": {
+        "power_kw_max": 111.86,
+        "hp": 150.0,
+        "current_a": 365.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "150 365 SSW060365T2257ESZ 150 365 SSW900D0365T5E3B  $8,721 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060412T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060412T2257ESZ",
+      "price_usd": 9465,
+      "price_cop": 38806500,
+      "attrs": {
+        "power_kw_max": 111.86,
+        "hp": 150.0,
+        "current_a": 412.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "150 412 SSW060412T2257ESZ 150 412 SSW900D0412T5E3B  $9,465 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060604T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060604T2257ESZ",
+      "price_usd": 13082,
+      "price_cop": 53636200,
+      "attrs": {
+        "power_kw_max": 186.43,
+        "hp": 250.0,
+        "current_a": 604.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "250 604 SSW060604T2257ESZ 250 604 SSW900E0604T5E3B 4  $13,082 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060670T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060670T2257ESZ",
+      "price_usd": 14878,
+      "price_cop": 60999800,
+      "attrs": {
+        "power_kw_max": 186.43,
+        "hp": 250.0,
+        "current_a": 670.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "250 670 SSW060670T2257ESZ 250 670 SSW900E0670T5E3B 4  $14,878 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060820T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060820T2257ESZ",
+      "price_usd": 17573,
+      "price_cop": 72049300,
+      "attrs": {
+        "power_kw_max": 261.0,
+        "hp": 350.0,
+        "current_a": 820.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "350 820 SSW060820T2257ESZ 350 820 SSW900F0820T5E3B 4  $17,573 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW061100T2257ESH2Z",
+      "kind": "drive",
+      "name": "WEG SSW061100T2257ESH2Z",
+      "price_usd": 33351,
+      "price_cop": 136739100,
+      "attrs": {
+        "power_kw_max": 335.56,
+        "hp": 450.0,
+        "current_a": 1100.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "450 1100 SSW061100T2257ESH2Z 450 1100 SSW900G1100T5E3B  $33,351 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW061400T2257ESH2Z",
+      "kind": "drive",
+      "name": "WEG SSW061400T2257ESH2Z",
+      "price_usd": 42863,
+      "price_cop": 175738300,
+      "attrs": {
+        "power_kw_max": 410.13,
+        "hp": 550.0,
+        "current_a": 1400.0,
+        "voltage_min": 200,
+        "voltage_max": 240,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 163,
+        "raw_row": "550 1400 SSW061400T2257ESH2Z 550 1400 SSW900G1400T5E3B  $42,863 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060085T2257ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060085T2257ESZ",
+      "price_usd": 2771,
+      "price_cop": 11361100,
+      "attrs": {
+        "power_kw_max": 55.93,
+        "hp": 75.0,
+        "current_a": 85.0,
+        "voltage_min": 575,
+        "voltage_max": 575,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "75 85 SSW060085T2257ESZ 75 85 SSW900B0085T5E2B 3  $2,771 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060170T5769ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060170T5769ESZ",
+      "price_usd": 5705,
+      "price_cop": 23390500,
+      "attrs": {
+        "power_kw_max": 149.14,
+        "hp": 200.0,
+        "current_a": 170.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "200 170 SSW060170T5769ESZ 200 171 SSW900C0171T6E2B 3  $5,705 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060205T5769ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060205T5769ESZ",
+      "price_usd": 7172,
+      "price_cop": 29405200,
+      "attrs": {
+        "power_kw_max": 186.43,
+        "hp": 250.0,
+        "current_a": 205.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "250 205 SSW060205T5769ESZ 250 200 SSW900C0200T6E2B 3  $7,172 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060255T5769ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060255T5769ESZ",
+      "price_usd": 8242,
+      "price_cop": 33792200,
+      "attrs": {
+        "power_kw_max": 223.71,
+        "hp": 300.0,
+        "current_a": 255.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "300 255 SSW060255T5769ESZ 300 255 SSW900D0255T6E3B  $8,242 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060312T5769ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060312T5769ESZ",
+      "price_usd": 8948,
+      "price_cop": 36686800,
+      "attrs": {
+        "power_kw_max": 298.28,
+        "hp": 400.0,
+        "current_a": 312.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "400 312 SSW060312T5769ESZ 400 312 SSW900D0312T6E3B  $8,948 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060365T5769ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060365T5769ESZ",
+      "price_usd": 9299,
+      "price_cop": 38125900,
+      "attrs": {
+        "power_kw_max": 335.56,
+        "hp": 450.0,
+        "current_a": 365.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "450 365 SSW060365T5769ESZ 450 365 SSW900D0365T6E3B  $9,299 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060412T5769ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060412T5769ESZ",
+      "price_usd": 11181,
+      "price_cop": 45842100,
+      "attrs": {
+        "power_kw_max": 410.13,
+        "hp": 550.0,
+        "current_a": 412.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "550 412 SSW060412T5769ESZ 550 412 SSW900D0412T6E3B  $11,181 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060604T5769ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060604T5769ESZ",
+      "price_usd": 15439,
+      "price_cop": 63299900,
+      "attrs": {
+        "power_kw_max": 559.27,
+        "hp": 750.0,
+        "current_a": 604.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "750 604 SSW060604T5769ESZ 750 604 SSW900E0604T6E3B 5  $15,439 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060670T5769ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060670T5769ESZ",
+      "price_usd": 14932,
+      "price_cop": 61221200,
+      "attrs": {
+        "power_kw_max": 633.85,
+        "hp": 850.0,
+        "current_a": 670.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "850 670 SSW060670T5769ESZ 850 670 SSW900E0670T6E3B 5  $14,932 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW060820T5769ESZ",
+      "kind": "drive",
+      "name": "WEG SSW060820T5769ESZ",
+      "price_usd": 17646,
+      "price_cop": 72348600,
+      "attrs": {
+        "power_kw_max": 745.7,
+        "hp": 1000.0,
+        "current_a": 820.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "1000 820 SSW060820T5769ESZ 1000 820 SSW900F0820T6E3B 5  $17,646 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW061100T5769ESH2Z",
+      "kind": "drive",
+      "name": "WEG SSW061100T5769ESH2Z",
+      "price_usd": 34673,
+      "price_cop": 142159300,
+      "attrs": {
+        "power_kw_max": 1043.98,
+        "hp": 1400.0,
+        "current_a": 1100.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "1400 1100 SSW061100T5769ESH2Z 1400 1100 SSW900G1100T6E3B  $34,673 E19 (E1)"
+      }
+    },
+    {
+      "id": "SSW061400T5769ESH2Z",
+      "kind": "drive",
+      "name": "WEG SSW061400T5769ESH2Z",
+      "price_usd": 44509,
+      "price_cop": 182486900,
+      "attrs": {
+        "power_kw_max": 1267.69,
+        "hp": 1700.0,
+        "current_a": 1400.0,
+        "voltage_min": 690,
+        "voltage_max": 690,
+        "phase": "Three-Phase"
+      },
+      "source": {
+        "page": 164,
+        "raw_row": "1700 1400 SSW061400T5769ESH2Z 1700 1400 SSW900G1400T6E3B  $44,509 E19 (E1)"
+      }
+    }
+  ]
+}

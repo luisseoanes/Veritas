@@ -152,6 +152,13 @@ def _explain_relaxations(
     Esto convierte "no hay solucion" en una negociacion concreta. Para el
     presupuesto ademas calcula el minimo viable real: el precio de la
     configuracion mas barata que cumple todo lo demas.
+
+    Cada relajacion viaja con una PROPUESTA concreta: la configuracion mas
+    barata que existiria si el cliente cediera en ese punto, con sus ids y su
+    precio. Sin eso, "podrias ceder en X" es una abstraccion que el cliente no
+    puede aceptar; con eso es una oferta sobre la mesa. Se elige la mas barata
+    a proposito: es un criterio neutral y auditable, no una politica comercial
+    (los objetivos de negocio viven en otra capa y no pueden entrar aqui).
     """
     relaxations = []
     for req in core:
@@ -162,11 +169,21 @@ def _explain_relaxations(
             "description": req.description,
             "solutions_unlocked": len(solutions),
         }
-        if isinstance(req, BudgetRequirement) and solutions:
+        if solutions:
             cheapest = min(solutions, key=lambda c: c.total_price_cop)
-            entry["minimum_viable_cop"] = cheapest.total_price_cop
-            entry["gap_cop"] = cheapest.total_price_cop - req.max_cop
-            entry["cheapest_configuration"] = cheapest.ids
+            entry["proposal"] = {
+                "configuration": list(cheapest.ids),
+                "total_price_cop": cheapest.total_price_cop,
+                "min_stock": cheapest.min_stock,
+                "components": {
+                    kind.value: {"id": c.id, "name": c.name, "price_cop": c.price_cop}
+                    for kind, c in cheapest.components.items()
+                },
+            }
+            if isinstance(req, BudgetRequirement):
+                entry["minimum_viable_cop"] = cheapest.total_price_cop
+                entry["gap_cop"] = cheapest.total_price_cop - req.max_cop
+                entry["cheapest_configuration"] = cheapest.ids
         relaxations.append(entry)
     return sorted(relaxations, key=lambda e: e["solutions_unlocked"], reverse=True)
 

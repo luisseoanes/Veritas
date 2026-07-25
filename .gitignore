@@ -22,3 +22,7 @@ CLAUDE.local.md
 .idea/
 .DS_Store
 Thumbs.db
+
+# PDFs oficiales de WEG: se descargan, NO se redistribuyen (copyright del
+# fabricante). Regenerarlos con: python -m scripts.ingest_weg --url <static.weg.net/...>
+data/raw/
