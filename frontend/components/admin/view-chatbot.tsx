@@ -8,7 +8,7 @@ import { MessageList } from "@/components/chat/message-list";
 import type { ChatMessage } from "@/components/chat/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ADMIN_CHAT_PATH, api } from "@/lib/api";
+import { api } from "@/lib/api";
 import { describeError } from "@/lib/errors";
 import { getAdminSessionId, newAdminSessionId } from "@/lib/session";
 
@@ -107,17 +107,10 @@ export function ViewChatbot() {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex flex-wrap items-start justify-between gap-4 border-b border-dash-border px-6 py-5 lg:px-8">
-        <div>
-          <h2 className="flex items-center gap-2.5 text-[22px] font-medium leading-tight text-dash-text">
-            <Bot className="size-[22px] text-dash-accent" strokeWidth={1.75} />
-            Chatbot de administración
-          </h2>
-          <p className="mt-1.5 max-w-2xl text-[13px] leading-relaxed text-dash-text-muted">
-            Pregunta en lenguaje natural sobre la inteligencia del panel. Se conecta a{" "}
-            <code className="font-mono text-dash-accent">POST {ADMIN_CHAT_PATH}</code> con el header{" "}
-            <code className="font-mono text-dash-accent">X-Admin-Token</code>.
-          </p>
-        </div>
+        <h2 className="flex items-center gap-2.5 text-[15px] font-semibold leading-tight text-dash-text">
+          <Bot className="size-4 text-dash-accent" strokeWidth={1.75} />
+          Chatbot de administración
+        </h2>
 
         <div className="flex items-center gap-3">
           <Badge tone={live ? "ok" : "warn"} className="gap-2">
@@ -134,27 +127,27 @@ export function ViewChatbot() {
       {messages.length ? (
         <MessageList
           messages={messages}
-          tone="dark"
+          tone="light"
           onStreamDone={handleStreamDone}
           onRetry={() => void send(lastMessageRef.current)}
         />
       ) : (
         <div className="min-h-0 flex-1 overflow-y-auto scroll-slim">
-          <div className="mx-auto w-full max-w-3xl px-6 py-10 lg:px-8">
+          <div className="mx-auto w-full max-w-3xl px-6 py-8 lg:px-8">
             <DashCard>
-              <p className="text-[15px] leading-relaxed text-dash-text-muted">
+              <p className="text-[13px] leading-relaxed text-dash-text-muted">
                 Mientras el backend no publique la ruta, las respuestas las produce un mock local
-                marcado como <span className="text-dash-warn">simulado</span>: se calculan a partir de
-                los mismos datos que muestra el panel, nunca con cifras nuevas.
+                marcado como <span className="font-medium text-dash-warn">simulado</span>: se calculan
+                a partir de los mismos datos que muestra el panel, nunca con cifras nuevas.
               </p>
 
-              <div className="mt-6 flex flex-wrap gap-2.5">
+              <div className="mt-5 flex flex-wrap gap-2">
                 {SUGGESTIONS.map((suggestion) => (
                   <button
                     key={suggestion}
                     type="button"
                     onClick={() => void send(suggestion)}
-                    className="rounded-full border border-dash-border bg-dash-surface-2 px-4 py-2 text-left text-[13px] text-dash-text-muted transition-colors duration-150 hover:border-dash-accent hover:text-dash-text"
+                    className="rounded-[var(--radius-control)] border border-dash-border bg-dash-surface px-3 py-2 text-left text-[12px] text-dash-text-muted transition-colors duration-150 hover:border-dash-border-strong hover:bg-dash-surface-2 hover:text-dash-text"
                   >
                     {suggestion}
                   </button>
@@ -165,18 +158,19 @@ export function ViewChatbot() {
         </div>
       )}
 
-      <div className="shrink-0 px-6 pb-6 lg:px-8">
+      <div className="shrink-0 border-t border-dash-border bg-dash-surface px-6 py-4 lg:px-8">
         <div className="mx-auto w-full max-w-3xl">
           <Composer
             value={draft}
             onChange={setDraft}
             onSubmit={() => void send(draft)}
             busy={busy}
-            tone="dark"
+            tone="light"
+            quietChrome
             placeholder="Pregunta sobre oportunidades, riesgos de inventario u objetivos…"
             ariaLabel="Mensaje para el copiloto de administración"
           />
-          <p className="mt-3 text-center text-[12px] text-dash-text-aux">
+          <p className="mt-2 text-center text-[11px] text-dash-text-aux">
             Enter envía · Shift + Enter salta línea
           </p>
         </div>

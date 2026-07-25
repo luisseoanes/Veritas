@@ -15,12 +15,12 @@ const buttonVariants = cva(
         ghost:
           "rounded-full border border-[var(--ghost-border)] bg-[var(--ghost-bg)] text-ice backdrop-blur-md hover:bg-[var(--ghost-bg-hover)] active:scale-[0.99]",
         /** Control del dashboard. */
-        dash: "rounded-[var(--radius-control)] border border-dash-border bg-dash-surface-2 text-dash-text hover:border-dash-border-strong hover:bg-[color-mix(in_oklab,var(--dash-surface-2),white_6%)]",
+        dash: "rounded-[var(--radius-control)] border border-dash-border bg-dash-surface text-dash-text shadow-[var(--elev-1)] hover:bg-dash-surface-2",
         /** Acento del dashboard (acciones primarias del panel). */
         dashAccent:
-          "rounded-[var(--radius-control)] bg-dash-accent text-navy-950 font-semibold hover:brightness-110",
+          "rounded-[var(--radius-control)] bg-dash-accent text-white font-medium hover:bg-brand-dark",
         /** Enlace discreto. */
-        quiet: "rounded-full text-dash-text-muted hover:text-dash-text",
+        quiet: "rounded-[var(--radius-control)] text-dash-text-muted hover:bg-dash-surface-2 hover:text-dash-text",
       },
       size: {
         sm: "h-8 px-3 text-[13px]",

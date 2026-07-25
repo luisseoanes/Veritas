@@ -73,8 +73,8 @@ export function ViewObjective({ activo, onChanged, onError }: ViewObjectiveProps
 
   if (!data && loading) {
     return (
-      <DashSection title="Objetivo de negocio" subtitle="Cargando objetivos disponibles…">
-        <div className="grid gap-6 md:grid-cols-2">
+      <DashSection title="Objetivo de negocio" subtitle="Cargando objetivos…">
+        <div className="grid gap-4 md:grid-cols-2">
           {Array.from({ length: 4 }).map((_, index) => (
             <DashCardSkeleton key={index} lines={4} />
           ))}
@@ -99,7 +99,7 @@ export function ViewObjective({ activo, onChanged, onError }: ViewObjectiveProps
         </div>
       ) : null}
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         {data.disponibles.map((option) => {
           const Icon = ICONS[option.clave] ?? Scale;
           const active = option.clave === activeKey;
@@ -112,7 +112,7 @@ export function ViewObjective({ activo, onChanged, onError }: ViewObjectiveProps
               interactive
               className={cn(
                 "cursor-pointer",
-                active && "border-dash-accent bg-[color-mix(in_oklab,var(--dash-surface),var(--dash-accent)_7%)]",
+                active && "border-dash-accent ring-1 ring-dash-accent/25",
               )}
               role="button"
               tabIndex={0}
@@ -125,26 +125,26 @@ export function ViewObjective({ activo, onChanged, onError }: ViewObjectiveProps
                 }
               }}
             >
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start justify-between gap-3">
                 <span
                   className={cn(
-                    "flex size-11 shrink-0 items-center justify-center rounded-full",
+                    "flex size-9 shrink-0 items-center justify-center rounded-lg",
                     active
                       ? "bg-[var(--dash-accent-soft)] text-dash-accent"
                       : "bg-dash-surface-2 text-dash-text-muted",
                   )}
                 >
-                  <Icon className="size-[22px]" strokeWidth={1.75} />
+                  <Icon className="size-[18px]" strokeWidth={1.75} />
                 </span>
 
                 {busy ? (
                   <Loader2 className="size-4 animate-spin text-dash-accent" strokeWidth={2} />
                 ) : active ? (
-                  <Badge tone="accent">Seleccionado</Badge>
+                  <Badge tone="accent">Activo</Badge>
                 ) : null}
               </div>
 
-              <h3 className="mt-5 text-[19px] font-medium leading-snug text-dash-text">
+              <h3 className="mt-4 text-[15px] font-semibold leading-snug text-dash-text">
                 {option.etiqueta}
               </h3>
 
@@ -152,10 +152,10 @@ export function ViewObjective({ activo, onChanged, onError }: ViewObjectiveProps
                 {weights.map(([dimension, weight]) => (
                   <div key={dimension}>
                     <div className="flex items-baseline justify-between gap-3">
-                      <dt className="text-[13px] text-dash-text-muted">
+                      <dt className="text-[12px] text-dash-text-muted">
                         {WEIGHT_LABELS[dimension] ?? dimension}
                       </dt>
-                      <dd className="tnum font-mono text-[13px] text-dash-text">
+                      <dd className="tnum text-[12px] font-medium text-dash-text">
                         {weight.toFixed(2)}
                       </dd>
                     </div>
