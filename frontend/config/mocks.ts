@@ -10,8 +10,14 @@
 export const USE_MOCKS = false;
 
 /**
- * Excepción declarada: `POST /admin/chat` aún no existe en `app/main.py`.
- * Con esto en `true`, esa acción cae a un mock local en vez de romper la demo;
- * la UI avisa que la respuesta es simulada. (`POST /demo/reset` ya existe.)
+ * Ya no queda ningún endpoint pendiente: `POST /admin/chat` existe en
+ * `app/main.py` (protegido por `X-Admin-Token`) y se verificó en vivo —
+ * responde 401 sin token y ejecuta las tools de análisis con él.
+ *
+ * Se deja la palanca porque el escenario que la motivó puede repetirse: si el
+ * front vuelve a adelantarse a un endpoint, ponerla en `true` degrada esa
+ * acción a un mock avisado en vez de romper la demo entera.
+ *
+ * En `false` NO queda nada simulado en el camino de demo.
  */
-export const MOCK_PENDING_ENDPOINTS = true;
+export const MOCK_PENDING_ENDPOINTS = false;
