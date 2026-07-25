@@ -77,19 +77,44 @@ def dominates(a: Configuration, b: Configuration, objectives: tuple[Objective, .
     return at_least_as_good and strictly_better
 
 
+def _dominates_vector(a: tuple[float, ...], b: tuple[float, ...]) -> bool:
+    """Igual que `dominates`, pero sobre vectores ya normalizados a 'mas es mejor'."""
+    strictly_better = False
+    for va, vb in zip(a, b):
+        if va < vb:
+            return False
+        if va > vb:
+            strictly_better = True
+    return strictly_better
+
+
 def pareto_frontier(
     solutions: list[Configuration],
     objectives: tuple[Objective, ...] = OBJECTIVES,
 ) -> list[Configuration]:
     """Filtra las soluciones no dominadas.
 
-    Complejidad O(n^2) sobre el conjunto factible. Suficiente: el solver ya
-    redujo el espacio a las configuraciones tecnicamente validas.
+    Sigue siendo O(n^2) comparaciones, pero los valores de cada objetivo se
+    calculan UNA vez por solucion en vez de una vez por comparacion. Importa:
+    `total_price_cop` y `total_margin_cop` recorren los componentes en cada
+    acceso, asi que la version ingenua los recalculaba millones de veces. Con
+    ~1500 soluciones factibles eso costaba ~4.5 s dentro de una respuesta de
+    chat; precalcular lo baja a decimas.
+
+    El signo se invierte aqui para los objetivos de minimizar, de modo que la
+    comparacion interna sea siempre "mas es mejor".
     """
+    signs = tuple(-1.0 if obj.direction == "min" else 1.0 for obj in objectives)
+    vectors = [
+        tuple(sign * obj.value(c) for obj, sign in zip(objectives, signs))
+        for c in solutions
+    ]
+
     frontier = []
-    for candidate in solutions:
-        if not any(dominates(other, candidate, objectives) for other in solutions if other is not candidate):
-            frontier.append(candidate)
+    for i, candidate in enumerate(vectors):
+        if not any(j != i and _dominates_vector(other, candidate)
+                   for j, other in enumerate(vectors)):
+            frontier.append(solutions[i])
     return frontier
 
 

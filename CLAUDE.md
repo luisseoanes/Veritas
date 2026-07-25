@@ -224,7 +224,7 @@ curl -X POST localhost:8000/chat -H "Content-Type: application/json" -d '{"messa
 # -> $6.040.000
 
 curl -X POST localhost:8000/admin/objective -H "X-Admin-Token: $T" -H "Content-Type: application/json" -d '{"key":"maximize_margin"}'
-# misma pregunta -> $7.930.000 — distinta, igual de válida, y también en la frontera de Pareto
+# misma pregunta -> $7.960.000 — distinta, igual de válida, y también en la frontera de Pareto
 ```
 
 Guion completo, pitch de 20 s y respuestas preparadas para el jurado: `docs/00-contexto-hackathon.md` §7–8.

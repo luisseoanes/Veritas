@@ -217,7 +217,7 @@ Cruce entre lo que pide el evento y lo que ya construimos (ver `CLAUDE.md`):
 | **Innovation** — "un caso/flujo que otros no habrían pensado" (30%) | Neuro-simbólico (CSP en vez de retrieval) + núcleo insatisfacible (MUS) + Pareto multi-stakeholder. El fracaso del agente como activo de negocio. |
 | **Technical Checklist** — 5 componentes **funcionando**, no nombrados (20%) | 1 Knowledge/grounding · 2 Tool calling (6 tools) · 3 Memory · 4 Orquestación · 5 Guardrails (el solver **es** el guardrail). Cada uno en su módulo, verificado por el smoke test. |
 | **Code Quality** — "¿funciona o está mockeado?" (10%) | Cero mock en el camino crítico; `LLM_PROVIDER=mock` solo en dev, nunca en demo. Secretos en `.env`. Commits frecuentes. `GET /trace/{session}` y `POST /solve` prueban que la lógica no depende del modelo. |
-| **Presentation** (10%) | Demo del objetivo de negocio moviendo el punto sobre la frontera de Pareto ($6.04M → $7.93M, ambas válidas). |
+| **Presentation** (10%) | Demo del objetivo de negocio moviendo el punto sobre la frontera de Pareto ($6.04M → $7.96M, ambas válidas). |
 
 **Alineaciones directas con la guía oficial:**
 - Su ejemplo canónico del bucle es *"encuentra el repuesto correcto para este modelo
@@ -278,7 +278,7 @@ del fragmento menos malo — el umbral está en el código, no en el criterio de
 
 1. Cliente pregunta → agente resuelve → mostrar el rastro de evidencia (`explain_configuration`).
 2. Admin activa `maximize_margin` en `POST /admin/objective`.
-3. Cliente pregunta lo mismo → **la recomendación cambia** ($6.04M → $7.93M), ambas válidas,
+3. Cliente pregunta lo mismo → **la recomendación cambia** ($6.04M → $7.96M), ambas válidas,
    ambas en la frontera.
 4. `GET /admin/dashboard` se actualiza en vivo con la oportunidad nueva.
 

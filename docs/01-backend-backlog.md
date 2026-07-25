@@ -203,7 +203,7 @@ def admin_frontier(req: SolveRequest, _: None = Depends(require_admin)) -> dict:
 > un helper `_requirements_from(req)` y reúsalo aquí. Evita que las dos rutas diverjan.
 >
 > **Escenario de demo fijo:** define en el front (o en un preset) un body de requerimientos estable
-> —el mismo con el que ensayas el "$6.04M → $7.93M"— para que la frontera no cambie entre ensayos.
+> —el mismo con el que ensayas el "$6.04M → $7.96M"— para que la frontera no cambie entre ensayos.
 
 ---
 
