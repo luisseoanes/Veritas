@@ -6,11 +6,12 @@ Contexto persistente del repositorio **del evento**. Léelo antes de tocar códi
 
 | Repo | Rol | Estado |
 |---|---|---|
-| **Veritas** (este) | El repositorio que se entrega y se juzga. Aquí se construye el día del evento. | Vacío: solo CI de release y `docs/`. |
-| **ReshapeX** (`../ReshapeX`, remoto `HackathonScaffold`) | **Scaffold**: motor completo ya construido, probado y defendible. Se porta desde aquí. | Funcionando y verificado (ver §Estado del scaffold). |
+| **Veritas** (este) | El repositorio que se entrega y se juzga. **Self-contained**: código, docs y tests. | Motor portado y verificado (ver §Estado del proyecto). |
+| **ReshapeX** (repo `HackathonScaffold`) | **Scaffold** del que se sembró Veritas. Origen histórico; ya **no** es una dependencia. | Congelado — todo lo relevante ya vive aquí. |
 
-`../ReshapeX/CLAUDE.md` y `../ReshapeX/docs/` son la fuente extendida: contexto oficial del
-evento, backlog de backend y contrato de frontend. **No los dupliques aquí — consúltalos.**
+Todo el contexto extendido vive **en este repo**, en `docs/`: contexto oficial del evento
+(`00-contexto-hackathon.md`), backlog de backend (`01-backend-backlog.md`) y contrato de
+frontend (`02-frontend-guia.md`).
 
 - Evento: 25 de julio de 2026, 8:00 AM – 12:00 PM, Universidad EAFIT. ~3.5 h de build.
 - Marca elegida: **WEG** (accionamientos industriales: motores, variadores, protección, cableado).
@@ -39,7 +40,7 @@ Tres consecuencias, y las tres están en código:
 
 Los jueces verifican que **funcionen**, no que estén nombrados.
 
-| # | Componente | Dónde (tras el port) |
+| # | Componente | Dónde |
 |---|---|---|
 | 1 | Knowledge tool / grounding | `app/graph/store.py` — aristas derivadas de reglas · RAG en `app/retrieval/` |
 | 2 | Tool calling | `app/agent/registry.py` + `app/agent/tools.py` — 6 tools |
@@ -47,7 +48,7 @@ Los jueces verifican que **funcionen**, no que estén nombrados.
 | 4 | Orquestación / planning | `app/agent/loop.py` — multi-paso con traza, tope `max_agent_steps` |
 | 5 | Guardrails | `app/solver/engine.py` — **el solver es el guardrail** |
 
-## Arquitectura a portar
+## Arquitectura
 
 ```
 app/
@@ -79,8 +80,8 @@ scripts/
   generate_history.py  Histórico sintético para los detectores
   index_datasheets.py  Indexa PDFs de WEG en el vector store (RAG)
   ingest_weg.py        Extrae las TABLAS de esos mismos PDFs -> catálogo/grafo
-tests/                 7 archivos pytest + test de arquitectura ejecutable
-web/                   Frontend (pendiente)
+tests/                 8 archivos pytest (incl. test de arquitectura ejecutable) — 35 tests
+web/                   Frontend (pendiente — lo trae el experto de front)
 ```
 
 ### Las 6 tools, y por qué el orden importa
@@ -129,11 +130,13 @@ feat: …      minor      fix: / perf: / refactor: / docs: / chore: / style: / t
 BREAKING CHANGE: …  o  feat!: …      major
 ```
 
-Historial actual: `2d141ec` → `ed7e1e3` (scaffolding de CI). El primer commit de código va encima.
+El historial arranca con el scaffolding de CI; el código se construye encima con commits
+convencionales, uno por avance.
 
-## Estado del scaffold (verificado hoy, 2026-07-25)
+## Estado del proyecto (verificado hoy, 2026-07-25)
 
 **Funcionando:**
+- **Suite pytest: 35 tests verdes** (8 archivos) · smoke test end-to-end sano.
 - Grafo: **28 componentes / 121 aristas derivadas** de 4 reglas (motor 9, drive 8, protección 6,
   cable 5). Ninguna arista escrita a mano.
 - Solver + MUS (minimalidad verificada), Pareto + 4 objetivos de negocio, 3 detectores.
@@ -146,28 +149,27 @@ Historial actual: `2d141ec` → `ed7e1e3` (scaffolding de CI). El primer commit 
 - `python -m tests.test_architecture` → **verde, y atrapa la violación plantada**.
 
 **Gaps reales, confirmados contra el código (no contra la doc):**
-- ⚠️ **`pytest` no está instalado en `.venv`** — los 7 archivos de tests no corren. Está en
-  `requirements.txt`; falta `pip install pytest`. Arreglarlo **antes** del evento.
 - ⚠️ `scripts/ingest_weg.py` dice que `app/data/catalog.py` carga
   `data/generated/weg_catalog.json` si existe. **No lo hace**: `load_graph()` solo usa
   `ALL_COMPONENTS` en código. O se cablea la carga, o se corrige el docstring.
 - Falta el **`LICENSE` permisivo** (MIT/Apache-2.0/BSD/ISC) — es **requisito de premio** (T&C §7).
 - UI de cliente (chat) y dashboard de admin: `web/` está vacío. Contrato de datos completo en
-  `../ReshapeX/docs/02-frontend-guia.md`. La guía oficial pide reservar los **últimos ~35 min**
+  `docs/02-frontend-guia.md`. La guía oficial pide reservar los **últimos ~35 min**
   para la demo clickeable.
 - Backlog de backend abierto: B9 (logging estructurado), B10 (tests de API con `TestClient`),
-  B4 (servir estáticos), B13 (`.env.example` + `run.ps1`). Ver `../ReshapeX/docs/01-backend-backlog.md`.
+  B4 (servir estáticos), B13 (`.env.example` + `run.ps1`). Ver `docs/01-backend-backlog.md`.
 - Gemini nunca se probó con API key real: el smoke test corre en modo `mock`.
 - Índice de hojas de datos arranca **vacío** — el agente lo declara (`SIN_CORPUS`).
 
 ## Comandos
 
-Desde la raíz del proyecto portado (en el scaffold el venv vive en `../ReshapeX/.venv`):
+Desde la raíz del repo (el venv local vive en `.venv/`). En Linux/macOS usa
+`./.venv/bin/python` en vez de `.\.venv\Scripts\python.exe`:
 
 ```powershell
 .\.venv\Scripts\python.exe -m scripts.smoke_test              # verificar el motor + RAG
 .\.venv\Scripts\python.exe -m tests.test_architecture         # demo de jurado autocontenida
-.\.venv\Scripts\python.exe -m pytest -q                       # requiere: pip install pytest
+.\.venv\Scripts\python.exe -m pytest -q                       # toda la suite (35 tests)
 .\.venv\Scripts\python.exe -m scripts.generate_history --sessions 400
 .\.venv\Scripts\python.exe -m scripts.index_datasheets --stats          # estado del RAG
 .\.venv\Scripts\python.exe -m scripts.index_datasheets --dir data/raw   # indexar PDFs
@@ -225,7 +227,7 @@ curl -X POST localhost:8000/admin/objective -H "X-Admin-Token: $T" -H "Content-T
 # misma pregunta -> $7.930.000 — distinta, igual de válida, y también en la frontera de Pareto
 ```
 
-Guion completo, pitch de 20 s y respuestas preparadas para el jurado: `../ReshapeX/docs/00-contexto-hackathon.md` §7–8.
+Guion completo, pitch de 20 s y respuestas preparadas para el jurado: `docs/00-contexto-hackathon.md` §7–8.
 
 ## Cómo se puntúa (para decidir en qué gastar minutos)
 
