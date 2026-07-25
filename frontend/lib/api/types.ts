@@ -216,13 +216,9 @@ export interface DemoResetResponse {
   eventos_registrados?: number;
 }
 
-// ------------------------------------- POST /admin/chat (pendiente en backend)
+// ---------------------------------------------- POST /admin/chat (perfil ADMIN)
 
-/**
- * Copiloto del administrador. El endpoint todavía no existe en `app/main.py`;
- * el contrato se asume espejo de `/chat` más el header `X-Admin-Token`.
- * Cuando el backend lo publique, basta ajustar `ADMIN_CHAT_PATH` en `lib/api/client.ts`.
- */
+/** Espejo de `/chat` + header `X-Admin-Token`. Tools de BI, sin contaminar el log. */
 export interface AdminChatRequest {
   message: string;
   session_id: string;
@@ -231,9 +227,9 @@ export interface AdminChatRequest {
 export interface AdminChatResponse {
   session_id: string;
   reply: string;
-  /** Opcionales: si el backend los manda, la UI los pinta; si no, los ignora. */
   trace?: TraceStep[];
   business_objective?: string;
+  known_requirements?: KnownRequirements;
 }
 
 // ---------------------------------------------------------- simulador

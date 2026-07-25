@@ -1,12 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { Bot, Plug, Plus } from "lucide-react";
+import { Bot, Plus } from "lucide-react";
 
 import { Composer } from "@/components/chat/composer";
 import { MessageList } from "@/components/chat/message-list";
 import type { ChatMessage } from "@/components/chat/types";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { describeError } from "@/lib/errors";
@@ -25,16 +24,11 @@ function uid(): string {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-/**
- * Copiloto del administrador. El endpoint todavía no existe en el backend:
- * mientras no exista, la vista responde con un mock declarado y muestra qué
- * ruta espera. La UI no cambia cuando el backend la publique.
- */
+/** Copiloto admin: `POST /admin/chat` con tools de BI sobre datos reales del panel. */
 export function ViewChatbot() {
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [draft, setDraft] = React.useState("");
   const [busy, setBusy] = React.useState(false);
-  const [live, setLive] = React.useState<boolean | null>(null);
 
   const sessionIdRef = React.useRef<string>("");
   const lastMessageRef = React.useRef<string>("");
@@ -61,7 +55,6 @@ export function ViewChatbot() {
           message: text,
           session_id: sessionIdRef.current,
         });
-        setLive(!simulado);
         setMessages((current) =>
           current.map((message) =>
             message.id === pendingId
@@ -106,22 +99,16 @@ export function ViewChatbot() {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-dash-border px-6 py-5 lg:px-8">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-dash-border px-6 py-5 lg:px-8">
         <h2 className="flex items-center gap-2.5 text-[15px] font-semibold leading-tight text-dash-text">
           <Bot className="size-4 text-dash-accent" strokeWidth={1.75} />
           Chatbot de administración
         </h2>
 
-        <div className="flex items-center gap-3">
-          <Badge tone={live ? "ok" : "warn"} className="gap-2">
-            <Plug className="size-3.5" strokeWidth={2} />
-            {live === null ? "Endpoint sin verificar" : live ? "Endpoint en vivo" : "Endpoint pendiente"}
-          </Badge>
-          <Button variant="dash" size="sm" onClick={handleNewChat} disabled={!messages.length}>
-            <Plus className="size-3.5" strokeWidth={2} />
-            Nueva conversación
-          </Button>
-        </div>
+        <Button variant="dash" size="sm" onClick={handleNewChat} disabled={!messages.length}>
+          <Plus className="size-3.5" strokeWidth={2} />
+          Nueva conversación
+        </Button>
       </div>
 
       {messages.length ? (
@@ -136,9 +123,8 @@ export function ViewChatbot() {
           <div className="mx-auto w-full max-w-3xl px-6 py-8 lg:px-8">
             <DashCard>
               <p className="text-[13px] leading-relaxed text-dash-text-muted">
-                Mientras el backend no publique la ruta, las respuestas las produce un mock local
-                marcado como <span className="font-medium text-dash-warn">simulado</span>: se calculan
-                a partir de los mismos datos que muestra el panel, nunca con cifras nuevas.
+                Pregunta sobre oportunidades, inventario u objetivos. Las respuestas usan las tools
+                de análisis del backend sobre los mismos datos del dashboard.
               </p>
 
               <div className="mt-5 flex flex-wrap gap-2">

@@ -1,13 +1,10 @@
 import { forceReauth, getAdminToken } from "@/lib/admin-token";
 import { API_BASE_URL } from "@/lib/env";
 
-/**
- * Ruta del copiloto de administrador. Todavía no existe en `app/main.py`:
- * cuando el backend la publique con otro nombre, este es el único punto a cambiar.
- */
+/** Ruta del copiloto de administrador (`POST` en `app/main.py`). */
 export const ADMIN_CHAT_PATH = "/admin/chat";
 
-/** Ruta del reset de demo (tarea B3 del backlog de backend). */
+/** Ruta del reset de demo. */
 export const DEMO_RESET_PATH = "/demo/reset";
 
 export class ApiError extends Error {
