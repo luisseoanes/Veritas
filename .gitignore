@@ -1,1 +1,24 @@
-.pyc
+# Secretos — nunca commitear
+.env
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Datos generados
+data/generated/
+*.log
+
+# Memoria local de Claude (personal, fuera del repo)
+CLAUDE.local.md
+
+# Editores / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
