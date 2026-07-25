@@ -80,8 +80,8 @@ scripts/
   generate_history.py  Histórico sintético para los detectores
   index_datasheets.py  Indexa PDFs de WEG en el vector store (RAG)
   ingest_weg.py        Extrae las TABLAS de esos mismos PDFs -> catálogo/grafo
-tests/                 8 archivos pytest (incl. test de arquitectura ejecutable) — 35 tests
-web/                   Frontend (pendiente — lo trae el experto de front)
+tests/                 9 archivos pytest (incl. test de arquitectura ejecutable) — 43 tests
+frontend/              Next.js 15: chat de cliente (/) + dashboard admin (/admin)
 ```
 
 ### Las 6 tools, y por qué el orden importa
@@ -153,9 +153,9 @@ convencionales, uno por avance.
   `data/generated/weg_catalog.json` si existe. **No lo hace**: `load_graph()` solo usa
   `ALL_COMPONENTS` en código. O se cablea la carga, o se corrige el docstring.
 - Falta el **`LICENSE` permisivo** (MIT/Apache-2.0/BSD/ISC) — es **requisito de premio** (T&C §7).
-- UI de cliente (chat) y dashboard de admin: `web/` está vacío. Contrato de datos completo en
-  `docs/02-frontend-guia.md`. La guía oficial pide reservar los **últimos ~35 min**
-  para la demo clickeable.
+- El frontend vive en `frontend/` (Next.js, servido aparte en :3000 con CORS), NO en `web/`
+  ni montado con StaticFiles. `npm install && npm run dev`. Contrato de datos en
+  `docs/02-frontend-guia.md`.
 - Backlog de backend abierto: B9 (logging estructurado), B10 (tests de API con `TestClient`),
   B4 (servir estáticos), B13 (`.env.example` + `run.ps1`). Ver `docs/01-backend-backlog.md`.
 - Gemini nunca se probó con API key real: el smoke test corre en modo `mock`.

@@ -214,6 +214,6 @@ mientras tanto.
 
 ## Lo que es tuyo y no toco
 
-Framework, bundler, estructura de `web/`, sistema de diseño, tipografía, **colores**, componentes,
+Framework, bundler, estructura de `frontend/`, sistema de diseño, tipografía, **colores**, componentes,
 estado, routing. Si quieres una referencia de marca del evento, el sitio oficial existe, pero
 **no es una obligación** — decide tú. Este documento se queda en el *qué* y el *contrato de datos*.

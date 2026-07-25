@@ -11,8 +11,7 @@
 
 `B11 → B6 → B8 → B1 → B2 → B5 → B3 → B7 → B9 → B10 → B4 → B13` · el frontend corre en paralelo
 (ver [02-frontend-guia.md](02-frontend-guia.md)). B2 y B3 van **después** de B1 (necesitan el
-guard de auth). B4 (servir estáticos) va al final: no sirve de nada hasta que `web/` tenga algo
-real.
+guard de auth). B4 (servir estáticos) quedo DESCARTADA: el front es una app Next.js aparte.
 
 ## Estado (se marca aquí a medida que se completa)
 
@@ -251,7 +250,7 @@ Aplicar `Depends(require_admin)` a **todo** `/admin/*` y `/demo/*`. Dejar **abie
 
 | # | Qué | Nota |
 |---|---|---|
-| **B4** | `StaticFiles(directory="web", html=True)` en `/ui` + redirect desde `/`. **No** montar en `/` (sombrea la API). Mismo origen ⇒ sin CORS. | Va al final; depende de que `web/` exista. |
+| ~~B4~~ | **DESCARTADA.** El front acabo siendo una app Next.js independiente en `frontend/`, servida en :3000 y hablando con la API por CORS. Ya no hay estaticos que montar ni carpeta `web/`. | Obsoleta por decision de arquitectura. |
 | ✅ **B7** | Handlers para `Exception` (500 limpio, sin stacktrace), `HTTPException` y `RequestValidationError`, todos con envelope `{"error": {...}}`. | **HECHO** — `tests/test_error_handling.py`. |
 | ✅ **B8** | `Field(gt=0)` en `SolveRequest` (`power_kw`, `budget_cop`, `voltage`). Verificado: antes aceptaba negativos. | **HECHO** — `tests/test_solve_validation.py`. |
 | **B9** | Logging estructurado: request id, endpoint, latencia, tools llamadas en `/chat`. Hoy no hay ni una línea. | Sirve para depurar a las 11:00. |
