@@ -1,0 +1,11 @@
+{
+  "name": "veritas",
+  "version": "0.0.0-semantically-released",
+  "private": true,
+  "description": "Metadata para semantic-release (proyecto Python)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luisseoanes/Veritas.git"
+  },
+  "license": "MIT"
+}
