@@ -176,6 +176,9 @@ ADMIN = AgentProfile(
     tool_names=(
         "get_opportunities", "get_bottlenecks", "get_frontier",
         "get_active_objective", "set_business_objective",
+        # Contrafactual: cuantifica el retorno de cerrar una brecha, volviendo a
+        # resolver las ventas perdidas reales. Solo lee: no toca el catalogo.
+        "simulate_product",
     ),
 )
 

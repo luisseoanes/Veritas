@@ -18,8 +18,10 @@ from __future__ import annotations
 from app.agent.registry import registry
 from app.agent.tools import _build_requirements
 from app.graph.queries import sole_option_bottlenecks
+from app.graph.schema import Kind
 from app.intelligence.detectors import detect_all
 from app.intelligence.events import EventType, event_log
+from app.intelligence.simulator import build_hypothetical, simulate
 from app.solver.engine import solve
 from app.solver.pareto import (
     BUSINESS_OBJECTIVES,
@@ -201,3 +203,61 @@ def set_business_objective(key: str) -> dict:
         "pesos": objective.weights,
         "efecto": "Afecta de inmediato lo que el asesor recomienda a los clientes.",
     }
+
+
+@registry.tool(
+    name="simulate_product",
+    description=(
+        "SIMULACION CONTRAFACTUAL: responde '¿y si incorporo este producto, "
+        "cuantas ventas perdidas recupero y cuanto vale?'. Vuelve a resolver con "
+        "el solver real todas las consultas que quedaron SIN SOLUCION, sobre un "
+        "catalogo que incluye el producto hipotetico, y devuelve cuantos clientes "
+        "pasan de imposible a vendible y cuanto dinero representan. "
+        "Usala cuando el administrador pregunte que pasaria si anadiera un "
+        "producto, si vale la pena cubrir una brecha, o que retorno tendria. "
+        "NO modifica el catalogo real: la simulacion se descarta."
+    ),
+    parameters={
+        "type": "object",
+        "properties": {
+            "power_kw": {"type": "number", "description": "Potencia del producto hipotetico en kW"},
+            "voltage": {"type": "integer", "description": "Voltaje nominal (220 o 440)"},
+            "price_cop": {"type": "integer", "description": "Precio de venta estimado en COP"},
+            "kind": {
+                "type": "string",
+                "enum": ["motor", "drive", "protection", "cable"],
+                "description": "Tipo de producto (por defecto motor)",
+            },
+            "features": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Caracteristicas que traeria: soft_start, ip66, modbus, profibus, pid",
+            },
+        },
+        "required": ["power_kw", "voltage", "price_cop"],
+    },
+)
+def simulate_product(
+    power_kw: float,
+    voltage: int,
+    price_cop: int,
+    kind: str = "motor",
+    features: list[str] | None = None,
+) -> dict:
+    """Envuelve el simulador. La cifra sale de re-ejecutar el solver, no del LLM."""
+    candidate = build_hypothetical(
+        kind=Kind(kind),
+        power_kw=power_kw,
+        voltage=voltage,
+        price_cop=price_cop,
+        features=features,
+    )
+    result = simulate(event_log, state.graph, candidate)
+    result["instruccion"] = (
+        "Reporta los numeros EXACTOS que devuelve la herramienta y menciona la "
+        "'formula' y el 'metodo': la cifra sale de volver a resolver el motor "
+        "sobre consultas reales perdidas, no de una estimacion. Si hay perfiles "
+        "en 'detalle_no_recuperados', dilos: son clientes que seguirian sin "
+        "solucion y explican el limite de la inversion."
+    )
+    return result

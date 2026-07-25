@@ -30,6 +30,7 @@ from app.graph.queries import sole_option_bottlenecks
 from app.graph.schema import Kind
 from app.intelligence.detectors import detect_all
 from app.intelligence.events import EventType, event_log
+from app.intelligence.simulator import build_hypothetical, simulate
 from app.solver.engine import solve
 from app.solver.pareto import (
     BUSINESS_OBJECTIVES,
@@ -394,6 +395,43 @@ def demo_reset(request: ResetRequest) -> dict:
 def bottlenecks() -> dict:
     """Cuellos de botella estructurales del catalogo (analitica del grafo)."""
     return {"cuellos_de_botella": sole_option_bottlenecks(state.graph)}
+
+
+class SimulateRequest(BaseModel):
+    """Producto hipotetico a evaluar contra las ventas perdidas reales."""
+
+    power_kw: float = Field(..., gt=0)
+    voltage: int = Field(..., gt=0)
+    price_cop: int = Field(..., gt=0)
+    kind: str = Field("motor", description="motor | drive | protection | cable")
+    features: list[str] = Field(default_factory=list)
+
+
+@app.post("/admin/simulate", tags=["admin"], dependencies=[Depends(require_admin)])
+def admin_simulate(request: SimulateRequest) -> dict:
+    """"¿Y si incorporo este producto?" — respondido re-ejecutando el solver.
+
+    Inserta el producto en una COPIA del grafo y vuelve a resolver todas las
+    consultas que quedaron sin solucion. Devuelve cuantos clientes pasan de
+    imposible a vendible y cuanto valen, mas los que seguirian bloqueados y por
+    que. El catalogo real no se modifica.
+
+    Existe como endpoint ademas de como tool para poder demostrar en vivo que la
+    cifra no depende del modelo, igual que /solve respecto de /chat.
+    """
+    try:
+        kind = Kind(request.kind)
+    except ValueError as exc:
+        raise HTTPException(400, f"Tipo invalido: {request.kind}") from exc
+
+    candidate = build_hypothetical(
+        kind=kind,
+        power_kw=request.power_kw,
+        voltage=request.voltage,
+        price_cop=request.price_cop,
+        features=request.features,
+    )
+    return simulate(event_log, state.graph, candidate)
 
 
 @app.get("/graph/stats", tags=["admin"])

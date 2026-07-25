@@ -212,6 +212,16 @@ def solve(graph: KnowledgeGraph, requirements: list[Requirement]) -> SolveResult
     )
 
 
+def is_satisfiable(graph: KnowledgeGraph, requirements: list[Requirement]) -> bool:
+    """¿Existe al menos una configuracion valida? Corta en la primera.
+
+    `solve()` enumera TODAS las soluciones porque necesita la frontera de
+    Pareto. Cuando solo interesa el si/no —el simulador contrafactual re-resuelve
+    cientos de perfiles— enumerar de mas cuesta segundos sin aportar nada.
+    """
+    return _is_satisfiable(graph, requirements)
+
+
 def explain(graph: KnowledgeGraph, config: Configuration) -> dict:
     """Rastro de evidencia de una configuracion.
 
