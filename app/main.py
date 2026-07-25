@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import logging
 import secrets
+import time
+import uuid
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request
@@ -26,6 +28,7 @@ from app.agent.memory import memory
 from app.agent.tracing import tracer
 from app.config import settings
 from app.llm.factory import get_provider
+from app.observability import configure_logging, request_id_var
 from app.graph.queries import sole_option_bottlenecks
 from app.graph.schema import Kind
 from app.intelligence.detectors import detect_all
@@ -136,7 +139,33 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+configure_logging()
 logger = logging.getLogger("reshapex")
+
+
+# --------------------------------------------------------- logging por request
+#
+# Un log por peticion con request_id, endpoint, status y latencia. El request_id
+# se propaga por ContextVar, asi que los logs del turno del agente (tools
+# llamadas, en loop.py) quedan correlacionados con esta misma linea.
+
+
+@app.middleware("http")
+async def _log_requests(request: Request, call_next):
+    rid = uuid.uuid4().hex[:8]
+    token = request_id_var.set(rid)
+    start = time.perf_counter()
+    try:
+        response = await call_next(request)
+        latency_ms = (time.perf_counter() - start) * 1000
+        logger.info(
+            "method=%s path=%s status=%s latency_ms=%.1f",
+            request.method, request.url.path, response.status_code, latency_ms,
+        )
+        response.headers["X-Request-ID"] = rid
+        return response
+    finally:
+        request_id_var.reset(token)
 
 
 # ------------------------------------------------------------ manejo de errores

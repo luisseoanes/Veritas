@@ -9,9 +9,10 @@
 
 ## Orden de ataque
 
-`B11 → B6 → B8 → B1 → B2 → B5 → B3 → B7 → B9 → B10 → B4 → B13` · el frontend corre en paralelo
+`B11 → B6 → B8 → B1 → B2 → B5 → B3 → B7 → B9 → B10 → ~~B4~~ → B13` · el frontend corre en paralelo
 (ver [02-frontend-guia.md](02-frontend-guia.md)). B2 y B3 van **después** de B1 (necesitan el
-guard de auth). B4 (servir estáticos) quedo DESCARTADA: el front es una app Next.js aparte.
+guard de auth). **B4 se cerró como NO APLICA** (el front es Next.js con servidor propio + CORS, no
+un estático a montar; ver estado abajo). **B13 ✅ hecho** ⇒ el backlog de backend queda cerrado.
 
 ## Estado (se marca aquí a medida que se completa)
 
@@ -23,10 +24,31 @@ guard de auth). B4 (servir estáticos) quedo DESCARTADA: el front es una app Nex
 - [x] **B5** · Validación de proveedores en arranque — ✅ *hecho:* `_validate_config` (gemini sin key, embeddings sin key, `ADMIN_TOKEN` vacío → el proceso no levanta). De paso migré los 3 `@app.on_event` a un único `lifespan` — mueren los warnings de deprecación. Test `tests/test_startup_validation.py` (4).
 - [x] **B3** · `POST /demo/reset` — ✅ *hecho:* añadidos `memory.reset_all()` y `tracer.clear_all()`; el endpoint limpia memoria/trazas, recarga el grafo, vuelve el objetivo a `balanced`, y con `keep_history=False` vacía el log. Guardado por `require_admin`. Test `tests/test_demo_reset.py` (5).
 - [x] **B7** · Manejo global de errores — ✅ *hecho:* handlers para `Exception` (500 limpio, sin filtrar stacktrace, logueado del lado servidor), `HTTPException` y `RequestValidationError`, todos con envelope `{"error": {...}}`. Test `tests/test_error_handling.py` (4).
-- [ ] **B9** · Logging estructurado
-- [ ] **B10** · Tests de API con `TestClient`
-- [ ] **B4** · Servir el frontend (`StaticFiles`)
-- [ ] **B13** · `.env.example` + `run.ps1`
+- [x] **B9** · Logging estructurado — ✅ *hecho (2026-07-25):* `app/observability.py` (nuevo) con
+  `request_id` por request (ContextVar) inyectado en cada log vía filtro, formato greppable
+  `clave=valor` y `configure_logging()` idempotente que cuelga de `reshapex` sin pisar uvicorn.
+  Middleware HTTP en `main.py` loguea `method/path/status/latency_ms` + header `X-Request-ID`.
+  `run_agent` loguea `agent_turn` con perfil, provider, pasos y **tools llamadas** — correlacionado
+  por el mismo `request_id`.
+- [x] **B10** · Tests de API con `TestClient` — ✅ *hecho (2026-07-25):* `tests/test_api.py` (5),
+  complementa lo ya cubierto sin duplicar: `/health` + contrato, header `X-Request-ID` (B9),
+  `/solve` válido, `/admin/*` sin token → 401, y la **carrera de B6 a través de `/chat` real**
+  (8 conversaciones concurrentes; cada evento queda atribuido a su sesión namespaceada, cero
+  cruces). El `event_log` se aísla por test en un archivo temporal.
+- [~] **B4** · Servir el frontend (`StaticFiles`) — ❌ *NO APLICA (2026-07-25):* superado por la
+  arquitectura del front. El front que llegó es una app **Next.js 15 (App Router)** en `frontend/`
+  (no un bundle estático en `web/`), diseñada para correr como **servidor propio** (dev en `:3000`,
+  deploy en **Vercel**) y pegarle a la API por HTTP vía `NEXT_PUBLIC_API_BASE_URL` + **CORS** (ya
+  habilitado). `next.config.ts` no usa `output: 'export'`, así que no hay estático que montar. El
+  objetivo real de B4 —que el front sea accesible— queda cubierto por CORS + Vercel. Ver
+  `frontend/COMO-CORRER.md` y `docs/02` §"Cómo se sirve el front".
+- [x] **B13** · `.env.example` + scripts de arranque — ✅ *hecho (2026-07-25):* `.env.example`
+  completado con todas las variables de `config.py` (LLM, retrieval `EMBEDDING_PROVIDER`/
+  `GEMINI_EMBEDDING_MODEL`/`EMBEDDING_DIM`/`CHROMA_PATH`/`RETRIEVAL_TOP_K`, `ADMIN_TOKEN`,
+  `CORS_ORIGINS`). Scripts **`run.sh`** (Linux/macOS) y **`run.ps1`** (Windows), idempotentes: crean
+  venv, instalan deps, copian `.env` desde el ejemplo la primera vez y levantan uvicorn. Smoke:
+  `./run.sh` arranca la API (`/health` 200, header `X-Request-ID`). **Con esto el backlog de
+  backend queda cerrado** (B4 no aplica).
 
 > **Workstream paralelo — dual chatbot (C1–C6):** el chatbot admin sobre el mismo motor se
 > rastrea en [03-chatbot-dual.md](03-chatbot-dual.md) §11. Es backend (C1–C5) + ML/DS (C6).
@@ -250,13 +272,13 @@ Aplicar `Depends(require_admin)` a **todo** `/admin/*` y `/demo/*`. Dejar **abie
 
 | # | Qué | Nota |
 |---|---|---|
-| ~~B4~~ | **DESCARTADA.** El front acabo siendo una app Next.js independiente en `frontend/`, servida en :3000 y hablando con la API por CORS. Ya no hay estaticos que montar ni carpeta `web/`. | Obsoleta por decision de arquitectura. |
+| ❌ **B4** | ~~`StaticFiles(directory="web", html=True)`~~ — **NO APLICA.** El front es Next.js (`frontend/`) con servidor propio + Vercel; se integra por HTTP + CORS, no como estático montado en FastAPI. | **Cerrado 2026-07-25.** Ver checklist arriba. |
 | ✅ **B7** | Handlers para `Exception` (500 limpio, sin stacktrace), `HTTPException` y `RequestValidationError`, todos con envelope `{"error": {...}}`. | **HECHO** — `tests/test_error_handling.py`. |
 | ✅ **B8** | `Field(gt=0)` en `SolveRequest` (`power_kw`, `budget_cop`, `voltage`). Verificado: antes aceptaba negativos. | **HECHO** — `tests/test_solve_validation.py`. |
 | **B9** | Logging estructurado: request id, endpoint, latencia, tools llamadas en `/chat`. Hoy no hay ni una línea. | Sirve para depurar a las 11:00. |
 | **B10** | Tests con `TestClient`: `/health`, `/solve` válido/ inválido, `/admin/*` sin token → 401, `/demo/reset`, y **la carrera de B6**. | — |
 | ✅ **B11** | Test de arquitectura con `ast`: falla si `app/graph/` o `app/solver/` importan `app.llm`/`app.agent`/`app.retrieval`. **Prueba mecánica de que el LLM no decide.** Implementado como **allowlist** (más estricto): el núcleo solo puede importar `app.graph`/`app.solver`. | **HECHO** — `tests/test_architecture.py`. |
-| **B13** | `.env.example`: añadir `ADMIN_TOKEN`, `CORS_ORIGINS` (default `http://localhost:3000,http://127.0.0.1:3000`) y las claves de retrieval (`EMBEDDING_PROVIDER`, `GEMINI_EMBEDDING_MODEL`, `EMBEDDING_DIM`, `CHROMA_PATH`). `run.ps1`. | ⚠️ *Verificar* que el retrieval recupera bien con Gemini real roza la capa de embeddings — eso es del encargado de ML/DS, no tuyo. Tú solo cableas las variables. |
+| ✅ **B13** | `.env.example` con todas las variables + `run.sh` (Linux/macOS) y `run.ps1` (Windows). | **HECHO 2026-07-25.** ⚠️ Verificar el retrieval con Gemini real roza la capa de embeddings — eso es del encargado de ML/DS. Tú solo cableas las variables. |
 
 ## Decisión declarada (no descuido)
 

@@ -15,17 +15,22 @@ Backend FastAPI ya funcionando. Dos audiencias sobre el mismo motor:
 El **momento clave de la demo**: el admin cambia el objetivo → la misma pregunta del cliente
 devuelve otra recomendación, y el punto se mueve **sobre la frontera de Pareto** (ambas válidas).
 
-## Servido en mismo origen
+## Cómo se sirve el front
 
-El backend montará el build estático en `/ui` (`StaticFiles`, tarea B4). **Mismo origen ⇒ sin
-CORS.** Las llamadas van a rutas relativas (`/chat`, `/admin/...`). Durante desarrollo puedes
-correr tu dev-server aparte apuntando a `http://localhost:8000`.
+**Dos servidores, integración por HTTP + CORS.** El front es una app **Next.js** (`frontend/`) con
+su propio servidor: en dev corre en `:3000` (`npm run dev`) y en prod se despliega en **Vercel**. El
+navegador llama **directo** a la API vía `NEXT_PUBLIC_API_BASE_URL` (`http://localhost:8000` en
+local). El backend **no** monta el front.
 
-> ✅ **CORS habilitado para dev (2026-07-25):** el backend ya acepta peticiones desde
-> **`http://localhost:3000`** (y `http://127.0.0.1:3000`), con `X-Admin-Token` entre los headers
-> permitidos y `credentials` activado. Ya puedes pegarle a `http://localhost:8000` desde tu
-> dev-server en el 3000 sin errores de CORS. Si corres el front en otro puerto, ajusta
-> `CORS_ORIGINS` en el `.env` del backend (lista separada por comas).
+> ℹ️ **Cambio de arquitectura (2026-07-25):** la idea original de servir un build estático desde
+> FastAPI (`/ui`, tarea B4) **quedó descartada** — este front no es un estático (`next.config.ts`
+> sin `output: 'export'`). Se **cerró B4 como "no aplica"**; la integración es CORS (dev) + Vercel
+> (prod). Detalles de arranque en `frontend/COMO-CORRER.md`.
+
+> ✅ **CORS habilitado (2026-07-25):** el backend acepta peticiones desde **`http://localhost:3000`**
+> (y `http://127.0.0.1:3000`), con `X-Admin-Token` entre los headers permitidos y `credentials`
+> activado. Para otro puerto/origen (p.ej. el dominio de Vercel), añádelo a `CORS_ORIGINS` en el
+> `.env` del backend (lista separada por comas).
 
 Base de la API: **`http://localhost:8000`** · docs interactivas en **`/docs`** (Swagger, úsalas
 para ver y probar cada payload real).
@@ -38,6 +43,11 @@ misma forma, así que puedes manejarla en un solo sitio:
 ```
 Guíate por el **código de estado HTTP**; `message` es texto para mostrar. El 500 trae un mensaje
 genérico a propósito (el detalle real queda en el log del servidor, no se expone).
+
+> **`X-Request-ID` (debugging).** Toda respuesta del backend trae el header `X-Request-ID`. El
+> servidor loguea cada petición con ese mismo id (endpoint, status, latencia y, en el chat, las
+> tools llamadas). Si algo falla, inclúyelo en el reporte de bug: sirve para correlacionar la
+> request con su log del lado servidor. No hace falta mostrarlo en la UI.
 
 ---
 

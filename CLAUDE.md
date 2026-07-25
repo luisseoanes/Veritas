@@ -43,7 +43,7 @@ Los jueces verifican que **funcionen**, no que estén nombrados.
 | # | Componente | Dónde |
 |---|---|---|
 | 1 | Knowledge tool / grounding | `app/graph/store.py` — aristas derivadas de reglas · RAG en `app/retrieval/` |
-| 2 | Tool calling | `app/agent/registry.py` + `app/agent/tools.py` — 6 tools |
+| 2 | Tool calling | `app/agent/registry.py` + `app/agent/tools.py` (cliente) + `app/agent/admin_tools.py` (admin) — 13 tools registradas |
 | 3 | Memory | `app/agent/memory.py` — hechos acumulados y descartes por sesión |
 | 4 | Orquestación / planning | `app/agent/loop.py` — multi-paso con traza, tope `max_agent_steps` |
 | 5 | Guardrails | `app/solver/engine.py` — **el solver es el guardrail** |
@@ -61,8 +61,9 @@ app/
     requirements.py  Restricciones nombradas y RETIRABLES (habilitan el MUS)
     engine.py        solve() + find_unsat_core() + explain()
     pareto.py        Frontera + objetivos de negocio (4 presets)
-  agent/        Agente
-    registry.py, tools.py, memory.py, tracing.py, loop.py
+  agent/        Agente — un solo loop parametrizado por perfil (cliente | admin)
+    registry.py, tools.py (8 tools cliente), admin_tools.py (5 tools admin: BI + set_objective)
+    memory.py, tracing.py, loop.py (AgentProfile CLIENTE/ADMIN + run_agent(profile=...))
   retrieval/    Capa RAG — prepara y respalda, NUNCA decide
     embedder.py   Embeddings agnósticos (mock | gemini), dos umbrales por longitud de corpus
     chunks.py     Troceo citable de PDF; las tablas NO entran (viven en el grafo)
@@ -73,6 +74,7 @@ app/
     detectors.py  3 detectores, todos con campo `formula` visible
   llm/          Capa agnóstica al proveedor (mock | gemini) — Protocol + factory
   data/catalog.py  Catálogo semilla WEG (28 componentes)
+  observability.py Logging estructurado + request_id por request (B9)
   state.py      Grafo + objetivo de negocio activo + retrieval perezoso
   main.py       FastAPI
 scripts/
@@ -80,16 +82,24 @@ scripts/
   generate_history.py  Histórico sintético para los detectores
   index_datasheets.py  Indexa PDFs de WEG en el vector store (RAG)
   ingest_weg.py        Extrae las TABLAS de esos mismos PDFs -> catálogo/grafo
-tests/                 9 archivos pytest (incl. test de arquitectura ejecutable) — 43 tests
+tests/                 10 archivos pytest (incl. test de arquitectura ejecutable) — 48 tests
 frontend/              Next.js 15: chat de cliente (/) + dashboard admin (/admin)
 ```
 
-### Las 6 tools, y por qué el orden importa
+### Dos chatbots sobre un solo motor (perfiles del agente)
+
+Un **único** `run_agent` parametrizado por `AgentProfile` (no dos agentes). El perfil decide tres
+cosas: *system prompt*, *conjunto de tools* y *namespace de sesión*. Todo lo demás (loop, traza,
+memoria, guardrails) se reutiliza. Un guardrail en el loop rechaza cualquier tool fuera del perfil.
+Spec completo en `docs/03-chatbot-dual.md`.
+
+**Perfil CLIENTE** (`POST /chat`, abierto) — asesor comercial, 8 tools:
 
 | Grupo | Tools | Qué puede hacer |
 |---|---|---|
 | **DECIDE** | `solve_configuration` | La única que produce recomendaciones |
-| **EXPLICA** | `explain_configuration`, `check_compatibility`, `search_catalog` | Lee el grafo |
+| **EXPLICA** | `explain_configuration`, `check_compatibility`, `search_catalog`, `compare_products` | Lee el grafo |
+| **EMITE** | `generate_quote` | Cotización con número, solo tras aceptación del cliente |
 | **PREPARA** | `suggest_requirements`, `cite_datasheet` | RAG: propone restricciones y cita documentos |
 
 Las dos de RAG no pueden armar una configuración ni por accidente: `suggest_requirements`
@@ -97,6 +107,19 @@ devuelve *restricciones* que el cliente confirma y el solver valida; `cite_datas
 *texto con página*. El smoke test verifica que ningún ID de producto ni precio sale de ellas.
 Sin respaldo devuelven `SIN_COINCIDENCIAS` / `SIN_RESPALDO` / `SIN_CORPUS` — el umbral está en
 el código, no en el criterio del modelo.
+
+**Perfil ADMIN** (`POST /admin/chat`, token) — analista de inteligencia de negocio, 5 tools:
+
+| Tool | Envuelve | Tipo |
+|---|---|---|
+| `get_opportunities`, `get_bottlenecks`, `get_frontier`, `get_active_objective` | detectores / grafo / solver / estado | lectura |
+| `set_business_objective` | `state.set_objective` (4 presets validados) | escritura |
+
+El perfil admin **no** tiene `solve_configuration`, la única tool que registra eventos → el
+chatbot admin **no contamina** el log de mercado. Su única acción con efecto es cambiar el objetivo
+de negocio (cambio de *política*, no de configuración; con confirmación conversacional). Las admin
+tools son *wrappers* sin lógica nueva: envuelven el mismo código que ya exponen los endpoints
+`/admin/*`.
 
 ## Reglas innegociables
 
@@ -136,12 +159,15 @@ convencionales, uno por avance.
 ## Estado del proyecto (verificado hoy, 2026-07-25)
 
 **Funcionando:**
-- **Suite pytest: 35 tests verdes** (8 archivos) · smoke test end-to-end sano.
+- **Suite pytest: 48 tests verdes** (10 archivos) · smoke test end-to-end sano.
 - Grafo: **28 componentes / 121 aristas derivadas** de 4 reglas (motor 9, drive 8, protección 6,
   cable 5). Ninguna arista escrita a mano.
 - Solver + MUS (minimalidad verificada), Pareto + 4 objetivos de negocio, 3 detectores.
-- Loop de agente con 6 tools, API FastAPI con auth de admin, manejo de errores unificado,
-  `/demo/reset`, `/admin/frontier`.
+- **Dual chatbot sobre un solo motor:** `run_agent` parametrizado por perfil (CLIENTE 8 tools /
+  ADMIN 5 tools), con guardrail de tools por perfil y namespacing de sesión. `POST /chat` (abierto)
+  y `POST /admin/chat` (token). El admin no registra eventos (no tiene `solve_configuration`).
+- API FastAPI con auth de admin, manejo de errores unificado, logging estructurado con `request_id`
+  (B9), `/demo/reset`, `/admin/frontier`.
 - Histórico: **402 eventos** en `data/generated/events.jsonl`.
 - RAG sobre Chroma: 10 perfiles de aplicación indexados; `cite_datasheet` verificado contra PDF
   real (recupera con documento y página, devuelve `SIN_RESPALDO` fuera de tema).
@@ -153,15 +179,19 @@ convencionales, uno por avance.
   `data/generated/weg_catalog.json` si existe. **No lo hace**: `load_graph()` solo usa
   `ALL_COMPONENTS` en código. O se cablea la carga, o se corrige el docstring.
 - Falta el **`LICENSE` permisivo** (MIT/Apache-2.0/BSD/ISC) — es **requisito de premio** (T&C §7).
-- El frontend vive en `frontend/` (Next.js, servido aparte en :3000 con CORS), NO en `web/`
+- El frontend vive en `frontend/` (Next.js 15, servido aparte en :3000 con CORS), NO en `web/`
   ni montado con StaticFiles. `npm install && npm run dev`. Contrato de datos en
   `docs/02-frontend-guia.md`.
-- Backlog de backend abierto: B9 (logging estructurado), B10 (tests de API con `TestClient`),
-  B4 (servir estáticos), B13 (`.env.example` + `run.ps1`). Ver `docs/01-backend-backlog.md`.
+- **Backlog de backend cerrado.** B9 (logging con `request_id`), B10 (tests de API) y B13
+  (`.env.example` completo + `run.sh`/`run.ps1`) hechos. **B4 no aplica**: el front es Next.js con
+  servidor propio + CORS/Vercel, no un estático a montar. Ver `docs/01-backend-backlog.md`.
 - Gemini nunca se probó con API key real: el smoke test corre en modo `mock`.
 - Índice de hojas de datos arranca **vacío** — el agente lo declara (`SIN_CORPUS`).
 
 ## Comandos
+
+**Arranque rápido (B13):** `./run.sh` (Linux/macOS) o `.\run.ps1` (Windows) — crean el venv,
+instalan deps, copian `.env` desde el ejemplo y levantan la API en `:8000`. Idempotentes.
 
 Desde la raíz del repo (el venv local vive en `.venv/`). En Linux/macOS usa
 `./.venv/bin/python` en vez de `.\.venv\Scripts\python.exe`:
@@ -169,7 +199,7 @@ Desde la raíz del repo (el venv local vive en `.venv/`). En Linux/macOS usa
 ```powershell
 .\.venv\Scripts\python.exe -m scripts.smoke_test              # verificar el motor + RAG
 .\.venv\Scripts\python.exe -m tests.test_architecture         # demo de jurado autocontenida
-.\.venv\Scripts\python.exe -m pytest -q                       # toda la suite (35 tests)
+.\.venv\Scripts\python.exe -m pytest -q                       # toda la suite (48 tests)
 .\.venv\Scripts\python.exe -m scripts.generate_history --sessions 400
 .\.venv\Scripts\python.exe -m scripts.index_datasheets --stats          # estado del RAG
 .\.venv\Scripts\python.exe -m scripts.index_datasheets --dir data/raw   # indexar PDFs
@@ -207,6 +237,7 @@ La app **falla al arrancar** (no en el primer `/chat`) si: `gemini` sin key, emb
 | GET | `/trace/{session_id}` | — | Qué decidió el agente y por qué (**público a propósito**: es el mecanismo de auditoría) |
 | POST | `/retrieval/suggest` | — | Aplicación → restricciones candidatas, sin LLM |
 | GET | `/admin/verify` | token | Login del front |
+| POST | `/admin/chat` | token | Chatbot admin: BI conversacional (mismo formato que `/chat`) |
 | GET | `/admin/dashboard` | token | Inteligencia de negocio en tiempo real |
 | GET/POST | `/admin/objectives` · `/admin/objective` | token | Objetivo comercial activo |
 | POST | `/admin/frontier` | token | Frontera de Pareto del escenario + punto elegido por cada objetivo |
