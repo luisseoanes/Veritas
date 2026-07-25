@@ -9,6 +9,7 @@ evidencia de arquitectura.
 """
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 
 from app.agent import admin_tools as _admin_tools  # noqa: F401  (registra tools admin)
@@ -21,6 +22,9 @@ from app.config import settings
 from app.llm.base import LLMProvider, Message
 from app.llm.factory import get_provider
 from app.state import state
+
+# Cuelga de 'reshapex' -> hereda el handler y el request_id (ver observability.py).
+logger = logging.getLogger("reshapex.agent")
 
 CLIENT_SYSTEM_PROMPT = """\
 Eres un asesor comercial tecnico de {brand}, especializado en accionamientos
@@ -214,8 +218,11 @@ def run_agent(
     schemas = registry.schemas(only=list(profile.tool_names))
 
     final_text = ""
+    called_tools: list[str] = []
+    steps_used = 0
 
     for step in range(settings.max_agent_steps):
+        steps_used = step + 1
         response = llm.complete(
             system=_system_prompt(profile, session),
             messages=session.history,
@@ -241,6 +248,7 @@ def run_agent(
             break
 
         for call in response.tool_calls:
+            called_tools.append(call.name)
             # Guardrail: rechaza cualquier tool fuera del perfil, aunque el
             # modelo alucine un nombre. El cliente no puede tocar tools de
             # admin ni al reves, incluso si el prompt falla.
@@ -272,6 +280,12 @@ def run_agent(
             "Alcance el limite de pasos sin cerrar la consulta. "
             "Reformula la necesidad con potencia, voltaje y presupuesto."
         )
+
+    logger.info(
+        "agent_turn profile=%s session=%s provider=%s steps=%s tools=%s",
+        profile.key, session_id, llm.name, steps_used,
+        ",".join(called_tools) or "-",
+    )
 
     return {
         "session_id": session_id,
