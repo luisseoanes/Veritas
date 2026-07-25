@@ -158,9 +158,20 @@ class GeminiEmbedder:
 
     name = "gemini"
     default_min_score = 0.55
-    # Sobre fragmentos largos el coseno baja aunque el contenido sea el
-    # correcto: el documento cubre mas temas que la pregunta.
-    long_text_min_score = 0.45
+    # CALIBRADO sobre el corpus real (778 fragmentos de dos catalogos WEG),
+    # con 10 preguntas tecnicas pertinentes y 8 ajenas al dominio:
+    #
+    #   pertinentes  0.604 - 0.777
+    #   ajenas       0.516 - 0.565      <- hueco limpio entre 0.565 y 0.604
+    #
+    # 0.58 cae en medio del hueco: no pierde ninguna pertinente y no deja pasar
+    # ninguna ajena, con margen por ambos lados.
+    #
+    # El valor anterior era 0.45, heredado de una estimacion sin corpus real.
+    # Con 0.45 preguntas como "cual es la capital de Colombia" devolvian
+    # CON_RESPALDO y un fragmento irrelevante — exactamente el fallo que este
+    # umbral existe para evitar. Recalibrar si cambia el corpus o el embedder.
+    long_text_min_score = 0.58
 
     # Gemini acepta hasta 100 textos por peticion.
     _BATCH = 100
