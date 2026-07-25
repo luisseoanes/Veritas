@@ -29,6 +29,11 @@ real.
 - [ ] **B4** · Servir el frontend (`StaticFiles`)
 - [ ] **B13** · `.env.example` + `run.ps1`
 
+> **Workstream paralelo — dual chatbot (C1–C6):** el chatbot admin sobre el mismo motor se
+> rastrea en [03-chatbot-dual.md](03-chatbot-dual.md) §11. Es backend (C1–C5) + ML/DS (C6).
+> **C1 ✅ hecho (2026-07-25):** `run_agent` parametrizado por `AgentProfile`, namespacing de
+> sesión por perfil y guardrail de tools; regresión pura (35 tests verdes). No toca el dominio.
+
 ---
 
 ## B6 · Erradicar la carrera de sesión — *CONFIRMADO como bug real* · ✅ HECHO
@@ -247,7 +252,7 @@ Aplicar `Depends(require_admin)` a **todo** `/admin/*` y `/demo/*`. Dejar **abie
 | **B9** | Logging estructurado: request id, endpoint, latencia, tools llamadas en `/chat`. Hoy no hay ni una línea. | Sirve para depurar a las 11:00. |
 | **B10** | Tests con `TestClient`: `/health`, `/solve` válido/ inválido, `/admin/*` sin token → 401, `/demo/reset`, y **la carrera de B6**. | — |
 | ✅ **B11** | Test de arquitectura con `ast`: falla si `app/graph/` o `app/solver/` importan `app.llm`/`app.agent`/`app.retrieval`. **Prueba mecánica de que el LLM no decide.** Implementado como **allowlist** (más estricto): el núcleo solo puede importar `app.graph`/`app.solver`. | **HECHO** — `tests/test_architecture.py`. |
-| **B13** | `.env.example`: añadir `ADMIN_TOKEN` y las claves de retrieval (`EMBEDDING_PROVIDER`, `GEMINI_EMBEDDING_MODEL`, `EMBEDDING_DIM`, `CHROMA_PATH`). `run.ps1`. | ⚠️ *Verificar* que el retrieval recupera bien con Gemini real roza la capa de embeddings — eso es del encargado de ML/DS, no tuyo. Tú solo cableas las variables. |
+| **B13** | `.env.example`: añadir `ADMIN_TOKEN`, `CORS_ORIGINS` (default `http://localhost:3000,http://127.0.0.1:3000`) y las claves de retrieval (`EMBEDDING_PROVIDER`, `GEMINI_EMBEDDING_MODEL`, `EMBEDDING_DIM`, `CHROMA_PATH`). `run.ps1`. | ⚠️ *Verificar* que el retrieval recupera bien con Gemini real roza la capa de embeddings — eso es del encargado de ML/DS, no tuyo. Tú solo cableas las variables. |
 
 ## Decisión declarada (no descuido)
 

@@ -21,6 +21,12 @@ El backend montará el build estático en `/ui` (`StaticFiles`, tarea B4). **Mis
 CORS.** Las llamadas van a rutas relativas (`/chat`, `/admin/...`). Durante desarrollo puedes
 correr tu dev-server aparte apuntando a `http://localhost:8000`.
 
+> ✅ **CORS habilitado para dev (2026-07-25):** el backend ya acepta peticiones desde
+> **`http://localhost:3000`** (y `http://127.0.0.1:3000`), con `X-Admin-Token` entre los headers
+> permitidos y `credentials` activado. Ya puedes pegarle a `http://localhost:8000` desde tu
+> dev-server en el 3000 sin errores de CORS. Si corres el front en otro puerto, ajusta
+> `CORS_ORIGINS` en el `.env` del backend (lista separada por comas).
+
 Base de la API: **`http://localhost:8000`** · docs interactivas en **`/docs`** (Swagger, úsalas
 para ver y probar cada payload real).
 

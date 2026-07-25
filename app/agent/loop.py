@@ -9,6 +9,8 @@ evidencia de arquitectura.
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from app.agent import tools as _tools  # noqa: F401  (registra las herramientas)
 from app.agent.memory import Session, memory
 from app.agent.registry import registry
@@ -83,39 +85,74 @@ Contexto de la sesion:
 """
 
 
-def _system_prompt(session: Session) -> str:
-    return SYSTEM_PROMPT.format(brand=settings.brand, session_context=session.summary())
+@dataclass(frozen=True)
+class AgentProfile:
+    """Perfil que parametriza `run_agent`: un solo loop, distintas audiencias.
+
+    Decide tres cosas y nada mas — persona (`system_prompt`), herramientas
+    permitidas (`tool_names`) y namespace de sesion (`key`). Todo el resto del
+    loop (traza, memoria, guardrails) se reutiliza igual. Ver docs/03.
+    """
+
+    key: str                       # "cliente" | "admin" -> namespacea la sesion
+    system_prompt: str             # plantilla con {brand} y {session_context}
+    tool_names: tuple[str, ...]    # subconjunto del registry que este agente usa
+
+
+# Perfil del asesor comercial (el chatbot que ya existia). En C1 reutiliza el
+# SYSTEM_PROMPT actual sin cambios; C2 partira los prompts en CLIENT_/ADMIN_.
+CLIENTE = AgentProfile(
+    key="cliente",
+    system_prompt=SYSTEM_PROMPT,
+    tool_names=(
+        "solve_configuration", "explain_configuration",
+        "check_compatibility", "search_catalog",
+        "suggest_requirements", "cite_datasheet",
+    ),
+)
+
+
+def _system_prompt(profile: AgentProfile, session: Session) -> str:
+    return profile.system_prompt.format(
+        brand=settings.brand, session_context=session.summary()
+    )
 
 
 def run_agent(
     message: str,
     session_id: str = "default",
+    *,
+    profile: AgentProfile = CLIENTE,
     provider: LLMProvider | None = None,
 ) -> dict:
-    """Ejecuta un turno completo de conversacion.
+    """Ejecuta un turno completo de conversacion bajo un `profile`.
 
     Devuelve la respuesta final, la traza de decisiones y el objetivo de
-    negocio vigente en el momento de responder.
+    negocio vigente en el momento de responder. El perfil `CLIENTE` reproduce
+    el comportamiento historico sin cambios.
     """
     llm = provider or get_provider()
-    session = memory.get(session_id)
-    set_session(session_id)
-    tracer.start(session_id)
+    # Namespacing por perfil: una sesion `admin` y una `cliente` con el mismo
+    # session_id NO comparten memoria/traza/eventos. Cero acoplamiento.
+    sid = f"{profile.key}:{session_id}"
+    session = memory.get(sid)
+    set_session(sid)
+    tracer.start(sid)
 
     session.add(Message(role="user", content=message))
-    schemas = registry.schemas()
+    schemas = registry.schemas(only=list(profile.tool_names))
 
     final_text = ""
 
     for step in range(settings.max_agent_steps):
         response = llm.complete(
-            system=_system_prompt(session),
+            system=_system_prompt(profile, session),
             messages=session.history,
             tools=schemas,
         )
 
         tracer.record(
-            session_id, "llm",
+            sid, "llm",
             step=step + 1,
             provider=llm.name,
             text=response.text[:500],
@@ -133,10 +170,16 @@ def run_agent(
             break
 
         for call in response.tool_calls:
-            result = registry.execute(call.name, call.arguments)
+            # Guardrail: rechaza cualquier tool fuera del perfil, aunque el
+            # modelo alucine un nombre. El cliente no puede tocar tools de
+            # admin ni al reves, incluso si el prompt falla.
+            if call.name not in profile.tool_names:
+                result = f"ERROR: '{call.name}' no esta disponible para este agente."
+            else:
+                result = registry.execute(call.name, call.arguments)
 
             tracer.record(
-                session_id, "tool",
+                sid, "tool",
                 name=call.name,
                 arguments=call.arguments,
                 result=result[:2000],
@@ -163,6 +206,6 @@ def run_agent(
         "session_id": session_id,
         "reply": final_text,
         "business_objective": state.objective_key,
-        "trace": tracer.get(session_id),
+        "trace": tracer.get(sid),
         "known_requirements": session.known,
     }
