@@ -37,5 +37,14 @@ class Settings(BaseSettings):
     # en un fallo de arranque para que no pase desapercibido.
     admin_token: str = ""
 
+    # Origenes permitidos por CORS (front en dev). Coma-separado en .env, ej.
+    # CORS_ORIGINS="http://localhost:3000,http://localhost:5173". El front del
+    # dashboard corre en localhost:3000 por defecto.
+    cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+
 
 settings = Settings()

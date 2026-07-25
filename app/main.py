@@ -16,11 +16,12 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.agent.loop import run_agent
+from app.agent.loop import CLIENTE, run_agent
 from app.agent.memory import memory
 from app.agent.tracing import tracer
 from app.config import settings
@@ -95,6 +96,17 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# CORS: el front del dashboard corre en otro origen durante desarrollo
+# (localhost:3000). Se permite el header X-Admin-Token para las rutas /admin/*.
+# Los origenes salen de settings.cors_origins (configurable via .env).
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 logger = logging.getLogger("reshapex")
 
 
@@ -160,16 +172,19 @@ class ChatRequest(BaseModel):
 @app.post("/chat", tags=["cliente"])
 def chat(request: ChatRequest) -> dict:
     """Un turno de conversacion con el asesor comercial."""
-    return run_agent(request.message, session_id=request.session_id)
+    return run_agent(request.message, session_id=request.session_id, profile=CLIENTE)
 
 
 @app.get("/trace/{session_id}", tags=["cliente"])
 def get_trace(session_id: str) -> dict:
     """Traza de decisiones: que herramienta llamo el agente, con que y que obtuvo.
 
-    Es la evidencia de arquitectura que se muestra al jurado.
+    Es la evidencia de arquitectura que se muestra al jurado. La sesion se
+    namespacea por perfil (ver docs/03); esta ruta publica expone SOLO la traza
+    del asesor cliente, nunca la del chatbot admin.
     """
-    return {"session_id": session_id, "steps": tracer.get(session_id)}
+    sid = f"{CLIENTE.key}:{session_id}"
+    return {"session_id": session_id, "steps": tracer.get(sid)}
 
 
 class SolveRequest(BaseModel):
